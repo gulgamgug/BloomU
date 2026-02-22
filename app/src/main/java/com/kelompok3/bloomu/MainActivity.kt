@@ -12,6 +12,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.kelompok3.bloomu.ui.theme.BloomUTheme
+import io.github.jan.supabase.createSupabaseClient
+import io.github.jan.supabase.postgrest.Postgrest
+
+val supabase = createSupabaseClient(
+    supabaseUrl = "https://ehkqdbfqocyzgvxyhyut.supabase.co",
+    supabaseKey = "sb_publishable_uKoALeln5THkWPHp_T0bUw_HEabbqf8"
+) {
+    install(Postgrest)
+}
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
