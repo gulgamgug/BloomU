@@ -47,11 +47,11 @@ class MainActivity : ComponentActivity() {
                     screen = "login"
                 }
             }
-            // ini buat ganti ganti layar sesuai variabel 'screen'
+
             when (screen) {
-                "loading" -> Text("tunggu bentar ya...")
+                "loading" -> Text("laoding")
                 "login" -> {
-                    // Sementara kita lempar ke register dulu biar ga putih doang
+                    // sementara lgsg ke register soale blm bikin layar login
                     screen = "register"
                 }
                 "register" -> RegisterScreen(
