@@ -7,9 +7,7 @@ plugins {
 
 android {
     namespace = "com.kelompok3.bloomu"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.kelompok3.bloomu"
@@ -58,9 +56,9 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
-    implementation(platform(libs.bom))
-    implementation(libs.postgrest.kt)
+    implementation(platform(libs.supabase.bom))
+    implementation(libs.supabase.postgrest)
     implementation(libs.ktor.client.android)
-    implementation(libs.gotrue.kt)
+    implementation(libs.supabase.auth)
     implementation(libs.kotlinx.serialization.json)
 }

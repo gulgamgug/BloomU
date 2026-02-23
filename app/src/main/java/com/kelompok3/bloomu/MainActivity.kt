@@ -8,31 +8,64 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.kelompok3.bloomu.presentation.authentication.RegisterScreen
 import com.kelompok3.bloomu.ui.theme.BloomUTheme
-import io.github.jan.supabase.createSupabaseClient
-import io.github.jan.supabase.postgrest.Postgrest
-
-val supabase = createSupabaseClient(
-    supabaseUrl = "https://ehkqdbfqocyzgvxyhyut.supabase.co",
-    supabaseKey = "sb_publishable_uKoALeln5THkWPHp_T0bUw_HEabbqf8"
-) {
-    install(Postgrest)
-}
+import com.kelompok3.bloomu.supabase.supabase
+import io.github.jan.supabase.auth.auth
+import io.github.jan.supabase.auth.status.SessionStatus
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
+import kotlinx.serialization.json.jsonPrimitive
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        //enableEdgeToEdge()
         setContent {
-            BloomUTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+            var screen by remember {
+                mutableStateOf("loading")
+            }
+            var emailUser by remember { mutableStateOf("")}
+            var namaUser by remember { mutableStateOf("") }
+
+            LaunchedEffect(Unit) {
+                // cek di hp udh login apa blom
+                val status = supabase.auth.sessionStatus
+                    .filter { it is SessionStatus.Authenticated || it is SessionStatus.NotAuthenticated }
+                    .first()
+
+                val user = supabase.auth.currentUserOrNull()
+                if (user != null) {
+                    namaUser = user.userMetadata?.get("nama")?.jsonPrimitive?.content ?: "user"
+                    screen = "home"
+                } else {
+                    screen = "login"
+                }
+            }
+            // ini buat ganti ganti layar sesuai variabel 'screen'
+            when (screen) {
+                "loading" -> Text("tunggu bentar ya...")
+                "login" -> {
+                    // Sementara kita lempar ke register dulu biar ga putih doang
+                    screen = "register"
+                }
+                "register" -> RegisterScreen(
+                    onRegisterSuccess = { email ->
+                        emailUser = email // simpen email buat otp
+                        screen = "otp" // pindah ke otp
+                    },
+                    onToLoginScreen = { screen = "login" }
+                )
+                "home" -> {
+                    Text("Halo $namaUser! Kamu sudah login.")
+                }
+                "otp" -> {
+                    Text("Cek email $emailUser buat kode OTP ya!")
                 }
             }
         }
