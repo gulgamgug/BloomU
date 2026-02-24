@@ -36,7 +36,7 @@ import kotlinx.serialization.json.put
 
 @Composable
 
-fun LoginScreen(onLoginSuccess: (String) -> Unit, onToRegisterScreen: () -> Unit){
+fun LoginScreen(onLoginSuccess: () -> Unit, onToRegisterScreen: () -> Unit){
     //var nama by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -72,7 +72,7 @@ fun LoginScreen(onLoginSuccess: (String) -> Unit, onToRegisterScreen: () -> Unit
                         this.email = email
                         this.password = password
                     }
-                    //  onLoginSuccess(email)
+                      onLoginSuccess()
                 } catch (e: Exception) {
                     println("error login")
                 }

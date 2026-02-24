@@ -15,6 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.kelompok3.bloomu.presentation.authentication.LoginScreen
 import com.kelompok3.bloomu.presentation.authentication.OtpScreen
 import com.kelompok3.bloomu.presentation.authentication.RegisterScreen
+import com.kelompok3.bloomu.presentation.home.HomeScreen
 import com.kelompok3.bloomu.supabase.supabase
 import com.kelompok3.bloomu.ui.theme.BloomUTheme
 import io.github.jan.supabase.auth.auth
@@ -52,7 +53,7 @@ class MainActivity : ComponentActivity() {
             when (screen) {
                 "loading" -> Text("laoding")
                 "login" -> LoginScreen(
-                    onLoginSuccess = { _ -> screen = "home"},
+                    onLoginSuccess = { screen = "home"},
                     onToRegisterScreen = { screen = "register" }
                 )
                 "register" -> RegisterScreen(
@@ -63,7 +64,10 @@ class MainActivity : ComponentActivity() {
                     onToLoginScreen = { screen = "login" }
                 )
                 "home" -> {
-                    Text("Halo $namaUser! Kamu sudah login.")
+                    HomeScreen(
+                        namaUser = namaUser ,
+                        onLogOutSuccess = { screen = "login" }
+                    )
                 }
 
                 "otp" -> {
