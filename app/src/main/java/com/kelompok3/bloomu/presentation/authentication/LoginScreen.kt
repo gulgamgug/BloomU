@@ -36,8 +36,8 @@ import kotlinx.serialization.json.put
 
 @Composable
 
-fun RegisterScreen(onRegisterSuccess: (String) -> Unit, onToLoginScreen: () -> Unit){
-    var nama by remember { mutableStateOf("") }
+fun LoginScreen(onLoginSuccess: (String) -> Unit, onToRegisterScreen: () -> Unit){
+    //var nama by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val scope = rememberCoroutineScope()
@@ -55,13 +55,12 @@ fun RegisterScreen(onRegisterSuccess: (String) -> Unit, onToLoginScreen: () -> U
         )
         Spacer(Modifier.height(10.dp))
 
-        Text("Register Page",
+        Text("Login Page",
             style = TextStyle(fontSize = 30.sp),
             color = Color(0xFF9383CC)
         )
         Spacer(Modifier.height(15.dp))
 
-        AuthTextField("Nama", nama, { nama = it} )
         AuthTextField("Email", email, { email = it} )
         AuthTextField("Password", password, { password = it} )
 
@@ -69,18 +68,17 @@ fun RegisterScreen(onRegisterSuccess: (String) -> Unit, onToLoginScreen: () -> U
         Button(onClick = {
             scope.launch {
                 try {
-                    supabase.auth.signUpWith(Email) {
+                    supabase.auth.signInWith(Email) {
                         this.email = email
                         this.password = password
-                        data = buildJsonObject { put("nama", nama) }
                     }
-                    onRegisterSuccess(email)
+                    //  onLoginSuccess(email)
                 } catch (e: Exception) {
-                    println("error daftar: ${e.message}")
+                    println("error login")
                 }
             }
-        }) { Text("Register") }
-        TextButton(onClick = onToLoginScreen) { Text("Login") }
+        }) { Text("Login") }
+        TextButton(onClick = onToRegisterScreen) { Text("Register") }
 
 
 

@@ -3,19 +3,20 @@ package com.kelompok3.bloomu
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.kelompok3.bloomu.presentation.authentication.LoginScreen
+import com.kelompok3.bloomu.presentation.authentication.OtpScreen
 import com.kelompok3.bloomu.presentation.authentication.RegisterScreen
-import com.kelompok3.bloomu.ui.theme.BloomUTheme
 import com.kelompok3.bloomu.supabase.supabase
+import com.kelompok3.bloomu.ui.theme.BloomUTheme
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.status.SessionStatus
 import kotlinx.coroutines.flow.filter
@@ -44,16 +45,16 @@ class MainActivity : ComponentActivity() {
                     namaUser = user.userMetadata?.get("nama")?.jsonPrimitive?.content ?: "user"
                     screen = "home"
                 } else {
-                    screen = "login"
+                    screen = "register"
                 }
             }
 
             when (screen) {
                 "loading" -> Text("laoding")
-                "login" -> {
-                    // sementara lgsg ke register soale blm bikin layar login
-                    screen = "register"
-                }
+                "login" -> LoginScreen(
+                    onLoginSuccess = { _ -> screen = "home"},
+                    onToRegisterScreen = { screen = "register" }
+                )
                 "register" -> RegisterScreen(
                     onRegisterSuccess = { email ->
                         emailUser = email // simpen email buat otp
@@ -64,8 +65,12 @@ class MainActivity : ComponentActivity() {
                 "home" -> {
                     Text("Halo $namaUser! Kamu sudah login.")
                 }
+
                 "otp" -> {
-                    Text("Cek email $emailUser buat kode OTP ya!")
+                    OtpScreen(
+                        email = emailUser,
+                        onVerifSuccess = { screen = "home" }
+                    )
                 }
             }
         }
