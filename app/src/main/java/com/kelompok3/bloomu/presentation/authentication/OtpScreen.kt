@@ -48,7 +48,7 @@ fun OtpScreen(email: String, onVerifSuccess: () -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text("Silahkan cek email kamu untuk kode OTP", style = TextStyle(fontSize = 20.sp), color = Color(0xFF9383CC))
+        Text("Kode OTP sudah kami kirimkan kepada $email. Silahkan cek inbox email anda", style = TextStyle(fontSize = 20.sp), color = Color(0xFF9383CC))
         Spacer(Modifier.height(25.dp))
         OtpInputField(digitCount = 6, onOtpComplete = { otpCode = it })
         Button(onClick = {
