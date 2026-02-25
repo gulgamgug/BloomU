@@ -9,7 +9,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,11 +23,18 @@ import androidx.compose.ui.unit.dp
 import com.kelompok3.bloomu.supabase.supabase
 import io.github.jan.supabase.auth.auth
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.jsonPrimitive
 
 @Composable
 
-fun HomeScreen(namaUser: String, onLogOutSuccess: () -> Unit) {
+fun HomeScreen(onLogOutSuccess: () -> Unit) {
+    var namaUser by remember { mutableStateOf("Loading..") }
     val scope = rememberCoroutineScope()
+    LaunchedEffect(Unit) {
+        val user = supabase.auth.currentUserOrNull()
+        namaUser = user?.userMetadata?.get("nama")?.jsonPrimitive?.content ?: "user"
+    }
+
     Column(
         modifier =  Modifier.fillMaxSize()
             .background(Color.White),

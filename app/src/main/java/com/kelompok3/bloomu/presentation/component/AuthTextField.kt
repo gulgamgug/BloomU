@@ -15,7 +15,7 @@ fun AuthTextField(placeholder: String, value: String, onValueChange: (String) ->
         enabled = true,
         onValueChange = onValueChange,
         singleLine = true,
-        shape = RoundedCornerShape(5.dp)
+        shape = RoundedCornerShape(30.dp)
     )
 
 }
