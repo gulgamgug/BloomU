@@ -2,4 +2,9 @@
 <resources>
 
     <style name="Theme.BloomU" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenAnimatedIcon">@drawable/logo_gambar</item>
+        <item name="windowSplashScreenBackground">#FFFFFF</item>
+        <item name="postSplashScreenTheme">@style/Theme.BloomU</item>
+    </style>
 </resources>
