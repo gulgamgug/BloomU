@@ -12,6 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -23,7 +24,9 @@ import com.kelompok3.bloomu.presentation.home.HomeScreen
 import com.kelompok3.bloomu.supabase.supabase
 import com.kelompok3.bloomu.ui.theme.BloomUTheme
 import com.kelompok3.bloomu.navigation.*
+import com.kelompok3.bloomu.presentation.component.LoadingDialog
 import io.github.jan.supabase.auth.auth
+import io.github.jan.supabase.auth.handleDeeplinks
 import io.github.jan.supabase.auth.status.SessionStatus
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
@@ -31,49 +34,40 @@ import kotlinx.serialization.json.jsonPrimitive
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
+        supabase.handleDeeplinks(intent)
+        var keepSplashShown = true
+        splashScreen.setKeepOnScreenCondition { keepSplashShown }
         //enableEdgeToEdge()
         setContent {
             val navController = rememberNavController()
-            var screen by remember {
-                mutableStateOf("loading")
-            }
-            var emailUser by remember { mutableStateOf("") }
-            var namaUser by remember { mutableStateOf("") }
-
             NavHost(
                 navController = navController,
                 startDestination = LoadingRoute
             ) {
                 composable<LoadingRoute> {
+
                     LaunchedEffect(Unit) {
-                        val user = supabase.auth.currentUserOrNull()
-                        if (user != null) {
-                            navController.navigate(HomeRoute) {
-                                popUpTo(LoadingRoute) { inclusive = true }
-                            }
-                        } else {
-                            navController.navigate(LoginRoute) {
-                                popUpTo(LoadingRoute) { inclusive = true }
+                        supabase.auth.sessionStatus.collect { status -> //cek status session saat ini dibalik splash screen
+                            if (status is SessionStatus.Authenticated || status is SessionStatus.NotAuthenticated) {
+                                val user = supabase.auth.currentUserOrNull()
+                                if (user != null) {
+                                    navController.navigate(HomeRoute) {
+                                        popUpTo(LoadingRoute) { inclusive = true }
+                                    }
+                                } else {
+                                    navController.navigate(LoginRoute) {
+                                        popUpTo(LoadingRoute) { inclusive = true }
+                                    }
+                                }
+                                keepSplashShown = false
                             }
                         }
-                    }
-                    Text("Loading...")
-                }
 
-//                        // cek di hp udh login apa blom
-//                        val status = supabase.auth.sessionStatus
-//                            .filter { it is SessionStatus.Authenticated || it is SessionStatus.NotAuthenticated }
-//                            .first()
-//
-//                        val user = supabase.auth.currentUserOrNull()
-//                        if (user != null) {
-//                            namaUser = user.userMetadata?.get("nama")?.jsonPrimitive?.content ?: "user"
-//                            screen = "home"
-//                        } else {
-//                            screen = "register"
-//                        }
-//                    }
+                    }
+
+                }
 
                 composable<LoginRoute> {
                     LoginScreen(
@@ -92,6 +86,9 @@ class MainActivity : ComponentActivity() {
                         onRegisterSuccess = { email ->
                             navController.navigate(OtpRoute(email))
                         },
+                        onLoginSuccess = { navController.navigate(HomeRoute) {
+                            popUpTo(RegisterRoute) { inclusive = true }
+                        } },
                         onToLoginScreen = { navController.navigate(LoginRoute){
                             popUpTo(RegisterRoute) { inclusive = true }
                         } }

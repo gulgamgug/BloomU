@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
@@ -30,17 +31,29 @@ import com.kelompok3.bloomu.presentation.component.AuthTextField
 import com.kelompok3.bloomu.supabase.supabase
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.builtin.Email
+import io.github.jan.supabase.compose.auth.composable.NativeSignInResult
+import io.github.jan.supabase.compose.auth.composable.rememberSignInWithGoogle
+import io.github.jan.supabase.compose.auth.composeAuth
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 
 @Composable
 
-fun RegisterScreen(onRegisterSuccess: (String) -> Unit, onToLoginScreen: () -> Unit){
+fun RegisterScreen(onRegisterSuccess: (String) -> Unit, onToLoginScreen: () -> Unit, onLoginSuccess: () -> Unit){
     var nama by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val scope = rememberCoroutineScope()
+    val googleState = supabase.composeAuth.rememberSignInWithGoogle(
+        onResult = { result ->
+            when (result) {
+                is NativeSignInResult.Success -> onLoginSuccess()
+                is NativeSignInResult.Error -> println("Error Google: ${result.message}")
+                else -> {}
+            }
+        }
+    )
     Column(
         modifier = Modifier.fillMaxSize()
             .padding(20.dp)
@@ -72,7 +85,7 @@ fun RegisterScreen(onRegisterSuccess: (String) -> Unit, onToLoginScreen: () -> U
                     supabase.auth.signUpWith(Email) {
                         this.email = email
                         this.password = password
-                        data = buildJsonObject { put("nama", nama) }
+                        data = buildJsonObject { put("name", nama) }
                     }
                     onRegisterSuccess(email)
                 } catch (e: Exception) {
@@ -81,6 +94,12 @@ fun RegisterScreen(onRegisterSuccess: (String) -> Unit, onToLoginScreen: () -> U
             }
         }) { Text("Register") }
         TextButton(onClick = onToLoginScreen) { Text("Login") }
+        Spacer(Modifier.height(20.dp))
+        Button(onClick = {
+            googleState.startFlow()},
+            modifier = Modifier.fillMaxWidth()
+        ) { Text("Login with Google") }
+
 
 
 

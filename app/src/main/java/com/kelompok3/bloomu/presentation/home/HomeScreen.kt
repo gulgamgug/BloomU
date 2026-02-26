@@ -32,7 +32,7 @@ fun HomeScreen(onLogOutSuccess: () -> Unit) {
     val scope = rememberCoroutineScope()
     LaunchedEffect(Unit) {
         val user = supabase.auth.currentUserOrNull()
-        namaUser = user?.userMetadata?.get("nama")?.jsonPrimitive?.content ?: "user"
+        namaUser = user?.userMetadata?.get("name")?.jsonPrimitive?.content ?: "user"
     }
 
     Column(

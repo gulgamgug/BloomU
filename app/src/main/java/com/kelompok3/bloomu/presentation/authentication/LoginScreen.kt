@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
@@ -27,9 +28,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kelompok3.bloomu.R
 import com.kelompok3.bloomu.presentation.component.AuthTextField
+import com.kelompok3.bloomu.presentation.component.LoadingDialog
 import com.kelompok3.bloomu.supabase.supabase
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.builtin.Email
+import io.github.jan.supabase.compose.auth.composable.NativeSignInResult
+import io.github.jan.supabase.compose.auth.composable.rememberSignInWithGoogle
+import io.github.jan.supabase.compose.auth.composeAuth
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
@@ -38,9 +43,25 @@ import kotlinx.serialization.json.put
 
 fun LoginScreen(onLoginSuccess: () -> Unit, onToRegisterScreen: () -> Unit){
     //var nama by remember { mutableStateOf("") }
+    var isLoading by remember { mutableStateOf(false)}
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val scope = rememberCoroutineScope()
+    var emailError by remember { mutableStateOf(false)}
+    var passwordError by remember { mutableStateOf(false) }
+
+    val googleState = supabase.composeAuth.rememberSignInWithGoogle(
+        onResult = { result ->
+            when (result) {
+                is NativeSignInResult.Success -> onLoginSuccess()
+                is NativeSignInResult.Error -> println("Error Google: ${result.message}")
+                else -> {}
+            }
+        }
+    )
+
+    LoadingDialog(isLoading = isLoading)
+
     Column(
         modifier = Modifier.fillMaxSize()
             .padding(20.dp)
@@ -61,24 +82,46 @@ fun LoginScreen(onLoginSuccess: () -> Unit, onToRegisterScreen: () -> Unit){
         )
         Spacer(Modifier.height(15.dp))
 
-        AuthTextField("Email", email, { email = it} )
+        AuthTextField("Email", email, {
+            email = it
+            //cek apakah email sudah diisi benar apa belum
+            //kalau sudah diisi maka hilangkan merah2nya
+            if (it.isNotEmpty()) emailError = false
+        }, isError = emailError, errorMessage = "Email tidak boleh kosong"
+        )
         AuthTextField("Password", password, { password = it} )
 
         Spacer(Modifier.height(20.dp))
         Button(onClick = {
-            scope.launch {
-                try {
-                    supabase.auth.signInWith(Email) {
-                        this.email = email
-                        this.password = password
+            //saat diepencet maka cek dulu email dan password kosong apa nggak
+            //kalau kosong, ga jadi login & munculin merah2 di text fieldnya
+            emailError = email.isEmpty()
+            passwordError = password.isEmpty()
+            //kalau udah diisi, lanjut login
+            if (!emailError && !passwordError) {
+                isLoading = true
+                scope.launch {
+                    try {
+                        supabase.auth.signInWith(Email) {
+                            this.email = email
+                            this.password = password
+                        }
+                        isLoading = false
+                        onLoginSuccess()
+                    } catch (e: Exception) {
+                        isLoading = false
+                        println("error login")
                     }
-                      onLoginSuccess()
-                } catch (e: Exception) {
-                    println("error login")
                 }
             }
         }) { Text("Login") }
         TextButton(onClick = onToRegisterScreen) { Text("Register") }
+        Spacer(Modifier.height(20.dp))
+        Button(onClick = {
+            googleState.startFlow()},
+            modifier = Modifier.fillMaxWidth()
+        ) { Text("Login with Google") }
+
 
 
 

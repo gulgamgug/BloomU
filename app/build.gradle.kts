@@ -62,6 +62,7 @@ dependencies {
     implementation(libs.ktor.client.android)
     implementation(libs.supabase.auth)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.multiplatform.settings)
     val navVersion = "2.9.7"
 
     // Jetpack Compose integration
@@ -76,4 +77,14 @@ dependencies {
 
     // Testing Navigation
     androidTestImplementation("androidx.navigation:navigation-testing:$navVersion")
+
+    implementation("androidx.core:core-splashscreen:1.2.0")
+    implementation(libs.supabase.compose.auth)
+    implementation(libs.google.id)
+    implementation("androidx.credentials:credentials:<latest version>")
+    implementation ("com.google.android.libraries.identity.googleid:googleid:<latest version>")
+
+// optional - needed for credentials support from play services, for devices running
+// Android 13 and below.
+    implementation("androidx.credentials:credentials-play-services-auth:<latest version>")
 }
