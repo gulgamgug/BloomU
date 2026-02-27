@@ -103,7 +103,7 @@ fun RegisterScreen(onRegisterSuccess: (String) -> Unit, onToLoginScreen: () -> U
             verticalArrangement = Arrangement.Center
         ) {
 
-            Text("Selamat datang di",
+            Text("Selamat Datang Kembali di",
                 style = TextStyle(fontSize = 20.sp),
                 color = Color(0xFF9383CC),
                 fontWeight = FontWeight.Bold
