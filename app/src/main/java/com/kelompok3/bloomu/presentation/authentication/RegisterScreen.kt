@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -42,13 +41,11 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kelompok3.bloomu.R
 import com.kelompok3.bloomu.presentation.component.AuthTextField
 import com.kelompok3.bloomu.supabase.supabase
-import com.kelompok3.bloomu.ui.theme.BloomUTheme
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.builtin.Email
 import io.github.jan.supabase.compose.auth.composable.NativeSignInResult
@@ -256,10 +253,10 @@ fun RegisterScreen(onRegisterSuccess: (String) -> Unit, onToLoginScreen: () -> U
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun RegisterScreenPreview() {
-    BloomUTheme {
-        RegisterScreen(onRegisterSuccess = {}, onToLoginScreen = {})
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun RegisterScreenPreview() {
+//    BloomUTheme {
+//        RegisterScreen(onRegisterSuccess = {}, onToLoginScreen = {})
+//    }
+//}
