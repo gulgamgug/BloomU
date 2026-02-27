@@ -57,7 +57,11 @@ import kotlinx.serialization.json.put
 
 @Composable
 
-fun RegisterScreen(onRegisterSuccess: (String) -> Unit, onToLoginScreen: () -> Unit, onLoginSuccess: () -> Unit){
+fun RegisterScreen(
+    onRegisterSuccess: (String) -> Unit,
+    onToLoginScreen: () -> Unit,
+    onLoginSuccess: () -> Unit
+){
     var nama by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -207,7 +211,7 @@ fun RegisterScreen(onRegisterSuccess: (String) -> Unit, onToLoginScreen: () -> U
                             supabase.auth.signUpWith(Email) {
                                 this.email = email
                                 this.password = password
-                                data = buildJsonObject { put("nama", nama) }
+                                data = buildJsonObject { put("name", nama) }
                             }
                             onRegisterSuccess(email)
                         } catch (e: Exception) {
