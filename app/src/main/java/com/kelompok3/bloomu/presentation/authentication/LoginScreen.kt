@@ -73,8 +73,10 @@ fun LoginScreen(onLoginSuccess: () -> Unit, onToRegisterScreen: () -> Unit){
             contentDescription = null,
             modifier = Modifier
                 .align(Alignment.TopEnd)
-                .offset(x = 60.dp, y = (-60).dp)
-                .alpha(0.5f)
+                .size(700.dp)
+                .offset(x = 100.dp, y = (-100).dp)
+                .alpha(1.0f)
+                .blur(35.dp)
         )
 
         // Ellipse kiri bawah
@@ -83,9 +85,11 @@ fun LoginScreen(onLoginSuccess: () -> Unit, onToRegisterScreen: () -> Unit){
             contentDescription = null,
             modifier = Modifier
                 .align(Alignment.BottomStart)
-                .offset(x = (-60).dp, y = 60.dp)
+                .size(700.dp)
+                .offset(x = (-100).dp, y = 100.dp)
                 .rotate(180f) // Diputar agar menyerupai lingkaran/posisi yang pas
-                .alpha(0.5f)
+                .alpha(1.0f)
+                .blur(35.dp)
         )
 
         Column(

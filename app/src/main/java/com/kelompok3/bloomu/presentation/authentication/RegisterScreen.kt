@@ -32,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -74,8 +75,10 @@ fun RegisterScreen(onRegisterSuccess: (String) -> Unit, onToLoginScreen: () -> U
             contentDescription = null,
             modifier = Modifier
                 .align(Alignment.TopEnd)
-                .offset(x = 60.dp, y = (-60).dp)
-                .alpha(0.5f)
+                .size(500.dp)
+                .offset(x = 100.dp, y = (-100).dp)
+                .alpha(1.0f)
+                .blur(40.dp)
         )
 
         // Ellipse kiri bawah
@@ -84,9 +87,11 @@ fun RegisterScreen(onRegisterSuccess: (String) -> Unit, onToLoginScreen: () -> U
             contentDescription = null,
             modifier = Modifier
                 .align(Alignment.BottomStart)
-                .offset(x = (-60).dp, y = 60.dp)
+                .size(500.dp)
+                .offset(x = (-100).dp, y = 100.dp)
                 .rotate(180f)
-                .alpha(0.5f)
+                .alpha(1.0f)
+                .blur(40.dp)
         )
 
         Column(
