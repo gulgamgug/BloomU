@@ -1,7 +1,7 @@
 package com.kelompok3.bloomu.presentation.authentication
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,15 +9,15 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -28,24 +28,23 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.blur
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.kelompok3.bloomu.R
 import com.kelompok3.bloomu.supabase.supabase
+import com.kelompok3.bloomu.ui.theme.InterFontFamily
 import io.github.jan.supabase.auth.OtpType
 import io.github.jan.supabase.auth.auth
 import kotlinx.coroutines.launch
@@ -56,36 +55,40 @@ fun OtpScreen(email: String, onVerifSuccess: () -> Unit) {
     var otpCode by remember { mutableStateOf("") }
     val scrollState = rememberScrollState()
     val scope = rememberCoroutineScope()
+    val gradientBackground = Brush.linearGradient(
+        colors = listOf(Color(0xFFFFFFFF), Color(0xFFE9E3FF))
+    )
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(gradientBackground)
+
     ) {
         // Ellipse kanan atas
-        Image(
-            painter = painterResource(id = R.drawable.ellipse_1),
-            contentDescription = null,
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .size(700.dp)
-                .offset(x = 100.dp, y = (-100).dp)
-                .alpha(1.0f)
-                .blur(35.dp)
-        )
-
-        // Ellipse kiri bawah
-        Image(
-            painter = painterResource(id = R.drawable.ellipse_1),
-            contentDescription = null,
-            modifier = Modifier
-                .align(Alignment.BottomStart)
-                .size(700.dp)
-                .offset(x = (-100).dp, y = 100.dp)
-                .rotate(180f)
-                .alpha(1.0f)
-                .blur(35.dp)
-        )
+//        Image(
+//            painter = painterResource(id = R.drawable.ellipse_1),
+//            contentDescription = null,
+//            modifier = Modifier
+//                .align(Alignment.TopEnd)
+//                .size(700.dp)
+//                .offset(x = 100.dp, y = (-100).dp)
+//                .alpha(1.0f)
+//                .blur(35.dp)
+//        )
+//
+//        // Ellipse kiri bawah
+//        Image(
+//            painter = painterResource(id = R.drawable.ellipse_1),
+//            contentDescription = null,
+//            modifier = Modifier
+//                .align(Alignment.BottomStart)
+//                .size(700.dp)
+//                .offset(x = (-100).dp, y = 100.dp)
+//                .rotate(180f)
+//                .alpha(1.0f)
+//                .blur(35.dp)
+//        )
     }
 
     Column(
@@ -96,19 +99,27 @@ fun OtpScreen(email: String, onVerifSuccess: () -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-        Spacer(Modifier.height(90.dp))
+        Spacer(Modifier.height(120.dp))
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
             Text(
                 "Kode OTP",
-                style = TextStyle(fontSize = 20.sp, fontWeight = androidx.compose.ui.text.font.FontWeight.Bold),
+                style = TextStyle(
+                    fontFamily = InterFontFamily,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontStyle = FontStyle.Normal),
                 color = Color(0xFF000000)
             )
+            Spacer(Modifier.height(10.dp))
             Text(
                 "Masukkan kode OTP yang telah dikirimkan melalui $email",
-                style = TextStyle(fontSize = 16.sp),
+                style = TextStyle(
+                    fontSize = 16.sp,
+                    fontFamily = InterFontFamily,
+                    fontWeight = FontWeight.SemiBold),
                 color = Color(0xFF262234),
                 textAlign = TextAlign.Center
             )
@@ -136,6 +147,7 @@ fun OtpScreen(email: String, onVerifSuccess: () -> Unit) {
     }
 }
 
+
 @Composable
 fun OtpInputField(
      digitCount: Int = 6,
@@ -145,6 +157,10 @@ fun OtpInputField(
      val otpValues = remember { mutableStateListOf("", "", "", "", "", "") }
      // FocusRequester untuk masing-masing box
      val focusRequesters = remember { List(digitCount) { FocusRequester() } }
+
+     val gradientBrush = Brush.linearGradient(
+         colors = listOf(Color(0xFFF5C6EC), Color(0xFF8366EB))
+     )
 
      Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
          otpValues.forEachIndexed { index, value ->
@@ -166,7 +182,13 @@ fun OtpInputField(
                      }
                  },
                  modifier = Modifier
-                     .width(45.dp)
+                     .width(50.dp)
+                     .height(90.dp)
+                     .border(
+                         width = 1.dp,
+                         brush = gradientBrush,
+                         shape = RoundedCornerShape(10.dp)
+                     )
                      .focusRequester(focusRequesters[index])
                      .onKeyEvent { event ->
                          // Logika Backspace (Pindah Focus ke Kiri)
@@ -175,8 +197,15 @@ fun OtpInputField(
                              true
                          } else false
                      },
+                 colors = OutlinedTextFieldDefaults.colors(
+                     focusedContainerColor = Color.White,
+                     unfocusedContainerColor = Color.White,
+                     focusedBorderColor = Color.Transparent,
+                     unfocusedBorderColor = Color.Transparent
+                 ),
+                 shape = RoundedCornerShape(12.dp),
                  keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                 textStyle = TextStyle(textAlign = TextAlign.Center, fontSize = 20.sp),
+                 textStyle = TextStyle(textAlign = TextAlign.Center, fontSize = 20.sp, fontWeight = FontWeight.Bold),
                  singleLine = true
              )
          }

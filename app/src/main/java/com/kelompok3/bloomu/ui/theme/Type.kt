@@ -11,7 +11,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.kelompok3.bloomu.R
 
-// Definisi Inter Variable Font Family
 @OptIn(ExperimentalTextApi::class)
 val InterFontFamily = FontFamily(
     Font(
@@ -29,7 +28,6 @@ val InterFontFamily = FontFamily(
     )
 )
 
-// Set of Material typography styles to start with
 val Typography = Typography(
     bodyLarge = TextStyle(
         fontFamily = InterFontFamily,
