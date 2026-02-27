@@ -31,12 +31,14 @@ import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kelompok3.bloomu.supabase.supabase
 import io.github.jan.supabase.auth.OtpType
 import io.github.jan.supabase.auth.auth
 import kotlinx.coroutines.launch
+
 
 @Composable
 fun OtpScreen(email: String, onVerifSuccess: () -> Unit) {
@@ -115,3 +117,8 @@ fun OtpInputField(
          }
      }
  }
+
+@Composable
+@Preview
+fun OtpScreenPreview() {
+    OtpScreen("yayaya@gmail.com", onVerifSuccess = {} )}
