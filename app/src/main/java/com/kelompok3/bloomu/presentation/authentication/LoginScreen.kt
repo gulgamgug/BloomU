@@ -125,6 +125,14 @@ fun LoginScreen(onLoginSuccess: () -> Unit, onToRegisterScreen: () -> Unit){
             )
             Spacer(Modifier.height(10.dp))
 
+            Text(
+                text = "Email",
+                modifier = Modifier.fillMaxWidth().padding(start = 4.dp, bottom = 4.dp),
+                color = Color(0xFF9383CC),
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Medium,
+                textAlign = TextAlign.Start
+            )
             AuthTextField(
                 placeholder = "Email",
                 value = email,
@@ -138,6 +146,14 @@ fun LoginScreen(onLoginSuccess: () -> Unit, onToRegisterScreen: () -> Unit){
 
             )
             Spacer(Modifier.height(15.dp))
+            Text(
+                text = "Password",
+                modifier = Modifier.fillMaxWidth().padding(start = 4.dp, bottom = 4.dp),
+                color = Color(0xFF9383CC),
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Medium,
+                textAlign = TextAlign.Start
+            )
             AuthTextField(
                 placeholder = "Password",
                 value = password,

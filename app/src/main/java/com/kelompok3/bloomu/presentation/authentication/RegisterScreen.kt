@@ -75,10 +75,10 @@ fun RegisterScreen(onRegisterSuccess: (String) -> Unit, onToLoginScreen: () -> U
             contentDescription = null,
             modifier = Modifier
                 .align(Alignment.TopEnd)
-                .size(500.dp)
+                .size(700.dp)
                 .offset(x = 100.dp, y = (-100).dp)
                 .alpha(1.0f)
-                .blur(40.dp)
+                .blur(35.dp)
         )
 
         // Ellipse kiri bawah
@@ -87,11 +87,11 @@ fun RegisterScreen(onRegisterSuccess: (String) -> Unit, onToLoginScreen: () -> U
             contentDescription = null,
             modifier = Modifier
                 .align(Alignment.BottomStart)
-                .size(500.dp)
+                .size(700.dp)
                 .offset(x = (-100).dp, y = 100.dp)
                 .rotate(180f)
                 .alpha(1.0f)
-                .blur(40.dp)
+                .blur(35.dp)
         )
 
         Column(
@@ -128,6 +128,14 @@ fun RegisterScreen(onRegisterSuccess: (String) -> Unit, onToLoginScreen: () -> U
             )
 
             Spacer(Modifier.height(15.dp))
+            Text(
+                text = "Nama",
+                modifier = Modifier.fillMaxWidth().padding(start = 4.dp, bottom = 4.dp),
+                color = Color(0xFF9383CC),
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Medium,
+                textAlign = TextAlign.Start
+            )
             AuthTextField(
                 placeholder = "Nama",
                 value = nama,
@@ -140,7 +148,15 @@ fun RegisterScreen(onRegisterSuccess: (String) -> Unit, onToLoginScreen: () -> U
                 }
 
             )
-            Spacer(Modifier.height(20.dp))
+            Spacer(Modifier.height(15.dp))
+            Text(
+                text = "Email",
+                modifier = Modifier.fillMaxWidth().padding(start = 4.dp, bottom = 4.dp),
+                color = Color(0xFF9383CC),
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Medium,
+                textAlign = TextAlign.Start
+            )
             AuthTextField(
                 placeholder = "Email",
                 value = email,
@@ -152,7 +168,15 @@ fun RegisterScreen(onRegisterSuccess: (String) -> Unit, onToLoginScreen: () -> U
                     )
                 }
             )
-            Spacer(Modifier.height(20.dp))
+            Spacer(Modifier.height(15.dp))
+            Text(
+                text = "Password",
+                modifier = Modifier.fillMaxWidth().padding(start = 4.dp, bottom = 4.dp),
+                color = Color(0xFF9383CC),
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Medium,
+                textAlign = TextAlign.Start
+            )
             AuthTextField(
                 placeholder = "Password",
                 value = password,
