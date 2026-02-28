@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -50,6 +49,7 @@ import com.kelompok3.bloomu.presentation.component.AuthTextField
 import com.kelompok3.bloomu.presentation.component.LoadingDialog
 import com.kelompok3.bloomu.supabase.supabase
 import com.kelompok3.bloomu.ui.theme.BloomUTheme
+import com.kelompok3.bloomu.ui.theme.InterFontFamily
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.builtin.Email
 import io.github.jan.supabase.compose.auth.composable.NativeSignInResult
@@ -124,10 +124,13 @@ fun LoginScreen(onLoginSuccess: () -> Unit, onToRegisterScreen: () -> Unit){
             verticalArrangement = Arrangement.Center
         ) {
 
-            Text("Selamat Datang di",
-                style = TextStyle(fontSize = 20.sp),
-                color = Color(0xFF9383CC),
-                fontWeight = FontWeight.Bold
+            Text("Selamat Datang Kembali di",
+                style = TextStyle(
+                    fontSize = 20.sp,
+                    fontFamily = InterFontFamily,
+                    fontWeight = FontWeight.Bold
+                ),
+                color = Color(0xFF9383CC)
             )
             Spacer(Modifier.height(10.dp))
 
@@ -142,6 +145,7 @@ fun LoginScreen(onLoginSuccess: () -> Unit, onToRegisterScreen: () -> Unit){
                 modifier = Modifier.fillMaxWidth(),
                 style = TextStyle(
                     fontSize = 15.sp,
+                    fontFamily = InterFontFamily,
                     fontWeight = FontWeight.Bold
                 ),
                 color = Color.Black,
@@ -153,6 +157,7 @@ fun LoginScreen(onLoginSuccess: () -> Unit, onToRegisterScreen: () -> Unit){
                 text = "Email",
                 modifier = Modifier.fillMaxWidth().padding(start = 4.dp, bottom = 4.dp),
                 color = Color(0xFF9383CC),
+                fontFamily = InterFontFamily,
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Medium,
                 textAlign = TextAlign.Start
@@ -174,6 +179,7 @@ fun LoginScreen(onLoginSuccess: () -> Unit, onToRegisterScreen: () -> Unit){
                 text = "Password",
                 modifier = Modifier.fillMaxWidth().padding(start = 4.dp, bottom = 4.dp),
                 color = Color(0xFF9383CC),
+                fontFamily = InterFontFamily,
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Medium,
                 textAlign = TextAlign.Start
@@ -195,6 +201,7 @@ fun LoginScreen(onLoginSuccess: () -> Unit, onToRegisterScreen: () -> Unit){
                 modifier = Modifier.fillMaxWidth(),
                 style = TextStyle(
                     fontSize = 12.sp,
+                    fontFamily = InterFontFamily,
                     color = Color(0xFF9383CC),
                     textAlign = TextAlign.End
                 )
@@ -202,7 +209,7 @@ fun LoginScreen(onLoginSuccess: () -> Unit, onToRegisterScreen: () -> Unit){
 
             Spacer(Modifier.height(120.dp))
             Button(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().height(53.dp),
                 onClick = {
                     scope.launch {
                         try {
@@ -215,14 +222,17 @@ fun LoginScreen(onLoginSuccess: () -> Unit, onToRegisterScreen: () -> Unit){
                             println("error login")
                         }
                     }
-                }
-            ) { Text("Masuk") }
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF221E52),
+                    contentColor = Color.White)
+            ) { Text("Masuk", fontFamily = InterFontFamily, fontWeight = FontWeight.Bold) }
 
             Spacer(Modifier.height(10.dp))
 
             OutlinedButton(
                 onClick = { googleState.startFlow() },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().height(53.dp),
                 border = BorderStroke(1.dp, Color(0xFF3155AA)),
                 colors = ButtonDefaults.outlinedButtonColors(containerColor = Color.Transparent)
             ) {
@@ -233,16 +243,16 @@ fun LoginScreen(onLoginSuccess: () -> Unit, onToRegisterScreen: () -> Unit){
                     tint = Color.Unspecified
                 )
                 Spacer(Modifier.width(10.dp))
-                Text("Sign up with Google", color = Color(0xFF3155AA))
+                Text("Sign up with Google", color = Color(0xFF3155AA), fontFamily = InterFontFamily)
             }
 
             Spacer(Modifier.height(1.dp))
 
             val footerText = buildAnnotatedString {
-                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                withStyle(style = SpanStyle(fontFamily = InterFontFamily, fontWeight = FontWeight.Bold)) {
                     append("Belum memiliki akun? ")
                 }
-                withStyle(style = SpanStyle(color = Color(0xFF0D47A1), fontWeight = FontWeight.Bold)) {
+                withStyle(style = SpanStyle(fontFamily = InterFontFamily, color = Color(0xFF0D47A1), fontWeight = FontWeight.Bold)) {
                     append("Buat akun")
                 }
             }

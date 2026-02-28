@@ -1,6 +1,5 @@
 package com.kelompok3.bloomu.presentation.component
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -10,8 +9,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import com.kelompok3.bloomu.ui.theme.InterFontFamily
 
 @Composable
 fun AuthTextField(
@@ -24,9 +24,10 @@ fun AuthTextField(
         value = value,
         enabled = true,
         onValueChange = onValueChange,
-        placeholder = { Text(placeholder) },
+        placeholder = { Text(placeholder, fontFamily = InterFontFamily) },
         leadingIcon = leadingIcon,
         singleLine = true,
+        textStyle = TextStyle(fontFamily = InterFontFamily),
         modifier = Modifier
             .fillMaxWidth()
             .shadow(elevation = 8.dp, shape = RoundedCornerShape(30.dp)),
