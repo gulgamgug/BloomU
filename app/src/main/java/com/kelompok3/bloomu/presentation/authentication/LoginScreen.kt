@@ -33,6 +33,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
@@ -62,10 +63,14 @@ fun LoginScreen(onLoginSuccess: () -> Unit, onToRegisterScreen: () -> Unit){
     var password by remember { mutableStateOf("") }
     val scope = rememberCoroutineScope()
 
+    val gradientBrush = Brush.verticalGradient(
+        colors = listOf(Color(0xFFFFFFFF), Color(0xFFE9E3FF))
+    )
+
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(brush = gradientBrush)
     ) {
         // Ellipse kanan atas
         Image(

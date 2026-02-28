@@ -34,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
@@ -64,10 +65,14 @@ fun RegisterScreen(onRegisterSuccess: (String) -> Unit, onToLoginScreen: () -> U
     val scope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
 
+    val gradientBrush = Brush.verticalGradient(
+        colors = listOf(Color(0xFFFFFFFF), Color(0xFFE9E3FF))
+    )
+
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(brush = gradientBrush)
     ) {
         // Ellipse kanan atas
         Image(
