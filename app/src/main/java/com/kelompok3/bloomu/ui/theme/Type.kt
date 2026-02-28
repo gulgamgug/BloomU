@@ -1,31 +1,20 @@
 package com.kelompok3.bloomu.ui.theme
 
 import androidx.compose.material3.Typography
-import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontVariation
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.kelompok3.bloomu.R
 
-@OptIn(ExperimentalTextApi::class)
 val InterFontFamily = FontFamily(
-    Font(
-        resId = R.font.inter_variable,
-        variationSettings = FontVariation.Settings(
-            FontVariation.weight(400) // Default weight
-        )
-    ),
-    Font(
-        resId = R.font.inter_variable_italic,
-        style = FontStyle.Italic,
-        variationSettings = FontVariation.Settings(
-            FontVariation.weight(400)
-        )
-    )
+    Font(R.font.inter_regular, FontWeight.Normal),
+    Font(R.font.inter_medium, FontWeight.Medium),
+    Font(R.font.inter_semibold, FontWeight.SemiBold),
+    Font(R.font.inter_bold, FontWeight.Bold),
+    Font(R.font.inter_italic, FontWeight.Normal, FontStyle.Italic)
 )
 
 val Typography = Typography(
