@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kelompok3.bloomu.supabase.supabase
 import com.kelompok3.bloomu.ui.theme.BloomUTheme
+import com.kelompok3.bloomu.ui.theme.InterFontFamily
 import io.github.jan.supabase.auth.auth
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.jsonPrimitive
@@ -43,8 +44,8 @@ fun HomeScreen(onLogOutSuccess: () -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text("Home Screen")
-        Text("Halo $namaUser!")
+        Text("Home Screen", fontFamily = InterFontFamily)
+        Text("Halo $namaUser!", fontFamily = InterFontFamily)
         Spacer(Modifier.height(30.dp))
         Button(onClick = {
             scope.launch {
@@ -55,7 +56,7 @@ fun HomeScreen(onLogOutSuccess: () -> Unit) {
                     println("error logout")
                 }
             }
-        }) { Text("Log Out") }
+        }) { Text("Log Out", fontFamily = InterFontFamily) }
     }
 }
 

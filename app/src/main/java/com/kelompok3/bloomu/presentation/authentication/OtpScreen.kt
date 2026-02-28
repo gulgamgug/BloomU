@@ -143,7 +143,7 @@ fun OtpScreen(email: String, onVerifSuccess: () -> Unit) {
                     println("error verifikasi")
                 }
             }
-        }) { Text("Verifikasi Kode") }
+        }) { Text("Verifikasi Kode", fontFamily = InterFontFamily) }
     }
 }
 

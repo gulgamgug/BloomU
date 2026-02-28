@@ -13,13 +13,17 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.kelompok3.bloomu.navigation.HomeRoute
+import com.kelompok3.bloomu.navigation.LoadingRoute
+import com.kelompok3.bloomu.navigation.LoginRoute
+import com.kelompok3.bloomu.navigation.OtpRoute
+import com.kelompok3.bloomu.navigation.RegisterRoute
 import com.kelompok3.bloomu.presentation.authentication.LoginScreen
 import com.kelompok3.bloomu.presentation.authentication.OtpScreen
 import com.kelompok3.bloomu.presentation.authentication.RegisterScreen
 import com.kelompok3.bloomu.presentation.home.HomeScreen
 import com.kelompok3.bloomu.supabase.supabase
 import com.kelompok3.bloomu.ui.theme.BloomUTheme
-import com.kelompok3.bloomu.navigation.*
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.handleDeeplinks
 import io.github.jan.supabase.auth.status.SessionStatus
@@ -94,6 +98,7 @@ class MainActivity : ComponentActivity() {
                         onVerifSuccess = {
                             navController.navigate(HomeRoute){
                                 popUpTo(OtpRoute(args.email)) { inclusive = true }
+                                popUpTo(RegisterRoute) { inclusive=true }
                             } }
                     )
                 }

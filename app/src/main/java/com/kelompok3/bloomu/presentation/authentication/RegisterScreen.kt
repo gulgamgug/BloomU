@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.sp
 import com.kelompok3.bloomu.R
 import com.kelompok3.bloomu.presentation.component.AuthTextField
 import com.kelompok3.bloomu.supabase.supabase
+import com.kelompok3.bloomu.ui.theme.InterFontFamily
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.builtin.Email
 import io.github.jan.supabase.compose.auth.composable.NativeSignInResult
@@ -116,10 +117,13 @@ fun RegisterScreen(
             verticalArrangement = Arrangement.Center
         ) {
 
-            Text("Selamat Datang Kembali di",
-                style = TextStyle(fontSize = 20.sp),
-                color = Color(0xFF9383CC),
-                fontWeight = FontWeight.Bold
+            Text("Selamat Datang di",
+                style = TextStyle(
+                    fontSize = 20.sp,
+                    fontFamily = InterFontFamily,
+                    fontWeight = FontWeight.Bold
+                ),
+                color = Color(0xFF9383CC)
             )
             Spacer(Modifier.height(17.dp))
 
@@ -134,6 +138,7 @@ fun RegisterScreen(
                 modifier = Modifier.fillMaxWidth(),
                 style = TextStyle(
                     fontSize = 15.sp,
+                    fontFamily = InterFontFamily,
                     fontWeight = FontWeight.Bold
                 ),
                 color = Color.Black,
@@ -145,8 +150,9 @@ fun RegisterScreen(
                 text = "Nama",
                 modifier = Modifier.fillMaxWidth().padding(start = 4.dp, bottom = 4.dp),
                 color = Color(0xFF9383CC),
+                fontFamily = InterFontFamily,
                 fontSize = 12.sp,
-                fontWeight = FontWeight.Medium,
+                fontWeight = FontWeight.SemiBold,
                 textAlign = TextAlign.Start
             )
             AuthTextField(
@@ -166,8 +172,9 @@ fun RegisterScreen(
                 text = "Email",
                 modifier = Modifier.fillMaxWidth().padding(start = 4.dp, bottom = 4.dp),
                 color = Color(0xFF9383CC),
+                fontFamily = InterFontFamily,
                 fontSize = 12.sp,
-                fontWeight = FontWeight.Medium,
+                fontWeight = FontWeight.SemiBold,
                 textAlign = TextAlign.Start
             )
             AuthTextField(
@@ -186,8 +193,9 @@ fun RegisterScreen(
                 text = "Password",
                 modifier = Modifier.fillMaxWidth().padding(start = 4.dp, bottom = 4.dp),
                 color = Color(0xFF9383CC),
+                fontFamily = InterFontFamily,
                 fontSize = 12.sp,
-                fontWeight = FontWeight.Medium,
+                fontWeight = FontWeight.SemiBold,
                 textAlign = TextAlign.Start
             )
             AuthTextField(
@@ -204,7 +212,7 @@ fun RegisterScreen(
 
             Spacer(Modifier.height(30.dp))
             Button(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().height(53.dp),
                 onClick = {
                     scope.launch {
                         try {
@@ -218,14 +226,17 @@ fun RegisterScreen(
                             println("error daftar: ${e.message}")
                         }
                     }
-                }
-            ) { Text("Register") }
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF221E52),
+                    contentColor = Color.White)
+            ) { Text("Buat Akun", fontFamily = InterFontFamily, fontWeight = FontWeight.Bold) }
 
             Spacer(Modifier.height(10.dp))
 
             OutlinedButton(
                 onClick = { googleState.startFlow() },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().height(53.dp),
                 border = BorderStroke(1.dp, Color(0xFF3155AA)),
                 colors = ButtonDefaults.outlinedButtonColors(containerColor = Color.Transparent)
             ) {
@@ -236,16 +247,16 @@ fun RegisterScreen(
                     tint = Color.Unspecified
                 )
                 Spacer(Modifier.width(10.dp))
-                Text("Sign up with Google", color = Color(0xFF3155AA))
+                Text("Sign up with Google", color = Color(0xFF3155AA), fontFamily = InterFontFamily)
             }
 
             Spacer(Modifier.height(1.dp))
 
             val footerText = buildAnnotatedString {
-                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                withStyle(style = SpanStyle(fontFamily = InterFontFamily, fontWeight = FontWeight.Bold)) {
                     append("Sudah memiliki akun? ")
                 }
-                withStyle(style = SpanStyle(color = Color(0xFF0D47A1), fontWeight = FontWeight.Bold)) {
+                withStyle(style = SpanStyle(fontFamily = InterFontFamily, color = Color(0xFF0D47A1), fontWeight = FontWeight.Bold)) {
                     append("Masuk")
                 }
             }
