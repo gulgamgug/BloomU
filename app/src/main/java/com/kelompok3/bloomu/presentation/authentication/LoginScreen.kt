@@ -1,5 +1,6 @@
 package com.kelompok3.bloomu.presentation.authentication
 
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -32,6 +33,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -58,6 +60,7 @@ import kotlinx.coroutines.launch
 @Composable
 
 fun LoginScreen(onLoginSuccess: () -> Unit, onToRegisterScreen: () -> Unit){
+    val context = LocalContext.current
     //var nama by remember { mutableStateOf("") }
     var isLoading by remember { mutableStateOf(false)}
     var email by remember { mutableStateOf("") }
@@ -203,15 +206,19 @@ fun LoginScreen(onLoginSuccess: () -> Unit, onToRegisterScreen: () -> Unit){
             Button(
                 modifier = Modifier.fillMaxWidth().height(53.dp),
                 onClick = {
-                    scope.launch {
-                        try {
-                            supabase.auth.signInWith(Email) {
-                                this.email = email
-                                this.password = password
+                    if (password.length < 8) {
+                        Toast.makeText(context, "Password minimal 8 karakter", Toast.LENGTH_SHORT).show()
+                    } else {
+                        scope.launch {
+                            try {
+                                supabase.auth.signInWith(Email) {
+                                    this.email = email
+                                    this.password = password
+                                }
+                                onLoginSuccess()
+                            } catch (e: Exception) {
+                                println("error login")
                             }
-                              onLoginSuccess()
-                        } catch (e: Exception) {
-                            println("error login")
                         }
                     }
                 },

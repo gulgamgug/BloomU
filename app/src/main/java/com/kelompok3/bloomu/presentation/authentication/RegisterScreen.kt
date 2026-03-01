@@ -1,5 +1,6 @@
 package com.kelompok3.bloomu.presentation.authentication
 
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -34,6 +35,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -63,6 +65,7 @@ fun RegisterScreen(
     onToLoginScreen: () -> Unit,
     onLoginSuccess: () -> Unit
 ){
+    val context = LocalContext.current
     var nama by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -214,16 +217,20 @@ fun RegisterScreen(
             Button(
                 modifier = Modifier.fillMaxWidth().height(53.dp),
                 onClick = {
-                    scope.launch {
-                        try {
-                            supabase.auth.signUpWith(Email) {
-                                this.email = email
-                                this.password = password
-                                data = buildJsonObject { put("name", nama) }
+                    if (password.length < 8) {
+                        Toast.makeText(context, "Password minimal 8 karakter", Toast.LENGTH_SHORT).show()
+                    } else {
+                        scope.launch {
+                            try {
+                                supabase.auth.signUpWith(Email) {
+                                    this.email = email
+                                    this.password = password
+                                    data = buildJsonObject { put("name", nama) }
+                                }
+                                onRegisterSuccess(email)
+                            } catch (e: Exception) {
+                                println("error daftar: ${e.message}")
                             }
-                            onRegisterSuccess(email)
-                        } catch (e: Exception) {
-                            println("error daftar: ${e.message}")
                         }
                     }
                 },
