@@ -10,6 +10,7 @@ import com.kelompok3.bloomu.presentation.authentication.LoginScreen
 import com.kelompok3.bloomu.presentation.authentication.OtpScreen
 import com.kelompok3.bloomu.presentation.authentication.RegisterScreen
 import com.kelompok3.bloomu.presentation.home.HomeScreen
+import com.kelompok3.bloomu.presentation.home.OnboardingViewModel
 import com.kelompok3.bloomu.supabase.supabase
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.status.SessionStatus
@@ -25,6 +26,8 @@ fun AppNavHost(
     ) {
         composable<LoadingRoute> {
             LaunchedEffect(Unit) {
+                val onboardingViewModel = OnboardingViewModel()
+
                 // Cek status session saat ini di balik splash screen
                 supabase.auth.sessionStatus.collect { status ->
                     if (status is SessionStatus.Authenticated || status is SessionStatus.NotAuthenticated) {
@@ -34,8 +37,14 @@ fun AppNavHost(
                                 popUpTo(LoadingRoute) { inclusive = true }
                             }
                         } else {
-                            navController.navigate(LoginRoute) {
-                                popUpTo(LoadingRoute) { inclusive = true }
+                            if (onboardingViewModel.isOnboardingCompleted()) {
+                                navController.navigate(LoginRoute) {
+                                    popUpTo(LoadingRoute) { inclusive = true }
+                                }
+                            } else {
+                                navController.navigate(OnboardingRoute) {
+                                    popUpTo(LoadingRoute) { inclusive = true }
+                                }
                             }
                         }
                         onLoadingFinished()
