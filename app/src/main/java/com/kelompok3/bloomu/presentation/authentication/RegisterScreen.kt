@@ -24,11 +24,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -45,32 +41,26 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kelompok3.bloomu.R
 import com.kelompok3.bloomu.presentation.component.AuthTextField
 import com.kelompok3.bloomu.supabase.supabase
 import com.kelompok3.bloomu.ui.theme.InterFontFamily
-import io.github.jan.supabase.auth.auth
-import io.github.jan.supabase.auth.providers.builtin.Email
 import io.github.jan.supabase.compose.auth.composable.NativeSignInResult
 import io.github.jan.supabase.compose.auth.composable.rememberSignInWithGoogle
 import io.github.jan.supabase.compose.auth.composeAuth
-import kotlinx.coroutines.launch
-import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.put
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
-
 fun RegisterScreen(
     onRegisterSuccess: (String) -> Unit,
     onToLoginScreen: () -> Unit,
-    onLoginSuccess: () -> Unit
-){
+    onLoginSuccess: () -> Unit,
+    viewModel: RegisterViewModel = viewModel()
+) {
     val context = LocalContext.current
-    var nama by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    val scope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
+
     val googleState = supabase.composeAuth.rememberSignInWithGoogle(
         onResult = { result ->
             when (result) {
@@ -80,6 +70,20 @@ fun RegisterScreen(
             }
         }
     )
+
+    // Listen to events from ViewModel
+    LaunchedEffect(Unit) {
+        viewModel.eventFlow.collectLatest { event ->
+            when (event) {
+                is RegisterEvent.Success -> {
+                    onRegisterSuccess(event.email)
+                }
+                is RegisterEvent.Error -> {
+                    Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -160,15 +164,14 @@ fun RegisterScreen(
             )
             AuthTextField(
                 placeholder = "Nama",
-                value = nama,
-                onValueChange = { nama = it },
+                value = viewModel.nama,
+                onValueChange = { viewModel.onNamaChange(it) },
                 leadingIcon = {
                     Icon(
                         painter = painterResource(id = R.drawable.username),
                         contentDescription = "username icon"
                     )
                 }
-
             )
             Spacer(Modifier.height(15.dp))
             Text(
@@ -182,8 +185,8 @@ fun RegisterScreen(
             )
             AuthTextField(
                 placeholder = "Email",
-                value = email,
-                onValueChange = { email = it },
+                value = viewModel.email,
+                onValueChange = { viewModel.onEmailChange(it) },
                 leadingIcon = {
                     Icon(
                         painter = painterResource(id = R.drawable.email),
@@ -203,8 +206,8 @@ fun RegisterScreen(
             )
             AuthTextField(
                 placeholder = "Password",
-                value = password,
-                onValueChange = { password = it },
+                value = viewModel.password,
+                onValueChange = { viewModel.onPasswordChange(it) },
                 leadingIcon = {
                     Icon(
                         painter = painterResource(id = R.drawable.gembok),
@@ -217,22 +220,7 @@ fun RegisterScreen(
             Button(
                 modifier = Modifier.fillMaxWidth().height(53.dp),
                 onClick = {
-                    if (password.length < 8) {
-                        Toast.makeText(context, "Password minimal 8 karakter", Toast.LENGTH_SHORT).show()
-                    } else {
-                        scope.launch {
-                            try {
-                                supabase.auth.signUpWith(Email) {
-                                    this.email = email
-                                    this.password = password
-                                    data = buildJsonObject { put("name", nama) }
-                                }
-                                onRegisterSuccess(email)
-                            } catch (e: Exception) {
-                                println("error daftar: ${e.message}")
-                            }
-                        }
-                    }
+                    viewModel.signUp()
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFF221E52),
@@ -274,11 +262,3 @@ fun RegisterScreen(
         }
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun RegisterScreenPreview() {
-//    BloomUTheme {
-//        RegisterScreen(onRegisterSuccess = {}, onToLoginScreen = {})
-//    }
-//}
