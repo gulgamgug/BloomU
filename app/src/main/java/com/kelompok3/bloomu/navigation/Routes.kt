@@ -6,4 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable object LoginRoute
 @Serializable object RegisterRoute
 @Serializable object HomeRoute
+@Serializable object OnboardingRoute
 @Serializable data class OtpRoute(val email: String)
