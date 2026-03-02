@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
@@ -26,11 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -40,73 +35,47 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kelompok3.bloomu.R
+import com.kelompok3.bloomu.presentation.component.ShowEllipse
 import com.kelompok3.bloomu.ui.theme.InterFontFamily
 import kotlinx.coroutines.launch
 
 data class OnboardingPageData(
     val title : String,
     val description : String,
-    val image : Int
+    val image : Int,
+    val bg : Int
 )
 
 @Composable
 fun OnboardingScreen(onFinished: () -> Unit) {
-    val gradientBackground = Brush.linearGradient(
-        colors = listOf(Color(0xFFF5C6EC), Color(0xFF8366EB))
-    )
-
     val pages = listOf(
         OnboardingPageData(
             "Kenali Mood Kamu Setiap Hari",
             "Satu aplikasi untuk memahami perasaanmu. \nCatat mood harian dengan emoji yang paling menggambarkan dirimu.",
-            R.drawable.onboarding_1
+            R.drawable.onboarding_1,
+            1
         ),
         OnboardingPageData(
             "Ekspresikan Perasaan dengan Mudah",
             "Pilih emoji sesuai suasana hatimu.\nTambahkan cerita singkat agar kamu lebih memahami dirimu sendiri.",
-            R.drawable.onboarding_2
+            R.drawable.onboarding_2,
+            2
         ),
         OnboardingPageData(
             "Pantau Perjalanan Emosimu",
             "Lihat perkembangan mood dari waktu ke waktu.\nBantu dirimu tumbuh lebih sadar, tenang, dan terkendali.",
-            R.drawable.onboarding_3
+            R.drawable.onboarding_3,
+            1
         )
     )
 
-    val PagerState = rememberPagerState(pageCount = { pages.size })
+    val pagerState = rememberPagerState(pageCount = { pages.size })
     val scope = rememberCoroutineScope()
+    val backgroundState = pages[pagerState.currentPage].bg
 
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(gradientBackground)
-    ) {
-        // Ellipse kanan atas
-        Image(
-            painter = painterResource(id = R.drawable.ellipse_2),
-            contentDescription = null,
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .size(700.dp)
-                .offset(x = 100.dp, y = (-100).dp)
-                .alpha(1.0f)
-                .blur(45.dp)
-        )
 
-        // Ellipse kiri bawah
-        Image(
-            painter = painterResource(id = R.drawable.ellipse_2),
-            contentDescription = null,
-            modifier = Modifier
-                .align(Alignment.BottomStart)
-                .size(700.dp)
-                .offset(x = (-100).dp, y = 100.dp)
-                .rotate(180f)
-                .alpha(1.0f)
-                .blur(45.dp)
-        )
-    }
+    ShowEllipse(backgroundState)
 
     Column(
         modifier = Modifier
@@ -128,7 +97,7 @@ fun OnboardingScreen(onFinished: () -> Unit) {
         }
 
         HorizontalPager(
-            state = PagerState,
+            state = pagerState,
             modifier = Modifier.weight(1f)
         ) { pageIndex ->
             val page = pages[pageIndex]
@@ -180,7 +149,7 @@ fun OnboardingScreen(onFinished: () -> Unit) {
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             repeat(pages.size) { index ->
-                val isSelected = PagerState.currentPage == index
+                val isSelected = pagerState.currentPage == index
                  Box(
                     modifier = Modifier
                         .size(if (isSelected) 10.dp else 8.dp)
@@ -191,9 +160,9 @@ fun OnboardingScreen(onFinished: () -> Unit) {
             }
         Button(
             onClick = {
-                if (PagerState.currentPage < pages.size - 1) {
+                if (pagerState.currentPage < pages.size - 1) {
                     scope.launch {
-                        PagerState.animateScrollToPage(PagerState.currentPage + 1)
+                        pagerState.animateScrollToPage(pagerState.currentPage + 1)
                     }
                 } else {
                     onFinished()
@@ -206,7 +175,7 @@ fun OnboardingScreen(onFinished: () -> Unit) {
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF221E52))
         ) {
             Text(
-                text = if (PagerState.currentPage == pages.size - 1) "Mulai" else "Lanjutkan",
+                text = if (pagerState.currentPage == pages.size - 1) "Mulai" else "Lanjutkan",
                 fontFamily = InterFontFamily,
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 16.sp,

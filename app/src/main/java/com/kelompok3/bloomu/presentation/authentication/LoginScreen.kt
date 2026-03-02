@@ -3,15 +3,12 @@ package com.kelompok3.bloomu.presentation.authentication
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -25,9 +22,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.blur
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -43,6 +37,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kelompok3.bloomu.R
 import com.kelompok3.bloomu.presentation.component.AuthTextField
 import com.kelompok3.bloomu.presentation.component.LoadingDialog
+import com.kelompok3.bloomu.presentation.component.ShowEllipse
 import com.kelompok3.bloomu.supabase.supabase
 import com.kelompok3.bloomu.ui.theme.InterFontFamily
 import io.github.jan.supabase.compose.auth.composable.NativeSignInResult
@@ -84,35 +79,7 @@ fun LoginScreen(
 
     LoadingDialog(isLoading = viewModel.isLoading)
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-    ) {
-        // Ellipse kanan atas
-        Image(
-            painter = painterResource(id = R.drawable.ellipse_1),
-            contentDescription = null,
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .size(700.dp)
-                .offset(x = 100.dp, y = (-100).dp)
-                .alpha(1.0f)
-                .blur(35.dp)
-        )
-
-        // Ellipse kiri bawah
-        Image(
-            painter = painterResource(id = R.drawable.ellipse_1),
-            contentDescription = null,
-            modifier = Modifier
-                .align(Alignment.BottomStart)
-                .size(700.dp)
-                .offset(x = (-100).dp, y = 100.dp)
-                .rotate(180f)
-                .alpha(1.0f)
-                .blur(35.dp)
-        )
+    ShowEllipse(0)
 
         Column(
             modifier = Modifier
@@ -230,7 +197,7 @@ fun LoginScreen(
                     tint = Color.Unspecified
                 )
                 Spacer(Modifier.width(10.dp))
-                Text("Sign up with Google", color = Color(0xFF3155AA), fontFamily = InterFontFamily)
+                Text("Sign in with Google", color = Color(0xFF3155AA), fontFamily = InterFontFamily)
             }
 
             Spacer(Modifier.height(1.dp))
@@ -249,4 +216,3 @@ fun LoginScreen(
             }
         }
     }
-}
