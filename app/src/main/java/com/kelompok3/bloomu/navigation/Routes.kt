@@ -3,6 +3,7 @@ package com.kelompok3.bloomu.navigation
 import kotlinx.serialization.Serializable
 
 @Serializable object LoadingRoute
+@Serializable object OnboardingRoute
 @Serializable object LoginRoute
 @Serializable object RegisterRoute
 @Serializable object HomeRoute
