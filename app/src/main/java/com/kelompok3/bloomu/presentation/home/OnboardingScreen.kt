@@ -22,6 +22,9 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -71,7 +74,9 @@ fun OnboardingScreen(onFinished: () -> Unit) {
 
     val pagerState = rememberPagerState(pageCount = { pages.size })
     val scope = rememberCoroutineScope()
-    val backgroundState = pages[pagerState.currentPage].bg
+    val backgroundState by remember {
+        derivedStateOf {  pages[pagerState.currentPage].bg }
+    }
 
 
 
