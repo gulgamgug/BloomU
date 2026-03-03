@@ -1,5 +1,6 @@
 package com.kelompok3.bloomu.presentation.authentication
 
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,19 +22,11 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.blur
-import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -41,34 +34,27 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kelompok3.bloomu.R
 import com.kelompok3.bloomu.presentation.component.AuthTextField
 import com.kelompok3.bloomu.presentation.component.LoadingDialog
+import com.kelompok3.bloomu.presentation.component.ShowEllipse
 import com.kelompok3.bloomu.supabase.supabase
-import com.kelompok3.bloomu.ui.theme.BloomUTheme
 import com.kelompok3.bloomu.ui.theme.InterFontFamily
-import io.github.jan.supabase.auth.auth
-import io.github.jan.supabase.auth.providers.builtin.Email
 import io.github.jan.supabase.compose.auth.composable.NativeSignInResult
 import io.github.jan.supabase.compose.auth.composable.rememberSignInWithGoogle
 import io.github.jan.supabase.compose.auth.composeAuth
-import kotlinx.coroutines.launch
-import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.put
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
-
-fun LoginScreen(onLoginSuccess: () -> Unit, onToRegisterScreen: () -> Unit){
-    //var nama by remember { mutableStateOf("") }
-    var isLoading by remember { mutableStateOf(false)}
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    val scope = rememberCoroutineScope()
-    var emailError by remember { mutableStateOf(false)}
-    var passwordError by remember { mutableStateOf(false) }
+fun LoginScreen(
+    onLoginSuccess: () -> Unit,
+    onToRegisterScreen: () -> Unit,
+    viewModel: LoginViewModel = viewModel()
+) {
+    val context = LocalContext.current
 
     val googleState = supabase.composeAuth.rememberSignInWithGoogle(
         onResult = { result ->
@@ -80,41 +66,23 @@ fun LoginScreen(onLoginSuccess: () -> Unit, onToRegisterScreen: () -> Unit){
         }
     )
 
-    LoadingDialog(isLoading = isLoading)
+    // Listen to events from ViewModel
+    LaunchedEffect(Unit) {
+        viewModel.eventFlow.collectLatest { event ->
+            when (event) {
+                is LoginEvent.Success -> {
+                    onLoginSuccess()
+                }
+                is LoginEvent.Error -> {
+                    Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
 
-    val gradientBrush = Brush.verticalGradient(
-        colors = listOf(Color(0xFFFFFFFF), Color(0xFFE9E3FF))
-    )
+    LoadingDialog(isLoading = viewModel.isLoading)
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(brush = gradientBrush)
-    ) {
-        // Ellipse kanan atas
-        Image(
-            painter = painterResource(id = R.drawable.ellipse_1),
-            contentDescription = null,
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .size(700.dp)
-                .offset(x = 100.dp, y = (-100).dp)
-                .alpha(1.0f)
-                .blur(35.dp)
-        )
-
-        // Ellipse kiri bawah
-        Image(
-            painter = painterResource(id = R.drawable.ellipse_1),
-            contentDescription = null,
-            modifier = Modifier
-                .align(Alignment.BottomStart)
-                .size(700.dp)
-                .offset(x = (-100).dp, y = 100.dp)
-                .rotate(180f) // Diputar agar menyerupai lingkaran/posisi yang pas
-                .alpha(1.0f)
-                .blur(35.dp)
-        )
+    ShowEllipse(0)
 
         Column(
             modifier = Modifier
@@ -164,15 +132,14 @@ fun LoginScreen(onLoginSuccess: () -> Unit, onToRegisterScreen: () -> Unit){
             )
             AuthTextField(
                 placeholder = "Email",
-                value = email,
-                onValueChange = { email = it },
+                value = viewModel.email,
+                onValueChange = { viewModel.onEmailChange(it) },
                 leadingIcon = {
                     Icon(
                         painter = painterResource(id = R.drawable.email),
                         contentDescription = "email icon"
                     )
                 }
-
             )
             Spacer(Modifier.height(15.dp))
             Text(
@@ -186,8 +153,8 @@ fun LoginScreen(onLoginSuccess: () -> Unit, onToRegisterScreen: () -> Unit){
             )
             AuthTextField(
                 placeholder = "Password",
-                value = password,
-                onValueChange = { password = it },
+                value = viewModel.password,
+                onValueChange = { viewModel.onPasswordChange(it) },
                 leadingIcon = {
                     Icon(
                         painter = painterResource(id = R.drawable.gembok),
@@ -211,17 +178,7 @@ fun LoginScreen(onLoginSuccess: () -> Unit, onToRegisterScreen: () -> Unit){
             Button(
                 modifier = Modifier.fillMaxWidth().height(53.dp),
                 onClick = {
-                    scope.launch {
-                        try {
-                            supabase.auth.signInWith(Email) {
-                                this.email = email
-                                this.password = password
-                            }
-                              onLoginSuccess()
-                        } catch (e: Exception) {
-                            println("error login")
-                        }
-                    }
+                    viewModel.login()
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFF221E52),
@@ -243,7 +200,7 @@ fun LoginScreen(onLoginSuccess: () -> Unit, onToRegisterScreen: () -> Unit){
                     tint = Color.Unspecified
                 )
                 Spacer(Modifier.width(10.dp))
-                Text("Sign up with Google", color = Color(0xFF3155AA), fontFamily = InterFontFamily)
+                Text("Sign in with Google", color = Color(0xFF3155AA), fontFamily = InterFontFamily)
             }
 
             Spacer(Modifier.height(1.dp))
@@ -262,12 +219,3 @@ fun LoginScreen(onLoginSuccess: () -> Unit, onToRegisterScreen: () -> Unit){
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun LoginScreenPreview() {
-    BloomUTheme {
-        LoginScreen(onLoginSuccess = {}, onToRegisterScreen = {})
-    }
-}

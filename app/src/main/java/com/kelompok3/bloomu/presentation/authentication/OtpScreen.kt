@@ -23,12 +23,8 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -47,64 +43,43 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.kelompok3.bloomu.supabase.supabase
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kelompok3.bloomu.ui.theme.InterFontFamily
-import io.github.jan.supabase.auth.OtpType
-import io.github.jan.supabase.auth.auth
-import io.github.jan.supabase.auth.exception.AuthRestException
-import io.github.jan.supabase.exceptions.HttpRequestException
-import io.github.jan.supabase.exceptions.RestException
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.collectLatest
 
 
 @Composable
-fun OtpScreen(email: String, onVerifSuccess: () -> Unit) {
+fun OtpScreen(
+    email: String,
+    onVerifSuccess: () -> Unit,
+    viewModel: OtpViewModel = viewModel()
+) {
     val context = LocalContext.current
-    var otpCode by remember { mutableStateOf("") }
     val scrollState = rememberScrollState()
-    val scope = rememberCoroutineScope()
     val gradientBackground = Brush.linearGradient(
         colors = listOf(Color(0xFFFFFFFF), Color(0xFFE9E3FF))
     )
 
-    var timerSeconds by remember { mutableStateOf(60) }
-    LaunchedEffect(timerSeconds) {
-             if (timerSeconds > 0) {
-                 delay(1000L)
-                 timerSeconds--
-             }
+    LaunchedEffect(Unit) {
+        viewModel.eventFlow.collectLatest { event ->
+            when (event) {
+                is OtpEvent.Success -> onVerifSuccess()
+                is OtpEvent.Error -> {
+                    Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+                }
+                is OtpEvent.ResendSuccess -> {
+                    Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+                }
+            }
         }
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(gradientBackground)
 
     ) {
-        // Ellipse kanan atas
-//        Image(
-//            painter = painterResource(id = R.drawable.ellipse_1),
-//            contentDescription = null,
-//            modifier = Modifier
-//                .align(Alignment.TopEnd)
-//                .size(700.dp)
-//                .offset(x = 100.dp, y = (-100).dp)
-//                .alpha(1.0f)
-//                .blur(35.dp)
-//        )
-//
-//        // Ellipse kiri bawah
-//        Image(
-//            painter = painterResource(id = R.drawable.ellipse_1),
-//            contentDescription = null,
-//            modifier = Modifier
-//                .align(Alignment.BottomStart)
-//                .size(700.dp)
-//                .offset(x = (-100).dp, y = 100.dp)
-//                .rotate(180f)
-//                .alpha(1.0f)
-//                .blur(35.dp)
-//        )
     }
 
     Column(
@@ -143,26 +118,10 @@ fun OtpScreen(email: String, onVerifSuccess: () -> Unit) {
         }
 
         Spacer(Modifier.height(25.dp))
-        OtpInputField(digitCount = 6, onOtpComplete = { otpCode = it })
+        OtpInputField(digitCount = 6, onOtpComplete = { viewModel.onOtpCodeChange(it) })
         Spacer(Modifier.height(25.dp))
         Button(onClick = {
-            scope.launch {
-                try {
-                    supabase.auth.verifyEmailOtp(
-                        type = OtpType.Email.EMAIL,
-                        email = email,
-                        token = otpCode
-                    )
-                    onVerifSuccess()
-                } catch (e: AuthRestException) {
-                    Toast.makeText(context, "Kode OTP tidak valid", Toast.LENGTH_SHORT).show()
-                } catch (e: HttpRequestException) {
-                    Toast.makeText(context, "Kesalahan jaringan", Toast.LENGTH_SHORT).show()
-                } catch (e: Exception) {
-                    Toast.makeText(context, "Terjadi kesalahan verifikasi", Toast.LENGTH_SHORT).show()
-                    println("error verifikasi: ${e.message}")
-                }
-            }
+            viewModel.verifyOtp(email)
         }) { Text("Verifikasi Kode", fontFamily = InterFontFamily) }
 
         Spacer(Modifier.height(40.dp))
@@ -186,33 +145,16 @@ fun OtpScreen(email: String, onVerifSuccess: () -> Unit) {
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp
                 ),
-                color = if (timerSeconds == 0) Color(0xFF3155AA) else Color(0xFFBDBDBD),
-                modifier = Modifier.clickable(enabled = timerSeconds == 0) {
-                    scope.launch {
-                        try {
-                            supabase.auth.resendEmail(
-                                type = OtpType.Email.EMAIL,
-                                email = email
-                            )
-                            timerSeconds = 60
-                            Toast.makeText(context, "OTP berhasil dikirim ulang!", Toast.LENGTH_SHORT).show()
-                        } catch (e: AuthRestException) {
-                            Toast.makeText(context, "Gagal: ${e.message}", Toast.LENGTH_SHORT).show()
-                        } catch (e: RestException) {
-                            Toast.makeText(context, "Kesalahan server: ${e.message}", Toast.LENGTH_SHORT).show()
-                        } catch (e: HttpRequestException) {
-                            Toast.makeText(context, "Kesalahan jaringan", Toast.LENGTH_SHORT).show()
-                        } catch (e: Exception) {
-                            Toast.makeText(context, "Terjadi kesalahan: ${e.message}", Toast.LENGTH_SHORT).show()
-                        }
-                    }
+                color = if (viewModel.timerSeconds == 0) Color(0xFF3155AA) else Color(0xFFBDBDBD),
+                modifier = Modifier.clickable(enabled = viewModel.timerSeconds == 0) {
+                    viewModel.resendOtp(email)
                 }
             )
         }
-        if (timerSeconds > 0) {
+        if (viewModel.timerSeconds > 0) {
             Spacer(Modifier.height(8.dp))
             Text(
-                "00:${timerSeconds.toString().padStart(2, '0')}",
+                "00:${viewModel.timerSeconds.toString().padStart(2, '0')}",
                 style = TextStyle(
                     fontFamily = InterFontFamily,
                     fontWeight = FontWeight.Normal,
