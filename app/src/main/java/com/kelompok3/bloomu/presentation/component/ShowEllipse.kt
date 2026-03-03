@@ -22,14 +22,10 @@ import com.kelompok3.bloomu.R
 @Composable
 fun ShowEllipse(mode: Int){
     if (mode == 0) {
-        val gradientBackground = Brush.linearGradient(
-            colors = listOf(Color(0xFFFFFFFF), Color(0xFFE9E3FF)
-            )
-        )
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(gradientBackground)
+                .background(Color.White)
         ) {
             // Ellipse kanan atas
             Image(
@@ -37,8 +33,8 @@ fun ShowEllipse(mode: Int){
                 contentDescription = null,
                 modifier = Modifier
                     .align(Alignment.TopEnd)
-                    .size(700.dp)
-                    .offset(x = 100.dp, y = (-100).dp)
+                    .size(400.dp)
+                    .offset(x = 80.dp, y = (-80).dp)
                     .alpha(1.0f)
                     .blur(45.dp)
             )
