@@ -1,40 +1,32 @@
 package com.kelompok3.bloomu.dailycheckin
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.kelompok3.bloomu.supabase.supabase
-import io.github.jan.supabase.auth.auth
-import io.github.jan.supabase.postgrest.postgrest
-import kotlinx.coroutines.launch
-
-data class CheckInRequest(
-    val user_id: String,
-    val mood_score: Int,
-    val mental_score: Int,
-    val physical_score: Int,
-    val academic_score: Int,
-    val diary_note: String
-)
 
 class CheckInViewModel : ViewModel() {
-    //state management
-    var currentStep by mutableStateOf(1) // 1:mood, 2:questions, 3:diary
-    var isLoading by mutableStateOf(false)
-    //data inputan user
-    var selectedMood by mutableStateOf(3)
-    var diaryNote by mutableStateOf("")
-    //pertanyaan yang randomized
+    // 1. STATE UI
+    var currentStep by mutableIntStateOf(1) // Langkah 1 (Mood), 2 (Pertanyaan), 3 (Diary)
+    var selectedMoodEmoji by mutableIntStateOf(3) // Skor mood keseluruhan (1-5)
+
+    // 2. STATE PERTANYAAN (Randomized)
     var activeQuestions by mutableStateOf<List<Question>>(emptyList())
-    var userAnswers = mutableMapOf<Int, Int>()
+        private set
+
+    // 3. STATE JAWABAN
+    // Map untuk menyimpan jawaban user: Key = ID Pertanyaan, Value = Bobot/Skor
+    var userAnswers by mutableStateOf<Map<Int, Int>>(emptyMap())
 
     init {
+        // Mengacak pertanyaan tiap kali layar ini dibuka
         randomizeQuestions()
     }
 
     private fun randomizeQuestions() {
+        // Mengambil 1 soal acak dari tiap domain (Mental, Fisik, Akademik)
         activeQuestions = listOf(
             CheckInBank.mentalQuestions.random(),
             CheckInBank.physicalQuestions.random(),
@@ -42,30 +34,13 @@ class CheckInViewModel : ViewModel() {
         )
     }
 
-    fun submitCheckIn(onSuccess: () -> Unit) {
-        val userId = supabase.auth.currentUserOrNull()?.id ?: return
-        isLoading = true
-        viewModelScope.launch {
-            try {
-                val mentalScore = userAnswers[activeQuestions[0].id] ?: 0
-                val physicalScore = userAnswers[activeQuestions[1].id] ?: 0
-                val academicScore = userAnswers[activeQuestions[2].id] ?: 0
+    // Fungsi pembantu untuk mengecek apakah semua pertanyaan sudah dijawab
+    fun allQuestionsAnswered(): Boolean {
+        return userAnswers.size == activeQuestions.size
+    }
 
-                val request = CheckInRequest(
-                    user_id = userId,
-                    mood_score = selectedMood,
-                    mental_score = mentalScore,
-                    physical_score = physicalScore,
-                    academic_score = academicScore,
-                    diary_note = diaryNote
-                )
-                supabase.postgrest["daily_checkins"].insert(request)
-                onSuccess()
-            } catch (e: Exception) {
-                println("Error submitting check-in: ${e.message}")
-            } finally {
-                isLoading = false
-            }
-        }
+    fun submitCheckIn() {
+        // Logika submit ke Supabase di sini
+        // Hitung skor total per domain, dll.
     }
 }
