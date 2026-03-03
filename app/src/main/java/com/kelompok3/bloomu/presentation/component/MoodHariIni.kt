@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kelompok3.bloomu.R
 import com.kelompok3.bloomu.ui.theme.BloomUTheme
+import com.kelompok3.bloomu.ui.theme.InterFontFamily
 
 @Composable
 fun PerasaanCard() {
@@ -36,7 +37,7 @@ fun PerasaanCard() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(220.dp)
+            .height(200.dp)
             .padding(16.dp)
             .background(brush = gradientBrush, shape = RoundedCornerShape(30.dp))
             .padding(20.dp),
@@ -49,6 +50,7 @@ fun PerasaanCard() {
         ) {
             Text(
                 text = "Masukkan perasaan hati kamu disini!",
+                fontFamily = InterFontFamily,
                 color = Color.White,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold
