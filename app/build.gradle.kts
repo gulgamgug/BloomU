@@ -51,6 +51,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material.icons.extended)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -82,10 +83,10 @@ dependencies {
     implementation("androidx.core:core-splashscreen:1.2.0")
     implementation(libs.supabase.compose.auth)
     implementation(libs.google.id)
-    implementation("androidx.credentials:credentials:<latest version>")
-    implementation ("com.google.android.libraries.identity.googleid:googleid:<latest version>")
+    implementation("androidx.credentials:credentials:1.5.0-rc01")
+    implementation ("com.google.android.libraries.identity.googleid:googleid:1.1.1")
 
 // optional - needed for credentials support from play services, for devices running
 // Android 13 and below.
-    implementation("androidx.credentials:credentials-play-services-auth:<latest version>")
+    implementation("androidx.credentials:credentials-play-services-auth:1.5.0-rc01")
 }
