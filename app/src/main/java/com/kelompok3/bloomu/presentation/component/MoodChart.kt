@@ -39,7 +39,7 @@ fun MoodChart(moodData: List<Float>) {
             text = "Grafik Mood Kamu!",
             color = Color(0xFF2B2553),
             fontWeight = FontWeight.Bold,
-            fontSize = 20.sp,
+            fontSize = 17.sp,
             modifier = Modifier.padding(bottom = 16.dp)
         )
 

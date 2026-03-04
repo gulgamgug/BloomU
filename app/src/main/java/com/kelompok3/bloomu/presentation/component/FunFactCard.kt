@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kelompok3.bloomu.R
 import com.kelompok3.bloomu.ui.theme.BloomUTheme
+import com.kelompok3.bloomu.ui.theme.InterFontFamily
 
 @Composable
 fun FunFactCard() {
@@ -55,6 +56,7 @@ fun FunFactCard() {
         ) {
             Text(
                 text = "Funfact hari ini",
+                fontFamily = InterFontFamily,
                 color = Color.White,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold
@@ -81,6 +83,7 @@ fun FunFactCard() {
                 Text(
                     text = "Mengelola mood harian dengan baik dapat mengurangi tingkat stress dalam jangka panjang",
                     color = Color(0xFF7A709E),
+                    fontFamily = InterFontFamily,
                     fontSize = 13.sp,
                     lineHeight = 18.sp
                 )
