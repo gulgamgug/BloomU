@@ -196,6 +196,7 @@ fun AppNavHost(
 
         composable<HomeRoute> {
             HomeScreen(
+                onCheckInClick = { navController.navigate(CheckInRoute) },
                 onLogOutSuccess = {
                     navController.navigate(LoginRoute) {
                         popUpTo(HomeRoute) { inclusive = true }
