@@ -116,7 +116,7 @@ fun HomeContent(
                     Icon(
                         painter = painterResource(id = R.drawable.lonceng),
                         contentDescription = "Notifications",
-                        modifier = Modifier.size(28.dp),
+                        modifier = Modifier.size(20.dp),
                         tint = Color.Unspecified
                     )
                 }
