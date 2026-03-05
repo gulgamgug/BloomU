@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kelompok3.bloomu.R
+import com.kelompok3.bloomu.R.drawable
 import com.kelompok3.bloomu.presentation.component.FunFactCard
 import com.kelompok3.bloomu.presentation.component.MoodChart
 import com.kelompok3.bloomu.presentation.component.PerasaanCard
@@ -204,7 +205,7 @@ fun HomeContent(
                                 }
                                 Spacer(modifier = Modifier.weight(1f))
                                 androidx.compose.foundation.Image(
-                                    painter = androidx.compose.ui.res.painterResource(id = R.drawable.apistrik),
+                                    painter = androidx.compose.ui.res.painterResource(id = drawable.apistrik),
                                     contentDescription = "Streak Icon",
                                     modifier = Modifier.size(45.dp),
                                     colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(

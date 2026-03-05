@@ -2,6 +2,8 @@ package com.kelompok3.bloomu.presentation.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,9 +15,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -28,7 +33,9 @@ import com.kelompok3.bloomu.ui.theme.BloomUTheme
 import com.kelompok3.bloomu.ui.theme.InterFontFamily
 
 @Composable
-fun PerasaanCard() {
+fun PerasaanCard(
+    onClick: () -> Unit
+) {
     // Definisi Gradasi Linear F5C6EC dan 8366EB
     val gradientBrush = Brush.linearGradient(
         colors = listOf(Color(0xFFF5C6EC), Color(0xFF8366EB))
@@ -37,10 +44,18 @@ fun PerasaanCard() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
+            .clip(RoundedCornerShape(30.dp))
             .height(200.dp)
             .padding(16.dp)
             .background(brush = gradientBrush, shape = RoundedCornerShape(30.dp))
-            .padding(20.dp),
+            .padding(20.dp)
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = ripple(
+                    bounded = true,
+                    color = Color.Unspecified
+                )
+            ) { onClick() },
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -86,6 +101,8 @@ fun EmojiIcon(id: Int) {
 @Composable
 fun PerasaanCardPreview() {
     BloomUTheme {
-        PerasaanCard()
+        PerasaanCard(
+            onClick = TODO()
+        )
     }
 }

@@ -20,6 +20,9 @@ class CheckInViewModel : ViewModel() {
     // Map untuk menyimpan jawaban user: Key = ID Pertanyaan, Value = Bobot/Skor
     var userAnswers by mutableStateOf<Map<Int, Int>>(emptyMap())
 
+    // 4. STATE DIARY
+    var diaryText by mutableStateOf("")
+
     init {
         // Mengacak pertanyaan tiap kali layar ini dibuka
         randomizeQuestions()

@@ -22,10 +22,14 @@ import com.kelompok3.bloomu.R
 @Composable
 fun ShowEllipse(mode: Int){
     if (mode == 0) {
+        val gradientBackground = Brush.linearGradient(
+            colors = listOf(Color(0xFFFFFFFF), Color(0xFFE9E3FF))
+        )
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White)
+                .background(gradientBackground)
         ) {
             // Ellipse kanan atas
             Image(
@@ -120,6 +124,68 @@ fun ShowEllipse(mode: Int){
                     .blur(45.dp)
             )
         }
+    } else if (mode ==3) {
+        val gradientBackground = Brush.linearGradient(
+            colors = listOf(Color(0xFFFFFFFF), Color(0xFFE9E3FF))
+        )
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(gradientBackground)
+        ) {
+            // Ellipse kiri atas
+            Box(
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .offset(x = (-150).dp, y = (-150).dp)
+                    .size(500.dp)
+                    .background(
+                        brush = Brush.radialGradient(
+                            colors = listOf(Color(0xFF8366EB).copy(alpha = 0.5f), Color.Transparent)
+                        )
+                    )
+            )
+
+            // Ellipse kanan bawah
+            Box(
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .offset(x = 150.dp, y = 150.dp)
+                    .size(500.dp)
+                    .background(
+                        brush = Brush.radialGradient(
+                            colors = listOf(Color(0xFF8366EB).copy(alpha = 0.5f), Color.Transparent)
+                        )
+                    )
+            )
+        }
+    } else if (mode == 4) {
+        val gradientBackground = Brush.linearGradient(
+            colors = listOf(Color(0xFFFFFFFF), Color(0xFFE9E3FF))
+        )
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(gradientBackground)
+        ) {
+            // Ellipse tengah
+            Box(
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .size(600.dp)
+                    .offset(x = 0.dp, y = -100.dp)
+                    .background(
+                        brush = Brush.radialGradient(
+                            0.2f to Color(0x80A28AFF),
+                            0.6f to Color(0x80CABCFF),
+                            1.0f to Color(0x00FFFFFF),
+                        )
+                    )
+            )
+
+        }
     }
 
 
@@ -128,5 +194,5 @@ fun ShowEllipse(mode: Int){
 @Composable
 @Preview
 fun PreviewEllipse(){
-    ShowEllipse(2)
+    ShowEllipse(4)
 }
