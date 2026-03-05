@@ -10,3 +10,8 @@ import kotlinx.serialization.Serializable
 @Serializable object CheckInRoute
 @Serializable data class OtpRoute(val email: String)
 @Serializable data class DailyCheckInRoute(val moodData: List<Float>)
+
+// CheckIn Steps
+@Serializable object MoodSelectionStepRoute
+@Serializable object QuestionsStepRoute
+@Serializable object MiniDiaryStepRoute

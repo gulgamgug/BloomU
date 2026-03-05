@@ -45,7 +45,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.kelompok3.bloomu.R
+import com.kelompok3.bloomu.navigation.MiniDiaryStepRoute
+import com.kelompok3.bloomu.navigation.MoodSelectionStepRoute
+import com.kelompok3.bloomu.navigation.QuestionsStepRoute
 import com.kelompok3.bloomu.presentation.component.ShowEllipse
 import com.kelompok3.bloomu.ui.theme.InterFontFamily
 
@@ -55,27 +61,31 @@ fun CheckInScreen(
     onBack: () -> Unit,
     viewModel: CheckInViewModel = viewModel()
 ) {
-    // Navigasi internal antar Step di dalam satu Screen
-    when (viewModel.currentStep) {
-        1 -> {
+    val navController = rememberNavController()
+
+    NavHost(
+        navController = navController,
+        startDestination = MoodSelectionStepRoute
+    ) {
+        composable<MoodSelectionStepRoute> {
             MoodPage(
                 onMoodSelected = { moodId ->
                     viewModel.selectedMoodEmoji = moodId
-                    viewModel.currentStep = 2
+                    navController.navigate(QuestionsStepRoute)
                 }
             )
         }
-        2 -> {
+        composable<QuestionsStepRoute> {
             QuestionsStep(
                 viewModel = viewModel,
-                onBack = { viewModel.currentStep = 1 },
-                onNext = { viewModel.currentStep = 3 }
+                onBack = { navController.popBackStack() },
+                onNext = { navController.navigate(MiniDiaryStepRoute) }
             )
         }
-        3 -> {
+        composable<MiniDiaryStepRoute> {
             MiniDiaryPage(
                 viewModel = viewModel,
-                onBack = { viewModel.currentStep = 2 },
+                onBack = { navController.popBackStack() },
                 onNext = {
                     // Nanti di sini submit ke Supabase lalu onFinished()
                     onFinished()
