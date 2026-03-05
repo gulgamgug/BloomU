@@ -63,6 +63,9 @@ fun CheckInScreen(
 ) {
     val navController = rememberNavController()
 
+    // loading dialog saat pengiriman data
+    com.kelompok3.bloomu.presentation.component.LoadingDialog(isLoading = viewModel.isLoading)
+
     NavHost(
         navController = navController,
         startDestination = MoodSelectionStepRoute
@@ -87,8 +90,7 @@ fun CheckInScreen(
                 viewModel = viewModel,
                 onBack = { navController.popBackStack() },
                 onNext = {
-                    // Nanti di sini submit ke Supabase lalu onFinished()
-                    onFinished()
+                    viewModel.submitCheckIn(onSuccess = onFinished)
                 }
             )
         }

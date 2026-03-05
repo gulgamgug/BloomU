@@ -111,18 +111,18 @@ fun MiniDiaryPage(
                 }
             },
             bottomBar = {
-                // 4. Tombol Lanjutkan (Alignment Kanan)
+                // 4. tombol selesai
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(20.dp),
-                    horizontalArrangement = Arrangement.End
+                    horizontalArrangement = Arrangement.Center
                 ) {
                     Button(
                         onClick = onNext,
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF221E52)),
                         shape = RoundedCornerShape(50.dp),
-                        modifier = Modifier.height(48.dp)
+                        modifier = Modifier.height(48.dp).fillMaxWidth()
                     ) {
                         Text(
                             text = "Selesai",
@@ -192,7 +192,7 @@ fun MiniDiaryPage(
                     )
                 )
 
-                Spacer(Modifier.height(100.dp)) // Beri ruang agar tidak tertutup tombol bawah
+                Spacer(Modifier.height(100.dp)) // supaya ga ketutupan bottom bar
             }
         }
     }
