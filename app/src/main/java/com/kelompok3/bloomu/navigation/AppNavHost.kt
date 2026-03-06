@@ -208,7 +208,28 @@ fun AppNavHost(
         composable<CheckInRoute> {
             com.kelompok3.bloomu.dailycheckin.CheckInScreen(
                 onBack = { navController.popBackStack() },
-                onFinished = { navController.popBackStack() }
+                onFinished = { mood, mental, physical, academic ->
+                    navController.navigate(
+                        AssessmentResultRoute(mood, mental, physical, academic)
+                    ) {
+                        popUpTo(CheckInRoute) { inclusive = true }
+                    }
+                }
+            )
+        }
+
+        composable<AssessmentResultRoute> { backStackEntry ->
+            val args = backStackEntry.toRoute<AssessmentResultRoute>()
+            com.kelompok3.bloomu.presentation.assessment.AssessmentResultScreen(
+                moodScore = args.moodScore,
+                mentalScore = args.mentalScore,
+                physicalScore = args.physicalScore,
+                academicScore = args.academicScore,
+                onBackToHome = {
+                    navController.navigate(HomeRoute) {
+                        popUpTo(HomeRoute) { inclusive = true }
+                    }
+                }
             )
         }
     }

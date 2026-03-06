@@ -15,3 +15,9 @@ import kotlinx.serialization.Serializable
 @Serializable object MoodSelectionStepRoute
 @Serializable object QuestionsStepRoute
 @Serializable object MiniDiaryStepRoute
+@Serializable data class AssessmentResultRoute(
+    val moodScore: Int,
+    val mentalScore: Int,
+    val physicalScore: Int,
+    val academicScore: Int
+)

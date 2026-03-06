@@ -56,7 +56,7 @@ class CheckInViewModel : ViewModel() {
         return userAnswers.size == activeQuestions.size
     }
 
-    fun submitCheckIn(onSuccess: () -> Unit) {
+    fun submitCheckIn(onSuccess: (Int, Int, Int, Int) -> Unit) {
         val user = supabase.auth.currentUserOrNull() ?: return
         
         viewModelScope.launch {
@@ -82,7 +82,7 @@ class CheckInViewModel : ViewModel() {
 
                 supabase.postgrest["daily_checkins"].insert(data)
                 
-                onSuccess()
+                onSuccess(selectedMoodEmoji, mentalScore, physicalScore, academicScore)
             } catch (e: Exception) {
                 e.printStackTrace()
                 // Nanti bisa tambahkan error handling seperti Toast

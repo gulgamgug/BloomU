@@ -57,7 +57,7 @@ import com.kelompok3.bloomu.ui.theme.InterFontFamily
 
 @Composable
 fun CheckInScreen(
-    onFinished: () -> Unit,
+    onFinished: (Int, Int, Int, Int) -> Unit,
     onBack: () -> Unit,
     viewModel: CheckInViewModel = viewModel()
 ) {
@@ -91,7 +91,9 @@ fun CheckInScreen(
                 viewModel = viewModel,
                 onBack = { navController.popBackStack() },
                 onNext = {
-                    viewModel.submitCheckIn(onSuccess = onFinished)
+                    viewModel.submitCheckIn(onSuccess = { mood, mental, physical, academic ->
+                        onFinished(mood, mental, physical, academic)
+                    })
                 }
             )
         }
