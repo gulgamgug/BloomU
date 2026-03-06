@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun MoodChart(moodData: List<Float>) {
     val days = listOf("Sen", "Sel", "Rab", "Kam", "Jum", "Sab", "Min")
-    val emojis = listOf("😆", "😄", "🙂", "😢", "😵‍💫")
+    val emojis = listOf("😆", "😄", "🙂", "😢", "😵‍💫", " ")
 
     val textMeasurer = rememberTextMeasurer()
 
@@ -46,7 +46,7 @@ fun MoodChart(moodData: List<Float>) {
 
         Box(
             modifier = Modifier
-                .background(Color(0xC8FFFFFF), RoundedCornerShape(24.dp))
+                .background(Color(0xAEFFFFFF), RoundedCornerShape(24.dp))
                 .fillMaxWidth()
                 .height(320.dp)
                 .border(1.dp, Color(0xFFD6C5E3), RoundedCornerShape(24.dp))
@@ -121,7 +121,12 @@ fun MoodChart(moodData: List<Float>) {
                 drawPath(
                     path = path,
                     brush = Brush.verticalGradient(
-                        colors = listOf(Color(0xFFF7CA79), Color(0xFFE9543A)),
+                        colors = listOf(
+                            Color(0xFFFFD693),
+                            Color(0xFFFF9E2A),
+                            Color(0xFFE9543A),
+                            Color(0xFFB4260E),
+                            Color(0xFF6B6B6B)),
                         startY = 0f,
                         endY = chartHeight
                     ),
@@ -140,6 +145,6 @@ fun MoodChart(moodData: List<Float>) {
 @Composable
 fun MoodChartPreview() {
     // 0 = 😵‍💫, 1 = 😢, 2 = 🙂, 3 = 😄, 4 = 😆
-    val sampleMoodData = listOf(4f, 3f, 2f, 3.5f, 1f, 0.5f, 2.5f)
+    val sampleMoodData = listOf(1f, 4f, 2f, -1f, -1f, 4f, 2f)
     MoodChart(moodData = sampleMoodData)
 }
