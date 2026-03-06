@@ -23,6 +23,7 @@ class RegisterViewModel : ViewModel() {
     var nama by mutableStateOf("")
     var email by mutableStateOf("")
     var password by mutableStateOf("")
+    var isLoading by mutableStateOf(false)
 
     private val _eventFlow = MutableSharedFlow<RegisterEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
@@ -48,6 +49,7 @@ class RegisterViewModel : ViewModel() {
         }
 
         viewModelScope.launch {
+            isLoading = true
             try {
                 supabase.auth.signUpWith(Email) {
                     this.email = this@RegisterViewModel.email
@@ -57,6 +59,8 @@ class RegisterViewModel : ViewModel() {
                 _eventFlow.emit(RegisterEvent.Success(email))
             } catch (e: Exception) {
                 _eventFlow.emit(RegisterEvent.Error(e.message ?: "Terjadi kesalahan saat mendaftar"))
+            } finally {
+                isLoading = false
             }
         }
     }

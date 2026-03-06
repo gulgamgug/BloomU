@@ -22,6 +22,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -55,12 +57,16 @@ fun RegisterScreen(
 ) {
     val context = LocalContext.current
     val scrollState = rememberScrollState()
+    var isGoogleLoading by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(false) }
 
     val googleState = supabase.composeAuth.rememberSignInWithGoogle(
         onResult = { result ->
+            isGoogleLoading = false
             when (result) {
                 is NativeSignInResult.Success -> onLoginSuccess()
-                is NativeSignInResult.Error -> println("Error Google: ${result.message}")
+                is NativeSignInResult.Error -> {
+                    Toast.makeText(context, "Google Error: ${result.message}", Toast.LENGTH_SHORT).show()
+                }
                 else -> {}
             }
         }
@@ -79,6 +85,8 @@ fun RegisterScreen(
             }
         }
     }
+
+    com.kelompok3.bloomu.presentation.component.LoadingDialog(isLoading = viewModel.isLoading || isGoogleLoading)
 
     ShowEllipse(0)
 
@@ -197,7 +205,10 @@ fun RegisterScreen(
             Spacer(Modifier.height(10.dp))
 
             OutlinedButton(
-                onClick = { googleState.startFlow() },
+                onClick = { 
+                    isGoogleLoading = true
+                    googleState.startFlow() 
+                },
                 modifier = Modifier.fillMaxWidth().height(53.dp),
                 border = BorderStroke(1.dp, Color(0xFF3155AA)),
                 colors = ButtonDefaults.outlinedButtonColors(containerColor = Color.Transparent)

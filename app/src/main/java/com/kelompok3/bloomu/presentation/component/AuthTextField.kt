@@ -33,6 +33,8 @@ fun AuthTextField(
             .shadow(elevation = 8.dp, shape = RoundedCornerShape(30.dp)),
         shape = RoundedCornerShape(30.dp),
         colors = TextFieldDefaults.colors(
+            focusedTextColor = Color.Black,
+            unfocusedTextColor = Color.Black,
             focusedContainerColor = Color.White,
             unfocusedContainerColor = Color.White,
             focusedIndicatorColor = Color.Transparent,
