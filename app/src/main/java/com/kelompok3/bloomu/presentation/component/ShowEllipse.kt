@@ -19,6 +19,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kelompok3.bloomu.R
 
+/**
+ * Mode 0 = ellipse kanan atas kiri bawah, bg putih
+ *
+ * Mode 1 = ellipse kanan atas kiri bawah, bg ungu
+ *
+ * Mode 2 = ellipse kiri atas kanan bawah, bg ungu
+ *
+ * Mode 3 = ellipse kiri atas kanan bawah, bg putih
+ *
+ * Mode 4 = ellipse tengah, bg putih
+ */
 @Composable
 fun ShowEllipse(mode: Int){
     if (mode == 0) {
@@ -179,7 +190,7 @@ fun ShowEllipse(mode: Int){
                     .background(
                         brush = Brush.radialGradient(
                             0.2f to Color(0x80A28AFF),
-                            0.6f to Color(0x80CABCFF),
+                            0.75f to Color(0x80CABCFF),
                             1.0f to Color(0x00FFFFFF),
                         )
                     )
@@ -194,5 +205,5 @@ fun ShowEllipse(mode: Int){
 @Composable
 @Preview
 fun PreviewEllipse(){
-    ShowEllipse(4)
+    ShowEllipse(3)
 }
