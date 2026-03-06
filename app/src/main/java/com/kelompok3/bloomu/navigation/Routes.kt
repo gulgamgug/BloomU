@@ -7,7 +7,11 @@ import kotlinx.serialization.Serializable
 @Serializable object LoginRoute
 @Serializable object RegisterRoute
 @Serializable object HomeRoute
+@Serializable object AnalyticRoute
+@Serializable object CareRoute
+@Serializable object ProfileRoute
 @Serializable object CheckInRoute
+
 @Serializable data class OtpRoute(val email: String)
 @Serializable data class DailyCheckInRoute(val moodData: List<Float>)
 

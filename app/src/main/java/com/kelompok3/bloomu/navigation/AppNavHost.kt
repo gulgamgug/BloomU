@@ -34,7 +34,6 @@ import com.kelompok3.bloomu.presentation.authentication.LoginScreen
 import com.kelompok3.bloomu.presentation.authentication.OtpScreen
 import com.kelompok3.bloomu.presentation.authentication.RegisterScreen
 import com.kelompok3.bloomu.presentation.component.ShowEllipse
-import com.kelompok3.bloomu.presentation.home.HomeScreen
 import com.kelompok3.bloomu.presentation.home.OnboardingScreen
 import com.kelompok3.bloomu.presentation.home.OnboardingViewModel
 import com.kelompok3.bloomu.supabase.supabase
@@ -195,7 +194,7 @@ fun AppNavHost(
         }
 
         composable<HomeRoute> {
-            HomeScreen(
+            com.kelompok3.bloomu.presentation.home.HomeNavBar(
                 onCheckInClick = { navController.navigate(CheckInRoute) },
                 onLogOutSuccess = {
                     navController.navigate(LoginRoute) {
