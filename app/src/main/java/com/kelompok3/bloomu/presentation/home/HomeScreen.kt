@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -47,6 +46,7 @@ import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun HomeScreen(
+    modifier: Modifier = Modifier,
     onCheckInClick: () -> Unit = {},
     onNotificationClick: () -> Unit = {},
     onLogOutSuccess: () -> Unit,
@@ -55,6 +55,7 @@ fun HomeScreen(
     val context = LocalContext.current
 
     LaunchedEffect(Unit) {
+        viewModel.checkTodayCheckIn() // Cek ulang setiap kali masuk ke Home
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
                 is HomeEvent.LogoutSuccess -> onLogOutSuccess()
@@ -66,7 +67,9 @@ fun HomeScreen(
     }
 
     HomeContent(
+        modifier = modifier,
         namaUser = viewModel.namaUser,
+        isCheckInCompletedToday = viewModel.isCheckInCompletedToday,
         onCheckInClick = onCheckInClick,
         onNotificationClick = onNotificationClick,
         onLogoutClick = { viewModel.logout() }
@@ -75,21 +78,22 @@ fun HomeScreen(
 
 @Composable
 fun HomeContent(
+    modifier: Modifier = Modifier,
     namaUser: String,
+    isCheckInCompletedToday: Boolean = false,
     onCheckInClick: () -> Unit,
     onNotificationClick: () -> Unit,
     onLogoutClick: () -> Unit
 ) {
-    Box(modifier = Modifier
+    Box(modifier = modifier
         .fillMaxSize()
         .background(Color.White)) {
-        // Background Ellipse
+
         ShowEllipse(mode = 0)
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .statusBarsPadding() // Berikan padding di sini agar konten tidak tertutup status bar
                 .verticalScroll(rememberScrollState())
                 .padding(top = 40.dp, bottom = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -136,6 +140,7 @@ fun HomeContent(
 
             // Card Input Perasaan
             PerasaanCard(
+                isCompleted = isCheckInCompletedToday,
                 onClick = onCheckInClick
             )
 
