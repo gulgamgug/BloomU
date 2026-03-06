@@ -22,7 +22,7 @@ object AssessmentContentProvider {
         
         return when {
             mentalScore <= 2 -> AssessmentCard(
-                imageRes = R.drawable.card_good_1, // Ganti dengan image yang sesuai nanti
+                imageRes = R.drawable.card_bad_1, // Ganti dengan image yang sesuai nanti
                 title = "Pikiranmu sedang sedikit penuh",
                 description = "Sepertinya ada banyak hal yang membebani pikiranmu hari ini. Tidak apa-apa untuk merasa lelah.",
                 microActions = listOf(

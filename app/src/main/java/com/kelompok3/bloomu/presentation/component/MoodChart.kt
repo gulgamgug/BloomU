@@ -1,6 +1,7 @@
 package com.kelompok3.bloomu.presentation.component
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -45,6 +46,7 @@ fun MoodChart(moodData: List<Float>) {
 
         Box(
             modifier = Modifier
+                .background(Color(0xC8FFFFFF), RoundedCornerShape(24.dp))
                 .fillMaxWidth()
                 .height(320.dp)
                 .border(1.dp, Color(0xFFD6C5E3), RoundedCornerShape(24.dp))

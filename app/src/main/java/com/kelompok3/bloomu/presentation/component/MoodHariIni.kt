@@ -34,11 +34,16 @@ import com.kelompok3.bloomu.ui.theme.InterFontFamily
 
 @Composable
 fun PerasaanCard(
+    isCompleted: Boolean = false,
     onClick: () -> Unit
 ) {
     // Definisi Gradasi Linear F5C6EC dan 8366EB
-    val gradientBrush = Brush.linearGradient(
-        colors = listOf(Color(0xFFF5C6EC), Color(0xFF8366EB))
+    val gradientBrush =
+        Brush.linearGradient(
+        colors =
+            if (!isCompleted) listOf(Color(0xFFF5C6EC), Color(0xFF8366EB))
+            else listOf(Color(0xFFD3FFAF), Color(0xFF72AF5F)
+        )
     )
 
     Box(
@@ -50,6 +55,7 @@ fun PerasaanCard(
             .background(brush = gradientBrush, shape = RoundedCornerShape(30.dp))
             .padding(20.dp)
             .clickable(
+                enabled = !isCompleted,
                 interactionSource = remember { MutableInteractionSource() },
                 indication = ripple(
                     bounded = true,
@@ -64,7 +70,7 @@ fun PerasaanCard(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                text = "Masukkan perasaan hati kamu disini!",
+                text = if (isCompleted) "Kamu sudah mengisi untuk hari ini!" else "Masukkan perasaan hati kamu disini!",
                 fontFamily = InterFontFamily,
                 color = Color.White,
                 fontSize = 16.sp,
@@ -82,7 +88,7 @@ fun PerasaanCard(
                 EmojiIcon(id = R.drawable.emoji4)
                 EmojiIcon(id = R.drawable.emoji3)
                 EmojiIcon(id = R.drawable.emoji2)
-                EmojiIcon(id = R.drawable.emoji)
+                EmojiIcon(id = R.drawable.emoji_1)
             }
         }
     }
