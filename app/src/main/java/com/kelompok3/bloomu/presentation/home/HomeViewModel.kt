@@ -12,7 +12,9 @@ import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.json.jsonPrimitive
 import kotlin.time.ExperimentalTime
@@ -45,20 +47,29 @@ class HomeViewModel : ViewModel() {
     @OptIn(ExperimentalTime::class)
     fun checkTodayCheckIn() {
         val user = supabase.auth.currentUserOrNull() ?: return
-        
+
         viewModelScope.launch {
             try {
-                // Mendapatkan tanggal hari ini dalam format YYYY-MM-DD
-                val now = kotlin.time.Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-                val todayStart = "${now.year}-${now.monthNumber.toString().padStart(2, '0')}-${now.dayOfMonth.toString().padStart(2, '0')}T00:00:00Z"
-                
+                // 1. Dapatkan zona waktu lokal (misal: +07 untuk WIB)
+                val tz = TimeZone.currentSystemDefault()
+
+                // 2. Dapatkan waktu sekarang di zona lokal
+                val now = kotlin.time.Clock.System.now().toLocalDateTime(tz)
+
+                // 3. Tentukan awal hari ini (jam 00:00:00) di zona lokal
+                val localStart = LocalDateTime(now.year, now.month, now.dayOfMonth, 0, 0, 0, 0)
+
+                // 4. Konversi awal hari lokal tersebut ke Instant (UTC)
+                val instantStart = localStart.toInstant(tz)
+                val todayStartIso = instantStart.toString() 
+
                 val response = supabase.postgrest["daily_checkins"].select(columns = Columns.list("id")) {
                     filter {
                         eq("user_id", user.id)
-                        gte("created_at", todayStart)
+                        gte("created_at", todayStartIso)
                     }
                 }
-                
+
                 isCheckInCompletedToday = response.data != "[]"
             } catch (e: Exception) {
                 e.printStackTrace()
