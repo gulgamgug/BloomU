@@ -72,6 +72,7 @@ fun CheckInScreen(
     ) {
         composable<MoodSelectionStepRoute> {
             MoodPage(
+                onBack = onBack,
                 onMoodSelected = { moodId ->
                     viewModel.selectedMoodEmoji = moodId
                     navController.navigate(QuestionsStepRoute)
@@ -318,7 +319,7 @@ fun QuestionsStep(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun QuestionsStepPreview() {
     QuestionsStep()

@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -79,13 +80,16 @@ fun HomeContent(
     onNotificationClick: () -> Unit,
     onLogoutClick: () -> Unit
 ) {
-    Box(modifier = Modifier.fillMaxSize().background(Color.White)) {
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .background(Color.White)) {
         // Background Ellipse
         ShowEllipse(mode = 0)
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .statusBarsPadding() // Berikan padding di sini agar konten tidak tertutup status bar
                 .verticalScroll(rememberScrollState())
                 .padding(top = 40.dp, bottom = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
