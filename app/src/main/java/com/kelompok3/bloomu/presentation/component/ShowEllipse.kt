@@ -14,6 +14,7 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -115,6 +116,42 @@ fun ShowEllipse(mode: Int){
                     .align(Alignment.BottomStart)
                     .size(700.dp)
                     .offset(x = (150).dp, y = 100.dp)
+                    .rotate(180f)
+                    .alpha(1.0f)
+                    .blur(45.dp)
+            )
+        }
+    } else if (mode == 3) {
+        // Mode 3: Mirror horizontal sempurna dari Mode 0
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White)
+                .graphicsLayer(scaleX = -1f) // Ini kuncinya bre, biar bener-bener kebalik arahnya
+        ) {
+            // Kita pake logic yang sama persis kayak mode 0
+            // Tapi karena diparent-nya di-flip, nanti hasilnya bakal otomatis kebalik
+            
+            // Ellipse kanan atas (jadi kiri atas karena flip)
+            Image(
+                painter = painterResource(id = R.drawable.ellipse_1),
+                contentDescription = null,
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .size(400.dp)
+                    .offset(x = 80.dp, y = (-80).dp)
+                    .alpha(1.0f)
+                    .blur(45.dp)
+            )
+
+            // Ellipse kiri bawah (jadi kanan bawah karena flip)
+            Image(
+                painter = painterResource(id = R.drawable.ellipse_1),
+                contentDescription = null,
+                modifier = Modifier
+                    .align(Alignment.BottomStart)
+                    .size(700.dp)
+                    .offset(x = (-100).dp, y = 100.dp)
                     .rotate(180f)
                     .alpha(1.0f)
                     .blur(45.dp)
