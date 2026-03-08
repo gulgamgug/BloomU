@@ -2,7 +2,9 @@ package com.kelompok3.bloomu
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -12,17 +14,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Build
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -52,6 +48,16 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.light(
+                android.graphics.Color.TRANSPARENT,
+                android.graphics.Color.TRANSPARENT
+            ),
+            navigationBarStyle = SystemBarStyle.light(
+                android.graphics.Color.TRANSPARENT,
+                android.graphics.Color.TRANSPARENT
+            )
+        )
         super.onCreate(savedInstanceState)
         supabase.handleDeeplinks(intent)
 
@@ -70,31 +76,31 @@ class MainActivity : ComponentActivity() {
                     )
 
                     // Debug FAB (Tombol mengambang di pojok kanan bawah)
-                    FloatingActionButton(
-                        onClick = { showDebugMenu = true },
-                        modifier = Modifier
-                            .align(Alignment.BottomEnd)
-                            .padding(16.dp),
-                        containerColor = Color(0xFF221E52),
-                        contentColor = Color.White
-                    ) {
-                        Icon(Icons.Default.Build, contentDescription = "Debug Menu")
-                    }
-
-                    // Debug Bottom Sheet Menu
-                    if (showDebugMenu) {
-                        ModalBottomSheet(
-                            onDismissRequest = { showDebugMenu = false },
-                            sheetState = rememberModalBottomSheetState()
-                        ) {
-                            DebugMenuContent(
-                                onNavigate = { route ->
-                                    navController.navigate(route)
-                                    showDebugMenu = false
-                                }
-                            )
-                        }
-                    }
+//                    FloatingActionButton(
+//                        onClick = { showDebugMenu = true },
+//                        modifier = Modifier
+//                            .align(Alignment.BottomEnd)
+//                            .padding(16.dp),
+//                        containerColor = Color(0xFF221E52),
+//                        contentColor = Color.White
+//                    ) {
+//                        Icon(Icons.Default.Build, contentDescription = "Debug Menu")
+//                    }
+//
+//                    // Debug Bottom Sheet Menu
+//                    if (showDebugMenu) {
+//                        ModalBottomSheet(
+//                            onDismissRequest = { showDebugMenu = false },
+//                            sheetState = rememberModalBottomSheetState()
+//                        ) {
+//                            DebugMenuContent(
+//                                onNavigate = { route ->
+//                                    navController.navigate(route)
+//                                    showDebugMenu = false
+//                                }
+//                            )
+//                        }
+//                    }
                 }
             }
         }

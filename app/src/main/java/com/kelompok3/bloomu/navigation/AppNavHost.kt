@@ -34,7 +34,7 @@ import com.kelompok3.bloomu.presentation.authentication.LoginScreen
 import com.kelompok3.bloomu.presentation.authentication.OtpScreen
 import com.kelompok3.bloomu.presentation.authentication.RegisterScreen
 import com.kelompok3.bloomu.presentation.component.ShowEllipse
-import com.kelompok3.bloomu.presentation.home.HomeScreen
+import com.kelompok3.bloomu.presentation.dailycheckin.CheckInScreen
 import com.kelompok3.bloomu.presentation.home.OnboardingScreen
 import com.kelompok3.bloomu.presentation.home.OnboardingViewModel
 import com.kelompok3.bloomu.supabase.supabase
@@ -195,7 +195,8 @@ fun AppNavHost(
         }
 
         composable<HomeRoute> {
-            HomeScreen(
+            com.kelompok3.bloomu.presentation.home.HomeNavBar(
+                onCheckInClick = { navController.navigate(CheckInRoute) },
                 onLogOutSuccess = {
                     navController.navigate(LoginRoute) {
                         popUpTo(HomeRoute) { inclusive = true }
@@ -205,9 +206,30 @@ fun AppNavHost(
         }
 
         composable<CheckInRoute> {
-            com.kelompok3.bloomu.dailycheckin.CheckInScreen(
+            CheckInScreen(
                 onBack = { navController.popBackStack() },
-                onFinished = { navController.popBackStack() }
+                onFinished = { mood, mental, physical, academic ->
+                    navController.navigate(
+                        AssessmentResultRoute(mood, mental, physical, academic)
+                    ) {
+                        popUpTo(CheckInRoute) { inclusive = true }
+                    }
+                }
+            )
+        }
+
+        composable<AssessmentResultRoute> { backStackEntry ->
+            val args = backStackEntry.toRoute<AssessmentResultRoute>()
+            com.kelompok3.bloomu.presentation.assessment.AssessmentResultScreen(
+                moodScore = args.moodScore,
+                mentalScore = args.mentalScore,
+                physicalScore = args.physicalScore,
+                academicScore = args.academicScore,
+                onBackToHome = {
+                    navController.navigate(HomeRoute) {
+                        popUpTo(HomeRoute) { inclusive = true }
+                    }
+                }
             )
         }
     }

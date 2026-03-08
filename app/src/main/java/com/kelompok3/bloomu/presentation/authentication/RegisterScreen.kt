@@ -22,6 +22,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -51,18 +53,14 @@ fun RegisterScreen(
     onRegisterSuccess: (String) -> Unit,
     onToLoginScreen: () -> Unit,
     onLoginSuccess: () -> Unit,
-    viewModel: RegisterViewModel = viewModel()
+    viewModel: AuthViewModel = viewModel()
 ) {
     val context = LocalContext.current
     val scrollState = rememberScrollState()
 
     val googleState = supabase.composeAuth.rememberSignInWithGoogle(
         onResult = { result ->
-            when (result) {
-                is NativeSignInResult.Success -> onLoginSuccess()
-                is NativeSignInResult.Error -> println("Error Google: ${result.message}")
-                else -> {}
-            }
+            viewModel.handleGoogleSignInResult(result)
         }
     )
 
@@ -70,15 +68,21 @@ fun RegisterScreen(
     LaunchedEffect(Unit) {
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
-                is RegisterEvent.Success -> {
+                is AuthEvent.RegisterSuccess -> {
                     onRegisterSuccess(event.email)
                 }
-                is RegisterEvent.Error -> {
+                is AuthEvent.LoginSuccess -> { // Untuk Google login di layar register
+                    onLoginSuccess()
+                }
+                is AuthEvent.Error -> {
                     Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
                 }
+                else -> {}
             }
         }
     }
+
+    com.kelompok3.bloomu.presentation.component.LoadingDialog(isLoading = viewModel.isLoading)
 
     ShowEllipse(0)
 
@@ -197,7 +201,10 @@ fun RegisterScreen(
             Spacer(Modifier.height(10.dp))
 
             OutlinedButton(
-                onClick = { googleState.startFlow() },
+                onClick = { 
+                    viewModel.isLoading = true
+                    googleState.startFlow() 
+                },
                 modifier = Modifier.fillMaxWidth().height(53.dp),
                 border = BorderStroke(1.dp, Color(0xFF3155AA)),
                 colors = ButtonDefaults.outlinedButtonColors(containerColor = Color.Transparent)

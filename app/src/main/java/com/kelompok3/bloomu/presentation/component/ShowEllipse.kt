@@ -20,13 +20,28 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kelompok3.bloomu.R
 
+/**
+ * Mode 0 = ellipse kanan atas kiri bawah, bg putih
+ *
+ * Mode 1 = ellipse kanan atas kiri bawah, bg ungu
+ *
+ * Mode 2 = ellipse kiri atas kanan bawah, bg ungu
+ *
+ * Mode 3 = ellipse kiri atas kanan bawah, bg putih
+ *
+ * Mode 4 = ellipse tengah, bg putih
+ */
 @Composable
 fun ShowEllipse(mode: Int){
     if (mode == 0) {
+        val gradientBackground = Brush.linearGradient(
+            colors = listOf(Color(0xFFFFFFFF), Color(0xFFE9E3FF))
+        )
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White)
+                .background(gradientBackground)
         ) {
             // Ellipse kanan atas
             Image(
@@ -121,41 +136,67 @@ fun ShowEllipse(mode: Int){
                     .blur(45.dp)
             )
         }
-    } else if (mode == 3) {
-        // Mode 3: Mirror horizontal sempurna dari Mode 0
+    } else if (mode ==3) {
+        val gradientBackground = Brush.linearGradient(
+            colors = listOf(Color(0xFFFFFFFF), Color(0xFFE9E3FF))
+        )
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White)
-                .graphicsLayer(scaleX = -1f) // Ini kuncinya bre, biar bener-bener kebalik arahnya
+                .background(gradientBackground)
         ) {
-            // Kita pake logic yang sama persis kayak mode 0
-            // Tapi karena diparent-nya di-flip, nanti hasilnya bakal otomatis kebalik
-            
-            // Ellipse kanan atas (jadi kiri atas karena flip)
-            Image(
-                painter = painterResource(id = R.drawable.ellipse_1),
-                contentDescription = null,
+            // Ellipse kiri atas
+            Box(
                 modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .size(400.dp)
-                    .offset(x = 80.dp, y = (-80).dp)
-                    .alpha(1.0f)
-                    .blur(45.dp)
+                    .align(Alignment.TopStart)
+                    .offset(x = (-150).dp, y = (-150).dp)
+                    .size(500.dp)
+                    .background(
+                        brush = Brush.radialGradient(
+                            colors = listOf(Color(0xFF8366EB).copy(alpha = 0.5f), Color.Transparent)
+                        )
+                    )
             )
 
-            // Ellipse kiri bawah (jadi kanan bawah karena flip)
-            Image(
-                painter = painterResource(id = R.drawable.ellipse_1),
-                contentDescription = null,
+            // Ellipse kanan bawah
+            Box(
                 modifier = Modifier
-                    .align(Alignment.BottomStart)
-                    .size(700.dp)
-                    .offset(x = (-100).dp, y = 100.dp)
-                    .rotate(180f)
-                    .alpha(1.0f)
-                    .blur(45.dp)
+                    .align(Alignment.BottomEnd)
+                    .offset(x = 150.dp, y = 150.dp)
+                    .size(500.dp)
+                    .background(
+                        brush = Brush.radialGradient(
+                            colors = listOf(Color(0xFF8366EB).copy(alpha = 0.5f), Color.Transparent)
+                        )
+                    )
             )
+        }
+    } else if (mode == 4) {
+        val gradientBackground = Brush.linearGradient(
+            colors = listOf(Color(0xFFFFFFFF), Color(0xFFE9E3FF))
+        )
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(gradientBackground)
+        ) {
+            // Ellipse tengah
+            Box(
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .size(600.dp)
+                    .offset(x = 0.dp, y = -100.dp)
+                    .background(
+                        brush = Brush.radialGradient(
+                            0.2f to Color(0x80A28AFF),
+                            0.75f to Color(0x80CABCFF),
+                            1.0f to Color(0x00FFFFFF),
+                        )
+                    )
+            )
+
         }
     }
 

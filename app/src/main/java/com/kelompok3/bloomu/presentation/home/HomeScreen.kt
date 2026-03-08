@@ -4,6 +4,7 @@ import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,7 +14,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
@@ -23,6 +23,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -33,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kelompok3.bloomu.R
+import com.kelompok3.bloomu.R.drawable
 import com.kelompok3.bloomu.presentation.component.FunFactCard
 import com.kelompok3.bloomu.presentation.component.MoodChart
 import com.kelompok3.bloomu.presentation.component.PerasaanCard
@@ -43,6 +46,8 @@ import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun HomeScreen(
+    modifier: Modifier = Modifier,
+    onCheckInClick: () -> Unit = {},
     onNotificationClick: () -> Unit = {},
     onLogOutSuccess: () -> Unit,
     viewModel: HomeViewModel = viewModel()
@@ -50,6 +55,8 @@ fun HomeScreen(
     val context = LocalContext.current
 
     LaunchedEffect(Unit) {
+        viewModel.checkTodayCheckIn() // Cek ulang setiap kali masuk ke Home
+        viewModel.fetchWeeklyMoodData() // Ambil data mood mingguan
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
                 is HomeEvent.LogoutSuccess -> onLogOutSuccess()
@@ -61,7 +68,11 @@ fun HomeScreen(
     }
 
     HomeContent(
+        modifier = modifier,
         namaUser = viewModel.namaUser,
+        isCheckInCompletedToday = viewModel.isCheckInCompletedToday,
+        weeklyMoodData = viewModel.weeklyMoodData,
+        onCheckInClick = onCheckInClick,
         onNotificationClick = onNotificationClick,
         onLogoutClick = { viewModel.logout() }
     )
@@ -69,12 +80,18 @@ fun HomeScreen(
 
 @Composable
 fun HomeContent(
+    modifier: Modifier = Modifier,
     namaUser: String,
+    isCheckInCompletedToday: Boolean = false,
+    weeklyMoodData: List<Float> = listOf(-1f, -1f, -1f, -1f, -1f, -1f, -1f),
+    onCheckInClick: () -> Unit,
     onNotificationClick: () -> Unit,
     onLogoutClick: () -> Unit
 ) {
-    Box(modifier = Modifier.fillMaxSize().background(Color.White)) {
-        // Background Ellipse
+    Box(modifier = modifier
+        .fillMaxSize()
+        .background(Color.White)) {
+
         ShowEllipse(mode = 0)
 
         Column(
@@ -125,7 +142,10 @@ fun HomeContent(
             Spacer(modifier = Modifier.height(4.dp))
 
             // Card Input Perasaan
-            PerasaanCard()
+            PerasaanCard(
+                isCompleted = isCheckInCompletedToday,
+                onClick = onCheckInClick
+            )
 
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -148,50 +168,63 @@ fun HomeContent(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(23.dp)
                 ) {
-                    // Box Kiri (Radial Gradient: Oranye Api)
-                    Box(
+                    // Box Kiri (radial gradient streak)
+                    BoxWithConstraints(
                         modifier = Modifier
                             .weight(1f)
                             .height(80.dp)
-                            .background(
-                                brush = Brush.radialGradient(
-                                    0.2f to Color(0xFFFFD54F), // Kuning Amber
-                                    0.6f to Color(0xFFFF9800), // Oranye Cerah
-                                    1.0f to Color(0xFFFF6D00)  // Oranye Pekat
-                                ),
-                                shape = RoundedCornerShape(24.dp),
-                            ),
-                        contentAlignment = Alignment.Center
+                            .clip(RoundedCornerShape(24.dp))
                     ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center,
-                            modifier = Modifier.padding(horizontal = 12.dp)
+                        val widthPx = constraints.maxWidth.toFloat()
+                        val heightPx = constraints.maxHeight.toFloat()
+
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(
+                                    brush = Brush.radialGradient(
+                                        0.2f to Color(0xFFFF9800),
+                                        0.6f to Color(0xFFFF6D00),
+                                        1.0f to Color(0xFFF44336),
+                                        center = Offset(x = widthPx * 0.5f, y = heightPx * 1f),
+                                        radius = widthPx * 0.6f
+                                    ),
+                                    shape = RoundedCornerShape(24.dp),
+                                ),
+                            contentAlignment = Alignment.Center
                         ) {
-                            Column(
-                                horizontalAlignment = Alignment.Start
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center,
+                                modifier = Modifier.padding(horizontal = 12.dp)
                             ) {
-                                Text(
-                                    text = "Streak Saat Ini",
-                                    color = Color.White,
-                                    fontSize = 14.sp,
-                                    fontFamily = InterFontFamily
-                                )
-                                Text(
-                                    text = "4 Hari",
-                                    color = Color.White,
-                                    fontSize = 22.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    fontFamily = InterFontFamily
+                                Column(
+                                    horizontalAlignment = Alignment.Start
+                                ) {
+                                    Text(
+                                        text = "Streak Saat Ini",
+                                        color = Color.White,
+                                        fontSize = 14.sp,
+                                        fontFamily = InterFontFamily
+                                    )
+                                    Text(
+                                        text = "4 Hari",
+                                        color = Color.White,
+                                        fontSize = 22.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        fontFamily = InterFontFamily
+                                    )
+                                }
+                                Spacer(modifier = Modifier.weight(1f))
+                                androidx.compose.foundation.Image(
+                                    painter = androidx.compose.ui.res.painterResource(id = drawable.apistrik),
+                                    contentDescription = "Streak Icon",
+                                    modifier = Modifier.size(45.dp),
+                                    colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(
+                                        Color.White
+                                    )
                                 )
                             }
-                            Spacer(modifier = Modifier.weight(1f))
-                            androidx.compose.foundation.Image(
-                                painter = androidx.compose.ui.res.painterResource(id = R.drawable.apistrik),
-                                contentDescription = "Streak Icon",
-                                modifier = Modifier.size(45.dp),
-                                colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(Color.White)
-                            )
                         }
                     }
 
@@ -234,8 +267,8 @@ fun HomeContent(
                 }
             }
 
-            // Grafik Mood (Dummy data untuk tampilan)
-            MoodChart(moodData = listOf(4f, 3f, 2f, 3.5f, 1f, 0.5f, 2.5f))
+            // Grafik Mood (Data dinamis dari Supabase)
+            MoodChart(moodData = weeklyMoodData)
 
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -251,6 +284,7 @@ fun HomeScreenPreview() {
     BloomUTheme {
         HomeContent(
             namaUser = "User",
+            onCheckInClick = {},
             onNotificationClick = {},
             onLogoutClick = {}
         )
