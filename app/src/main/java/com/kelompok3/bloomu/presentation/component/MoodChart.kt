@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun MoodChart(moodData: List<Float>) {
-    val days = listOf("Sen", "Sel", "Rab", "Kam", "Jum", "Sab", "Min")
+    val days = listOf("Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab")
     val emojis = listOf("😆", "😄", "🙂", "😢", "😵‍💫", " ")
 
     val textMeasurer = rememberTextMeasurer()
@@ -144,7 +144,7 @@ fun MoodChart(moodData: List<Float>) {
 @Preview(showBackground = true)
 @Composable
 fun MoodChartPreview() {
-    // 0 = 😵‍💫, 1 = 😢, 2 = 🙂, 3 = 😄, 4 = 😆
+    //-1 = user ga ngisi pada hari itu, 0 = 😵‍💫, 1 = 😢, 2 = 🙂, 3 = 😄, 4 = 😆
     val sampleMoodData = listOf(1f, 4f, 2f, -1f, -1f, 4f, 2f)
     MoodChart(moodData = sampleMoodData)
 }
