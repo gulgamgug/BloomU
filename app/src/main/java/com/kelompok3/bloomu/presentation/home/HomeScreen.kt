@@ -56,6 +56,7 @@ fun HomeScreen(
 
     LaunchedEffect(Unit) {
         viewModel.checkTodayCheckIn() // Cek ulang setiap kali masuk ke Home
+        viewModel.fetchWeeklyMoodData() // Ambil data mood mingguan
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
                 is HomeEvent.LogoutSuccess -> onLogOutSuccess()
@@ -70,6 +71,7 @@ fun HomeScreen(
         modifier = modifier,
         namaUser = viewModel.namaUser,
         isCheckInCompletedToday = viewModel.isCheckInCompletedToday,
+        weeklyMoodData = viewModel.weeklyMoodData,
         onCheckInClick = onCheckInClick,
         onNotificationClick = onNotificationClick,
         onLogoutClick = { viewModel.logout() }
@@ -81,6 +83,7 @@ fun HomeContent(
     modifier: Modifier = Modifier,
     namaUser: String,
     isCheckInCompletedToday: Boolean = false,
+    weeklyMoodData: List<Float> = listOf(-1f, -1f, -1f, -1f, -1f, -1f, -1f),
     onCheckInClick: () -> Unit,
     onNotificationClick: () -> Unit,
     onLogoutClick: () -> Unit
@@ -264,8 +267,8 @@ fun HomeContent(
                 }
             }
 
-            // Grafik Mood (Dummy data untuk tampilan)
-            MoodChart(moodData = listOf(4f, 3f, 2f, 3.5f, 1f, 0.5f, 2.5f))
+            // Grafik Mood (Data dinamis dari Supabase)
+            MoodChart(moodData = weeklyMoodData)
 
             Spacer(modifier = Modifier.height(8.dp))
 
