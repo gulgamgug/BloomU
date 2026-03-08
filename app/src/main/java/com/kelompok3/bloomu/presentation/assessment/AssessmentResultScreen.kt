@@ -31,7 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.kelompok3.bloomu.dailycheckin.getMoodInfo
+import com.kelompok3.bloomu.presentation.dailycheckin.getMoodInfo
 import com.kelompok3.bloomu.presentation.component.ShowEllipse
 import com.kelompok3.bloomu.ui.theme.BloomUTheme
 import com.kelompok3.bloomu.ui.theme.InterFontFamily
