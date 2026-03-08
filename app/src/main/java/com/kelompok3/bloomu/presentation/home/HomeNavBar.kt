@@ -6,10 +6,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CalendarViewDay
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.ListAlt
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -29,6 +29,7 @@ import com.kelompok3.bloomu.navigation.AnalyticRoute
 import com.kelompok3.bloomu.navigation.CareRoute
 import com.kelompok3.bloomu.navigation.HomeRoute
 import com.kelompok3.bloomu.navigation.ProfileRoute
+import com.kelompok3.bloomu.presentation.calendar.CalendarPage
 
 data class NavItem(
     val label: String,
@@ -45,8 +46,8 @@ fun HomeNavBar( //navbar
 
     val navItems = listOf( //isi navbar
         NavItem("Home", Icons.Default.Home, HomeRoute),
-        NavItem("Analitik", Icons.Default.Search, AnalyticRoute),
-        NavItem("Care", Icons.Default.List, CareRoute),
+        NavItem("Kalender", Icons.Default.CalendarViewDay, AnalyticRoute),
+        NavItem("Care", Icons.Default.ListAlt, CareRoute),
         NavItem("Profil", Icons.Default.Person, ProfileRoute)
     )
 
@@ -95,7 +96,7 @@ fun HomeNavBar( //navbar
                 onCheckInClick = onCheckInClick,
                 onLogOutSuccess = onLogOutSuccess
             )
-            1 -> PlaceholderScreen("Analitik", Modifier.padding(innerPadding))
+            1 -> CalendarPage(Modifier.padding(innerPadding))
             2 -> PlaceholderScreen("Care", Modifier.padding(innerPadding))
             3 -> PlaceholderScreen("Profil", Modifier.padding(innerPadding))
         }
