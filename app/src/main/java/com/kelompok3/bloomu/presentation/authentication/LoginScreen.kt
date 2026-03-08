@@ -51,21 +51,13 @@ import kotlinx.coroutines.flow.collectLatest
 fun LoginScreen(
     onLoginSuccess: () -> Unit,
     onToRegisterScreen: () -> Unit,
-    viewModel: LoginViewModel = viewModel()
+    viewModel: AuthViewModel = viewModel()
 ) {
     val context = LocalContext.current
-    var isGoogleLoading by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(false) }
 
     val googleState = supabase.composeAuth.rememberSignInWithGoogle(
         onResult = { result ->
-            isGoogleLoading = false
-            when (result) {
-                is NativeSignInResult.Success -> onLoginSuccess()
-                is NativeSignInResult.Error -> {
-                    Toast.makeText(context, "Google Error: ${result.message}", Toast.LENGTH_SHORT).show()
-                }
-                else -> {}
-            }
+            viewModel.handleGoogleSignInResult(result)
         }
     )
 
@@ -73,17 +65,18 @@ fun LoginScreen(
     LaunchedEffect(Unit) {
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
-                is LoginEvent.Success -> {
+                is AuthEvent.LoginSuccess -> {
                     onLoginSuccess()
                 }
-                is LoginEvent.Error -> {
+                is AuthEvent.Error -> {
                     Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
                 }
+                else -> {}
             }
         }
     }
 
-    LoadingDialog(isLoading = viewModel.isLoading || isGoogleLoading)
+    LoadingDialog(isLoading = viewModel.isLoading)
 
     ShowEllipse(0)
 
@@ -192,7 +185,7 @@ fun LoginScreen(
 
             OutlinedButton(
                 onClick = { 
-                    isGoogleLoading = true
+                    viewModel.isLoading = true
                     googleState.startFlow() 
                 },
                 modifier = Modifier.fillMaxWidth().height(53.dp),

@@ -53,22 +53,14 @@ fun RegisterScreen(
     onRegisterSuccess: (String) -> Unit,
     onToLoginScreen: () -> Unit,
     onLoginSuccess: () -> Unit,
-    viewModel: RegisterViewModel = viewModel()
+    viewModel: AuthViewModel = viewModel()
 ) {
     val context = LocalContext.current
     val scrollState = rememberScrollState()
-    var isGoogleLoading by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(false) }
 
     val googleState = supabase.composeAuth.rememberSignInWithGoogle(
         onResult = { result ->
-            isGoogleLoading = false
-            when (result) {
-                is NativeSignInResult.Success -> onLoginSuccess()
-                is NativeSignInResult.Error -> {
-                    Toast.makeText(context, "Google Error: ${result.message}", Toast.LENGTH_SHORT).show()
-                }
-                else -> {}
-            }
+            viewModel.handleGoogleSignInResult(result)
         }
     )
 
@@ -76,17 +68,21 @@ fun RegisterScreen(
     LaunchedEffect(Unit) {
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
-                is RegisterEvent.Success -> {
+                is AuthEvent.RegisterSuccess -> {
                     onRegisterSuccess(event.email)
                 }
-                is RegisterEvent.Error -> {
+                is AuthEvent.LoginSuccess -> { // Untuk Google login di layar register
+                    onLoginSuccess()
+                }
+                is AuthEvent.Error -> {
                     Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
                 }
+                else -> {}
             }
         }
     }
 
-    com.kelompok3.bloomu.presentation.component.LoadingDialog(isLoading = viewModel.isLoading || isGoogleLoading)
+    com.kelompok3.bloomu.presentation.component.LoadingDialog(isLoading = viewModel.isLoading)
 
     ShowEllipse(0)
 
@@ -206,7 +202,7 @@ fun RegisterScreen(
 
             OutlinedButton(
                 onClick = { 
-                    isGoogleLoading = true
+                    viewModel.isLoading = true
                     googleState.startFlow() 
                 },
                 modifier = Modifier.fillMaxWidth().height(53.dp),
