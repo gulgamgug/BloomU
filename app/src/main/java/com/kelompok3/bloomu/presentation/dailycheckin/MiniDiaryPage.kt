@@ -1,5 +1,6 @@
 package com.kelompok3.bloomu.presentation.dailycheckin
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -30,10 +31,16 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -52,11 +59,13 @@ fun MiniDiaryPage(
     onBack: () -> Unit = {},
     onNext: () -> Unit = {}
 ) {
+    val context = LocalContext.current
     val scrollState = rememberScrollState()
     val blueOutline = Color(0xFF2A2567)
     val gradientBrush = Brush.linearGradient(
         colors = listOf(Color(0xFFF5C6EC), Color(0xFF8366EB))
     )
+    var showError by remember { mutableStateOf(false) }
 
     Box(modifier = Modifier.fillMaxSize()) {
         ShowEllipse(4)
@@ -121,7 +130,18 @@ fun MiniDiaryPage(
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Button(
-                        onClick = onNext,
+                        onClick = {
+                            if (viewModel.diaryText.isNotBlank()) {
+                                onNext()
+                            } else {
+                                showError = true
+                                Toast.makeText(
+                                    context,
+                                    "Silahkan lengkapi diary Anda",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        },
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF221E52)),
                         shape = RoundedCornerShape(50.dp),
                         modifier = Modifier.height(48.dp).fillMaxWidth()
@@ -155,7 +175,7 @@ fun MiniDiaryPage(
                     color = Color(0xFF2A2567)
                 )
                 Text(
-                    "Ceritakan harimu di sini! (opsional)",
+                    "Ceritakan harimu di sini! (wajib)",
                     fontFamily = InterFontFamily,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Normal,
@@ -164,12 +184,19 @@ fun MiniDiaryPage(
 
                 OutlinedTextField(
                     value = viewModel.diaryText,
-                    onValueChange = { viewModel.diaryText = it },
+                    onValueChange = { 
+                        viewModel.diaryText = it
+                        if (it.isNotBlank()) showError = false
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(300.dp)
                         .padding(vertical = 10.dp)
-                        .border(1.dp, gradientBrush, RoundedCornerShape(25.dp)),
+                        .border(
+                            width = 1.dp,
+                            brush = if (showError) SolidColor(Color.Red) else gradientBrush,
+                            shape = RoundedCornerShape(25.dp)
+                        ),
                     placeholder = {
                         Text(
                             text = "Masukkan teks",

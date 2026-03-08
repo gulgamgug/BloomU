@@ -35,6 +35,8 @@ import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -65,9 +67,10 @@ fun CheckInScreen(
 ) {
     val navController = rememberNavController()
 
-    // loading dialog saat pengiriman data
+    // dialog loading
     LoadingDialog(isLoading = viewModel.isLoading)
 
+    // atur navigasi antar halaman check-in
     NavHost(
         navController = navController,
         startDestination = MoodSelectionStepRoute
@@ -102,6 +105,7 @@ fun CheckInScreen(
     }
 }
 
+// ambil data emot sama teks mood
 fun getMoodInfo(moodId: Int): Pair<Int, String> {
     return when (moodId) {
         1 -> Pair(R.drawable.emoji5, "Sangat Buruk")
@@ -120,16 +124,20 @@ fun QuestionsStep(
     onBack: () -> Unit = {},
     onNext: () -> Unit = {}
 ) {
+    val context = androidx.compose.ui.platform.LocalContext.current
     val scrollState = rememberScrollState()
     val blueOutline = Color(0xFF2A2567)
     val gradientBrush = Brush.linearGradient(
         colors = listOf(Color(0xFFF5C6EC), Color(0xFF8366EB))
     )
+    // state buat error kalo ada yg belom diisi
+    var showErrors by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(false) }
 
     Box(modifier = Modifier.fillMaxSize()) {
         ShowEllipse(4)
         Scaffold(
             topBar = {
+                // bagian header atas
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -156,7 +164,7 @@ fun QuestionsStep(
                             )
                         }
 
-                        //emot dan teks
+                        // gambar emot sesuai pilihan
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally,
                             modifier = Modifier.align(Alignment.Center)
@@ -181,7 +189,7 @@ fun QuestionsStep(
                 }
             },
             bottomBar = {
-                // 4. Tombol Lanjutkan (Alignment Kanan)
+                // bagian tombol bawah
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -189,7 +197,19 @@ fun QuestionsStep(
                     horizontalArrangement = Arrangement.End
                 ) {
                     Button(
-                        onClick = onNext,
+                        onClick = {
+                            // ini buat validasi pas mau lanjut
+                            if (viewModel.allQuestionsAnswered()) {
+                                onNext()
+                            } else {
+                                showErrors = true
+                                android.widget.Toast.makeText(
+                                    context,
+                                    "Silahkan lengkapi jawaban",
+                                    android.widget.Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        },
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF221E52)),
                         shape = RoundedCornerShape(50.dp),
                         modifier = Modifier.height(48.dp)
@@ -215,8 +235,10 @@ fun QuestionsStep(
             ) {
                 Spacer(Modifier.height(8.dp))
 
-                // --- Bagian Pertanyaan ---
+                // loop buat nampilin pertanyaan
                 viewModel.activeQuestions.forEach { question ->
+                    // cek pertanyaan mana yg kosong
+                    val isUnanswered = showErrors && viewModel.userAnswers[question.id] == null
                     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                         Text(
                             text = question.text,
@@ -228,11 +250,14 @@ fun QuestionsStep(
 
                         when (question.domain) {
                             Domain.MENTAL, Domain.AKADEMIK -> {
-                                // 2. Card dengan Radio Button (Mental & Akademik)
+                                // pake radio button buat mental/akademik
                                 Card(
                                     modifier = Modifier.fillMaxWidth(),
                                     colors = CardDefaults.cardColors(containerColor = Color.White),
-                                    border = BorderStroke(1.dp, gradientBrush),
+                                    border = BorderStroke(
+                                        width = 1.dp,
+                                        brush = if (isUnanswered) androidx.compose.ui.graphics.SolidColor(Color.Red) else gradientBrush
+                                    ),
                                     shape = RoundedCornerShape(12.dp)
                                 ) {
                                     Column(modifier = Modifier.padding(3.dp)) {
@@ -270,7 +295,7 @@ fun QuestionsStep(
                             }
 
                             Domain.FISIK -> {
-                                // 3. Choice Chips 2x2 (Fisik)
+                                // pake chips buat pertanyaan fisik
                                 FlowRow(
                                     modifier = Modifier.fillMaxWidth(),
                                     horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -300,7 +325,10 @@ fun QuestionsStep(
                                                 .weight(1f)
                                                 .height(58.dp)
                                                 .padding(5.dp),
-                                            border = BorderStroke(1.dp, Color(0xFF9383CC)),
+                                            border = BorderStroke(
+                                                width = 1.dp,
+                                                color = if (isUnanswered) Color.Red else Color(0xFF9383CC)
+                                            ),
                                             shape = RoundedCornerShape(50.dp),
                                             colors = FilterChipDefaults.filterChipColors(
                                                 containerColor = Color.White,
@@ -317,7 +345,7 @@ fun QuestionsStep(
                         }
                     }
                 }
-                Spacer(Modifier.height(100.dp)) // Beri ruang agar tidak tertutup tombol bawah
+                Spacer(Modifier.height(100.dp)) // biar ga ketutupan
             }
         }
     }
