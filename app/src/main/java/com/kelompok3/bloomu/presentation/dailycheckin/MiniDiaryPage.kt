@@ -1,4 +1,4 @@
-package com.kelompok3.bloomu.dailycheckin
+package com.kelompok3.bloomu.presentation.dailycheckin
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -76,7 +77,7 @@ fun MiniDiaryPage(
                                 .size(40.dp)
                                 .background(
                                     Color(0xFF2A2567),
-                                    shape = androidx.compose.foundation.shape.CircleShape
+                                    shape = CircleShape
                                 )
                         ) {
                             Icon(

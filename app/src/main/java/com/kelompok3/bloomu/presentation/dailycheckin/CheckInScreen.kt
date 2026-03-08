@@ -1,4 +1,4 @@
-package com.kelompok3.bloomu.dailycheckin
+package com.kelompok3.bloomu.presentation.dailycheckin
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -52,6 +53,7 @@ import com.kelompok3.bloomu.R
 import com.kelompok3.bloomu.navigation.MiniDiaryStepRoute
 import com.kelompok3.bloomu.navigation.MoodSelectionStepRoute
 import com.kelompok3.bloomu.navigation.QuestionsStepRoute
+import com.kelompok3.bloomu.presentation.component.LoadingDialog
 import com.kelompok3.bloomu.presentation.component.ShowEllipse
 import com.kelompok3.bloomu.ui.theme.InterFontFamily
 
@@ -64,7 +66,7 @@ fun CheckInScreen(
     val navController = rememberNavController()
 
     // loading dialog saat pengiriman data
-    com.kelompok3.bloomu.presentation.component.LoadingDialog(isLoading = viewModel.isLoading)
+    LoadingDialog(isLoading = viewModel.isLoading)
 
     NavHost(
         navController = navController,
@@ -143,7 +145,7 @@ fun QuestionsStep(
                                 .size(40.dp)
                                 .background(
                                     Color(0xFF2A2567),
-                                    shape = androidx.compose.foundation.shape.CircleShape
+                                    shape = CircleShape
                                 )
                         ) {
                             Icon(

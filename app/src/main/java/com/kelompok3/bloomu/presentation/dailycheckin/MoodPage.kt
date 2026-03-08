@@ -1,4 +1,4 @@
-package com.kelompok3.bloomu.dailycheckin
+package com.kelompok3.bloomu.presentation.dailycheckin
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
