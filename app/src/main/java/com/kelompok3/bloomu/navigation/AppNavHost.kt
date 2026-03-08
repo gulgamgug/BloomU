@@ -203,5 +203,12 @@ fun AppNavHost(
                 }
             )
         }
+
+        composable<CheckInRoute> {
+            com.kelompok3.bloomu.dailycheckin.CheckInScreen(
+                onBack = { navController.popBackStack() },
+                onFinished = { navController.popBackStack() }
+            )
+        }
     }
 }
