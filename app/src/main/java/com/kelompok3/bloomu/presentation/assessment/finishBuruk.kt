@@ -74,7 +74,7 @@ fun finishBuruk() {
 
             // Matahari Senyum
             Image(
-                painter = painterResource(id = R.drawable.bumiserem),
+                painter = painterResource(id = R.drawable.moodburuk),
                 contentDescription = "Bumi serem",
                 modifier = Modifier.size(215.dp)
             )

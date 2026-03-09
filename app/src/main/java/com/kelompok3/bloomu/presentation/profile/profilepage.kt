@@ -56,7 +56,7 @@ fun profilepage() {
             textAlign = TextAlign.Center
         )
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(5.dp))
 
         // Foto Profil dengan Grid Background (diwakili Box dekoratif)
         Box(
@@ -152,7 +152,7 @@ fun profilepage() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.lonceng),
+                    imageVector = ImageVector.vectorResource(id = R.drawable.notifications),
                     contentDescription = null,
                     tint = darkBlue,
                     modifier = Modifier.size(24.dp)
