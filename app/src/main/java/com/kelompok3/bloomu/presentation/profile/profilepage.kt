@@ -32,8 +32,6 @@ fun profilepage() {
 
 fun profilepagePreview(){
     BloomUTheme(dynamicColor = false) {
-        BloomUTheme(dynamicColor = false) {
             profilepage()
         }
     }
-}
