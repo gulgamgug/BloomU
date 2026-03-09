@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -31,12 +30,10 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kelompok3.bloomu.R
 import com.kelompok3.bloomu.presentation.component.ShowEllipse
-import com.kelompok3.bloomu.ui.theme.BloomUTheme
 import com.kelompok3.bloomu.ui.theme.InterFontFamily
 
 @Composable
@@ -145,15 +142,15 @@ fun CalendarPage(
                         .background(Color.White, CircleShape)
                 )
 
-                // Emoji di atas Chart (Posisi disesuaikan agar pas di tengah warna)
-                EmojiOnChart(R.drawable.emoji2, Alignment.CenterEnd, xOffset = (-25).dp, yOffset = 70.dp) // Sangat Baik
-                EmojiOnChart(R.drawable.emoji, Alignment.TopEnd, xOffset = (-40).dp, yOffset = 50.dp) // Baik (placeholder icon)
-                // Using different emoji for better representation matching the image
-                EmojiOnChart(R.drawable.emoji, Alignment.TopCenter, yOffset = 10.dp) // Baik
-                EmojiOnChart(R.drawable.emoji3, Alignment.CenterStart, xOffset = 5.dp, yOffset = (-35).dp) // Biasa
-                EmojiOnChart(R.drawable.emoji4, Alignment.CenterStart, xOffset = 0.dp, yOffset = (0).dp) // Buruk
-                EmojiOnChart(R.drawable.emoji5, Alignment.BottomStart, xOffset = 45.dp, yOffset = (-25).dp) // Sangat Buruk
-                EmojiOnChart(R.drawable.emoji, Alignment.BottomEnd, xOffset = (-25).dp, yOffset = (-45).dp) // Sangat Baik
+//                // Emoji di atas Chart (Posisi disesuaikan agar pas di tengah warna)
+//                EmojiOnChart(R.drawable.emoji2, Alignment.CenterEnd, xOffset = (-25).dp, yOffset = 70.dp) // Sangat Baik
+//                EmojiOnChart(R.drawable.emoji, Alignment.TopEnd, xOffset = (-40).dp, yOffset = 50.dp) // Baik (placeholder icon)
+//                // Using different emoji for better representation matching the image
+//                EmojiOnChart(R.drawable.emoji, Alignment.TopCenter, yOffset = 10.dp) // Baik
+//                EmojiOnChart(R.drawable.emoji3, Alignment.CenterStart, xOffset = 5.dp, yOffset = (-35).dp) // Biasa
+//                EmojiOnChart(R.drawable.emoji4, Alignment.CenterStart, xOffset = 0.dp, yOffset = (0).dp) // Buruk
+//                EmojiOnChart(R.drawable.emoji5, Alignment.BottomStart, xOffset = 45.dp, yOffset = (-25).dp) // Sangat Buruk
+//                EmojiOnChart(R.drawable.emoji, Alignment.BottomEnd, xOffset = (-25).dp, yOffset = (-45).dp) // Sangat Baik
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -166,11 +163,11 @@ fun CalendarPage(
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                LegendItem(Color(0xFFFF4848), "Sangat Buruk")
-                LegendItem(Color(0xFFFF9800), "Buruk")
-                LegendItem(Color(0xFFFFD54F), "Biasa")
-                LegendItem(Color(0xFF00E676), "Baik")
-                LegendItem(Color(0xFF7DB1F0), "Sangat Baik")
+//                LegendItem(Color(0xFFFF4848), "Sangat Buruk")
+//                LegendItem(Color(0xFFFF9800), "Buruk")
+//                LegendItem(Color(0xFFFFD54F), "Biasa")
+//                LegendItem(Color(0xFF00E676), "Baik")
+//                LegendItem(Color(0xFF7DB1F0), "Sangat Baik")
             }
 
             Spacer(modifier = Modifier.height(32.dp))
@@ -312,39 +309,39 @@ fun CalendarPage(
     }
 }
 
-@Composable
-fun EmojiOnChart(emojiId: Int, alignment: Alignment, xOffset: androidx.compose.ui.unit.Dp = 0.dp, yOffset: androidx.compose.ui.unit.Dp = 0.dp) {
-    Box(modifier = Modifier.fillMaxSize()) {
-        Image(
-            painter = painterResource(id = emojiId),
-            contentDescription = null,
-            modifier = Modifier
-                .size(32.dp)
-                .align(alignment)
-                .offset(x = xOffset, y = yOffset)
-        )
-    }
-}
+//@Composable
+//fun EmojiOnChart(emojiId: Int, alignment: Alignment, xOffset: androidx.compose.ui.unit.Dp = 0.dp, yOffset: androidx.compose.ui.unit.Dp = 0.dp) {
+//    Box(modifier = Modifier.fillMaxSize()) {
+//        Image(
+//            painter = painterResource(id = emojiId),
+//            contentDescription = null,
+//            modifier = Modifier
+//                .size(32.dp)
+//                .align(alignment)
+//                .offset(x = xOffset, y = yOffset)
+//        )
+//    }
+//}
 
-@Composable
-fun LegendItem(color: Color, label: String) {
-    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(horizontal = 6.dp)) {
-        Box(modifier = Modifier.size(12.dp).background(color, CircleShape))
-        Spacer(modifier = Modifier.width(6.dp))
-        Text(
-            text = label,
-            fontSize = 10.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color.Black,
-            fontFamily = InterFontFamily
-        )
-    }
-}
+//@Composable
+//fun LegendItem(color: Color, label: String) {
+//    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(horizontal = 6.dp)) {
+//        Box(modifier = Modifier.size(12.dp).background(color, CircleShape))
+//        Spacer(modifier = Modifier.width(6.dp))
+//        Text(
+//            text = label,
+//            fontSize = 10.sp,
+//            fontWeight = FontWeight.Bold,
+//            color = Color.Black,
+//            fontFamily = InterFontFamily
+//        )
+//    }
+//}
 
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun calendarPagePreview() {
-    BloomUTheme(dynamicColor = false) {
-        CalendarPage()
-    }
-}
+//@Preview(showBackground = true, showSystemUi = true)
+//@Composable
+//fun calendarPagePreview() {
+//    BloomUTheme(dynamicColor = false) {
+//        CalendarPage()
+//    }
+//}

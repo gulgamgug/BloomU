@@ -54,9 +54,10 @@ fun HomeScreen(
 ) {
     val context = LocalContext.current
 
+    // ambil data pas buka home
     LaunchedEffect(Unit) {
-        viewModel.checkTodayCheckIn() // Cek ulang setiap kali masuk ke Home
-        viewModel.fetchWeeklyMoodData() // Ambil data mood mingguan
+        viewModel.checkTodayCheckIn() // cek ulang setiap kali masuk ke Home
+        viewModel.fetchWeeklyMoodData() // ambil data mood mingguan
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
                 is HomeEvent.LogoutSuccess -> onLogOutSuccess()
@@ -88,6 +89,7 @@ fun HomeContent(
     onNotificationClick: () -> Unit,
     onLogoutClick: () -> Unit
 ) {
+    // background sama ellipse hiasan
     Box(modifier = modifier
         .fillMaxSize()
         .background(Color.White)) {
@@ -101,7 +103,7 @@ fun HomeContent(
                 .padding(top = 40.dp, bottom = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Header Section
+            // bagian sapaan sama notif
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -141,14 +143,24 @@ fun HomeContent(
 
             Spacer(modifier = Modifier.height(4.dp))
 
-            // Card Input Perasaan
+            // card buat mulai check-in harian
             PerasaanCard(
                 isCompleted = isCheckInCompletedToday,
                 onClick = onCheckInClick
             )
 
+            //Spacer(modifier = Modifier.height(4.dp))
+
+            // fun fact
+            FunFactCard()
+
+
+            // ini grafik mood seminggu
+            MoodChart(moodData = weeklyMoodData)
+
             Spacer(modifier = Modifier.height(8.dp))
 
+            // judul analitik
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -168,7 +180,7 @@ fun HomeContent(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(23.dp)
                 ) {
-                    // Box Kiri (radial gradient streak)
+                    // kotak buat streak (api-api)
                     BoxWithConstraints(
                         modifier = Modifier
                             .weight(1f)
@@ -228,7 +240,7 @@ fun HomeContent(
                         }
                     }
 
-                    // Box Kanan (Solid FCEDF9)
+                    // kotak buat total check-in
                     Box(
                         modifier = Modifier
                             .weight(1f)
@@ -266,14 +278,6 @@ fun HomeContent(
                     }
                 }
             }
-
-            // Grafik Mood (Data dinamis dari Supabase)
-            MoodChart(moodData = weeklyMoodData)
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            // Card Fun Fact
-            FunFactCard()
         }
     }
 }
