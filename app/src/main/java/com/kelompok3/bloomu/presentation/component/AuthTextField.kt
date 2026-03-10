@@ -10,7 +10,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.input.VisualTransformation
+import com.kelompok3.bloomu.ui.theme.BloomUTheme
 import com.kelompok3.bloomu.ui.theme.InterFontFamily
 
 @Composable
@@ -18,7 +21,9 @@ fun AuthTextField(
     placeholder: String,
     value: String,
     onValueChange: (String) -> Unit,
-    leadingIcon: @Composable (() -> Unit)? = null
+    leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
+    visualTransformation: VisualTransformation = VisualTransformation.None
 ) {
     TextField(
         value = value,
@@ -26,6 +31,8 @@ fun AuthTextField(
         onValueChange = onValueChange,
         placeholder = { Text(placeholder, fontFamily = InterFontFamily) },
         leadingIcon = leadingIcon,
+        trailingIcon = trailingIcon,
+        visualTransformation = visualTransformation,
         singleLine = true,
         textStyle = TextStyle(fontFamily = InterFontFamily),
         modifier = Modifier
@@ -44,4 +51,16 @@ fun AuthTextField(
         )
     )
 
+}
+
+@Preview(showBackground = true)
+@Composable
+fun AuthTextFieldPreview() {
+    BloomUTheme {
+        AuthTextField(
+            placeholder = "Email",
+            value = "",
+            onValueChange = {}
+        )
+    }
 }
