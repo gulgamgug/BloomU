@@ -78,6 +78,24 @@ class AuthViewModel : ViewModel() {
     }
 
     fun signUp() {
+        // 1. Validasi Input Kosong
+        if (nama.isBlank() || email.isBlank() || password.isBlank()) {
+            viewModelScope.launch {
+                _eventFlow.emit(AuthEvent.Error("Semua kolom harus diisi"))
+            }
+            return
+        }
+
+        // 2. Validasi Format Email
+        val emailPattern = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}\$".toRegex()
+        if (!email.matches(emailPattern)) {
+            viewModelScope.launch {
+                _eventFlow.emit(AuthEvent.Error("Format email tidak valid"))
+            }
+            return
+        }
+
+        // 3. Validasi Panjang Password
         if (password.length < 8) {
             viewModelScope.launch {
                 _eventFlow.emit(AuthEvent.Error("Password minimal 8 karakter"))
@@ -91,7 +109,18 @@ class AuthViewModel : ViewModel() {
                 AuthService.signUp(email, password, nama)
                 _eventFlow.emit(AuthEvent.RegisterSuccess(email))
             } catch (e: Exception) {
-                _eventFlow.emit(AuthEvent.Error(e.message ?: "Terjadi kesalahan saat mendaftar"))
+                val errorMessage = e.message ?: ""
+                val userFriendlyMessage = when {
+                    errorMessage.contains("User already registered", ignoreCase = true) || 
+                    errorMessage.contains("already exists", ignoreCase = true) -> {
+                        "Email sudah terdaftar. Silahkan menggunakan layanan login."
+                    }
+                    errorMessage.contains("network", ignoreCase = true) -> {
+                        "Koneksi internet bermasalah"
+                    }
+                    else -> "Terjadi kesalahan saat mendaftar: $errorMessage"
+                }
+                _eventFlow.emit(AuthEvent.Error(userFriendlyMessage))
             } finally {
                 isLoading = false
             }
