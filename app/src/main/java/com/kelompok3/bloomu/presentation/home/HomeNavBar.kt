@@ -109,7 +109,8 @@ fun HomeNavBar( //navbar
             2 -> PlaceholderScreen("Care", contentModifier)
             3 -> ProfilePage(
                 modifier = contentModifier,
-                onEditAccountClick = onEditAccountClick
+                onEditAccountClick = onEditAccountClick,
+                onLogOutSuccess = onLogOutSuccess
             )
         }
     }
