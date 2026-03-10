@@ -1,4 +1,4 @@
-package com.kelompok3.bloomu.presentation.calendar
+    package com.kelompok3.bloomu.presentation.calendar
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
@@ -18,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
@@ -35,7 +34,7 @@ import com.kelompok3.bloomu.ui.theme.BloomUTheme
 import com.kelompok3.bloomu.ui.theme.InterFontFamily
 
 @Composable
-fun Calenderpage() {
+fun calenderpageblmisi() {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -72,7 +71,7 @@ fun Calenderpage() {
                 Text(
                     text = "Runtutan Api",
                     color = Color(0xFF2A2567),
-                    fontSize = 15.sp,
+                    fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                     fontFamily = InterFontFamily
                 )
@@ -105,7 +104,7 @@ fun Calenderpage() {
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             (1..7).forEach { day ->
-                                StreakItem(day, day <= 4)
+                                StreakItemBlmIsi(day, day <= 4)
                             }
                         }
                     }
@@ -124,12 +123,12 @@ fun Calenderpage() {
                 Text(
                     text = "Grafik mood kamu",
                     color = Color(0xFF2A2567),
-                    fontSize = 15.sp,
+                    fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                     fontFamily = InterFontFamily
                 )
             }
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
             // Perfect Semi-Circle Mood Chart
             Column(
@@ -144,12 +143,9 @@ fun Calenderpage() {
                 ) {
                     Canvas(modifier = Modifier.fillMaxSize()) {
                         val strokeWidthPx = 50.dp.toPx()
-                        // To get a perfect semi-circle in a Box of W x H (where H = W/2):
-                        // We draw a full circle of size W x W, but it's clipped by the Box height.
                         val arcSize = Size(size.width - strokeWidthPx, (size.width) - strokeWidthPx)
                         val topLeft = Offset(strokeWidthPx / 2, strokeWidthPx / 2)
 
-                        // Draw arcs from 180 degrees to 360 degrees (top half)
                         drawArc(
                             color = Color(0xFFFF4848),
                             startAngle = 180f,
@@ -198,7 +194,7 @@ fun Calenderpage() {
                     }
                 }
                 
-                Spacer(modifier = Modifier.height(15.dp))
+                Spacer(modifier = Modifier.height(24.dp))
                 
                 Text(
                     text = "Total",
@@ -216,7 +212,7 @@ fun Calenderpage() {
                 )
             }
 
-            Spacer(modifier = Modifier.height(19.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
             // Legend Row
             Row(
@@ -226,11 +222,11 @@ fun Calenderpage() {
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                LegendItem(Color(0xFFFF4848), "Sangat Buruk")
-                LegendItem(Color(0xFFFF9800), "Buruk")
-                LegendItem(Color(0xFFFFD54F), "Biasa")
-                LegendItem(Color(0xFF00E676), "Baik")
-                LegendItem(Color(0xFF7DB1F0), "Sangat Baik")
+                LegendItemBlmIsi(Color(0xFFFF4848), "Sangat Buruk")
+                LegendItemBlmIsi(Color(0xFFFF9800), "Buruk")
+                LegendItemBlmIsi(Color(0xFFFFD54F), "Biasa")
+                LegendItemBlmIsi(Color(0xFF00E676), "Baik")
+                LegendItemBlmIsi(Color(0xFF7DB1F0), "Sangat Baik")
             }
 
             Spacer(modifier = Modifier.height(32.dp))
@@ -292,7 +288,6 @@ fun Calenderpage() {
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        // Date 1-5 (Circle placeholders)
                         (1..5).forEach { day ->
                             Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.width(36.dp)) {
                                 Box(modifier = Modifier.size(24.dp).background(Color(0xFFE9E3FF), CircleShape))
@@ -320,7 +315,7 @@ fun Calenderpage() {
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Mood Detail Card Section
+            // Mood Detail Card Section (UNFILLED VERSION)
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -340,31 +335,41 @@ fun Calenderpage() {
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Row(
-                        verticalAlignment = Alignment.Top
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         Image(
-                            painter = painterResource(id = R.drawable.emoji),
-                            contentDescription = "Mood Emoji",
+                            painter = painterResource(id = R.drawable.emojiblmisi),
+                            contentDescription = "Unfilled Mood Emoji",
                             modifier = Modifier.size(60.dp)
                         )
                         Spacer(modifier = Modifier.width(20.dp))
-                        Column {
-                            Text(
-                                text = "Sangat Baik",
-                                color = Color.Black,
-                                fontSize = 20.sp,
-                                fontWeight = FontWeight.Bold,
-                                fontFamily = InterFontFamily
-                            )
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Text(
-                                text = "Seneng banget ketemu hari ini bisa ngerjain live coding lancar banget dapet nilai 100, ga sia-sia belajar full seminggu kemarin huhuuu",
-                                color = Color.Black.copy(alpha = 0.7f),
-                                fontSize = 11.sp,
-                                lineHeight = 16.sp,
-                                fontFamily = InterFontFamily
-                            )
-                        }
+                        Text(
+                            text = "Kamu belum mengisi mood untuk hari ini",
+                            color = Color.Black.copy(alpha = 0.5f),
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Medium,
+                            fontFamily = InterFontFamily,
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+                    
+                    Spacer(modifier = Modifier.height(16.dp))
+                    
+                    // Input Mood Button
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.End)
+                            .background(Color(0xFF221E52), RoundedCornerShape(25.dp))
+                            .clickable { }
+                            .padding(horizontal = 20.dp, vertical = 8.dp)
+                    ) {
+                        Text(
+                            text = "Masukkan mood",
+                            color = Color.White,
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = InterFontFamily
+                        )
                     }
                 }
             }
@@ -373,32 +378,28 @@ fun Calenderpage() {
 }
 
 @Composable
-fun StreakItem(day: Int, isActive: Boolean) {
+fun StreakItemBlmIsi(day: Int, isActive: Boolean) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Box(
             modifier = Modifier
                 .width(42.dp)
-                .height(28.dp), // Height matches 'auraapi' ratio
+                .height(28.dp),
             contentAlignment = Alignment.Center
         ) {
-            // The 'auraapi' is your custom rectangular gradient barrier
             Image(
                 painter = painterResource(id = R.drawable.auraapi),
                 contentDescription = null,
                 modifier = Modifier.fillMaxSize(),
-                // Grayscale effect for the barrier on inactive days
                 colorFilter = if (!isActive) ColorFilter.colorMatrix(
                     ColorMatrix().apply { setToSaturation(0f) }
                 ) else null,
                 alpha = if (isActive) 1f else 0.4f
             )
             
-            // The actual fire icon on top of the barrier
             Image(
                 painter = painterResource(id = R.drawable.apistrek),
                 contentDescription = null,
                 modifier = Modifier.size(18.dp),
-                // Grayscale effect for the fire icon on inactive days (newspaper style)
                 colorFilter = if (!isActive) ColorFilter.colorMatrix(
                     ColorMatrix().apply { setToSaturation(0f) }
                 ) else null,
@@ -418,7 +419,7 @@ fun StreakItem(day: Int, isActive: Boolean) {
 }
 
 @Composable
-fun LegendItem(color: Color, label: String) {
+fun LegendItemBlmIsi(color: Color, label: String) {
     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(horizontal = 6.dp)) {
         Box(modifier = Modifier.size(12.dp).background(color, CircleShape))
         Spacer(modifier = Modifier.width(6.dp))
@@ -434,8 +435,8 @@ fun LegendItem(color: Color, label: String) {
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun calenderpagePreview() {
+fun calenderpageblmisiPreview() {
     BloomUTheme(dynamicColor = false) {
-        Calenderpage()
+        calenderpageblmisi()
     }
 }
