@@ -42,6 +42,13 @@ import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.status.SessionStatus
 import kotlinx.coroutines.delay
 
+import com.kelompok3.bloomu.presentation.profile.editAkun
+
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+
 @Composable
 fun AppNavHost(
     navController: NavHostController,
@@ -49,7 +56,19 @@ fun AppNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = LoadingRoute
+        startDestination = LoadingRoute,
+        enterTransition = {
+            slideInHorizontally(initialOffsetX = { it }, animationSpec = tween(300)) + fadeIn(animationSpec = tween(300))
+        },
+        exitTransition = {
+            slideOutHorizontally(targetOffsetX = { -it }, animationSpec = tween(300)) + fadeOut(animationSpec = tween(300))
+        },
+        popEnterTransition = {
+            slideInHorizontally(initialOffsetX = { -it }, animationSpec = tween(300)) + fadeIn(animationSpec = tween(300))
+        },
+        popExitTransition = {
+            slideOutHorizontally(targetOffsetX = { it }, animationSpec = tween(300)) + fadeOut(animationSpec = tween(300))
+        }
     ) {
         composable<LoadingRoute> {
             val onboardingViewModel: OnboardingViewModel = viewModel() // Inisialisasi ViewModel di sini
@@ -72,7 +91,7 @@ fun AppNavHost(
                             val user = supabase.auth.currentUserOrNull()
                             
                             if (user != null) {
-                                navController.navigate(HomeRoute) {
+                                navController.navigate(HomeRoute()) {
                                     popUpTo(LoadingRoute) { inclusive = true }
                                 }
                             } else {
@@ -151,7 +170,7 @@ fun AppNavHost(
         composable<LoginRoute> {
             LoginScreen(
                 onLoginSuccess = {
-                    navController.navigate(HomeRoute) {
+                    navController.navigate(HomeRoute()) {
                         popUpTo(LoginRoute) { inclusive = true }
                     }
                 },
@@ -169,7 +188,7 @@ fun AppNavHost(
                     navController.navigate(OtpRoute(email))
                 },
                 onLoginSuccess = {
-                    navController.navigate(HomeRoute) {
+                    navController.navigate(HomeRoute()) {
                         popUpTo(RegisterRoute) { inclusive = true }
                     }
                 },
@@ -186,7 +205,7 @@ fun AppNavHost(
             OtpScreen(
                 email = args.email,
                 onVerifSuccess = {
-                    navController.navigate(HomeRoute) {
+                    navController.navigate(HomeRoute()) {
                         popUpTo(OtpRoute(args.email)) { inclusive = true }
                         popUpTo(RegisterRoute) { inclusive = true }
                     }
@@ -194,14 +213,23 @@ fun AppNavHost(
             )
         }
 
-        composable<HomeRoute> {
+        composable<HomeRoute> { backStackEntry ->
+            val route = backStackEntry.toRoute<HomeRoute>()
             com.kelompok3.bloomu.presentation.home.HomeNavBar(
+                initialTab = route.selectedTab,
                 onCheckInClick = { navController.navigate(CheckInRoute) },
                 onLogOutSuccess = {
                     navController.navigate(LoginRoute) {
-                        popUpTo(HomeRoute) { inclusive = true }
+                        popUpTo(HomeRoute()) { inclusive = true }
                     }
-                }
+                },
+                onEditAccountClick = { navController.navigate(EditAccountRoute) }
+            )
+        }
+
+        composable<EditAccountRoute> {
+            editAkun(
+                onBack = { navController.popBackStack() }
             )
         }
 
@@ -226,8 +254,8 @@ fun AppNavHost(
                 physicalScore = args.physicalScore,
                 academicScore = args.academicScore,
                 onBackToHome = {
-                    navController.navigate(HomeRoute) {
-                        popUpTo(HomeRoute) { inclusive = true }
+                    navController.navigate(HomeRoute()) {
+                        popUpTo(HomeRoute()) { inclusive = true }
                     }
                 }
             )
