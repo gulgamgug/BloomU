@@ -30,6 +30,9 @@ import com.kelompok3.bloomu.navigation.CareRoute
 import com.kelompok3.bloomu.navigation.HomeRoute
 import com.kelompok3.bloomu.navigation.ProfileRoute
 import com.kelompok3.bloomu.presentation.calendar.CalendarPage
+import com.kelompok3.bloomu.presentation.profile.ProfilePage
+import androidx.compose.runtime.saveable.rememberSaveable
+
 
 data class NavItem(
     val label: String,
@@ -37,12 +40,15 @@ data class NavItem(
     val route: Any
 )
 
+
 @Composable
 fun HomeNavBar( //navbar
+    initialTab: Int = 0,
     onCheckInClick: () -> Unit,
-    onLogOutSuccess: () -> Unit
+    onLogOutSuccess: () -> Unit,
+    onEditAccountClick: () -> Unit = {}
 ) {
-    var selectedTab by remember { mutableStateOf(0) }
+    var selectedTab by rememberSaveable { mutableStateOf(initialTab) }
 
     val navItems = listOf( //isi navbar
         NavItem("Home", Icons.Default.Home, HomeRoute),
@@ -90,17 +96,24 @@ fun HomeNavBar( //navbar
         }
     ) { innerPadding ->
         // Konten utama berdasarkan tab yang dipilih
+        // Gunakan padding bottom saja agar background bisa tembus ke status bar (seamless)
+        val contentModifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding())
+
         when (selectedTab) {
             0 -> HomeScreen(
-                modifier = Modifier.padding(innerPadding),
+                modifier = contentModifier,
                 onCheckInClick = onCheckInClick,
                 onLogOutSuccess = onLogOutSuccess
             )
-            1 -> CalendarPage(Modifier.padding(innerPadding))
-            2 -> PlaceholderScreen("Care", Modifier.padding(innerPadding))
-            3 -> PlaceholderScreen("Profil", Modifier.padding(innerPadding))
+            1 -> CalendarPage(modifier = contentModifier)
+            2 -> PlaceholderScreen("Care", contentModifier)
+            3 -> ProfilePage(
+                modifier = contentModifier,
+                onEditAccountClick = onEditAccountClick
+            )
         }
     }
+
 }
 
 @androidx.compose.ui.tooling.preview.Preview(showBackground = true, showSystemUi = true)
