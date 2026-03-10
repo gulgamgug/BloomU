@@ -32,7 +32,9 @@ import com.kelompok3.bloomu.ui.theme.InterFontFamily
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun editAkun() {
+fun editAkun(
+    onBack: () -> Unit = {}
+) {
     val darkBlue = Color(0xFF231F40)
     val lightPurpleBg = Brush.verticalGradient(
         colors = listOf(Color(0xFFFFFFFF), Color(0xFFE9E3FF))
@@ -70,7 +72,7 @@ fun editAkun() {
                         .align(Alignment.CenterStart)
                         .size(33.dp)
                         .shadow(elevation = 4.dp, shape = CircleShape)
-                        .clickable { /* Back Logic */ }
+                        .clickable { onBack() }
                 )
 
                 // Title

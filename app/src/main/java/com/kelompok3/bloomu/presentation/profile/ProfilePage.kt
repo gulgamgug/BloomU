@@ -25,13 +25,19 @@ import com.kelompok3.bloomu.R
 import com.kelompok3.bloomu.ui.theme.BloomUTheme
 import androidx.compose.ui.graphics.Brush
 
+import com.kelompok3.bloomu.presentation.component.ItemType
+import com.kelompok3.bloomu.presentation.component.SettingsItem
+
 @Composable
-fun ProfilePage() {
+fun ProfilePage(
+    modifier: Modifier = Modifier,
+    onEditAccountClick: () -> Unit = {}
+) {
     val darkBlue = Color(0xFF231F40) // Warna tombol dan teks profil
     var isNotificationEnabled by remember { mutableStateOf(true) }
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(
                 brush = Brush.verticalGradient(
@@ -115,7 +121,7 @@ fun ProfilePage() {
 
         // Tombol Edit Akun
         Button(
-            onClick = { /* Action Edit */ },
+            onClick = onEditAccountClick,
             modifier = Modifier
                 .width(210.dp)
                 .height(50.dp),
@@ -132,94 +138,35 @@ fun ProfilePage() {
 
         Spacer(modifier = Modifier.height(40.dp))
 
-        // List Menu
+        // List Menu menggunakan SettingsItem
         Column(modifier = Modifier.fillMaxWidth()) {
-            ProfileRowItem(
-                iconRes = R.drawable.settings,
+            SettingsItem(
                 title = "Pengaturan",
-                onClick = {}
+                icon = painterResource(id = R.drawable.settings),
+                type = ItemType.Arrow(onClick = {})
             )
-            
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 12.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.notifications),
-                    contentDescription = null,
-                    tint = darkBlue,
-                    modifier = Modifier.size(24.dp)
-                )
-                Spacer(modifier = Modifier.width(16.dp))
-                Text(
-                    text = "Notifikasi Harian",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = darkBlue,
-                    modifier = Modifier.weight(1f)
-                )
-                Switch(
-                    checked = isNotificationEnabled,
-                    onCheckedChange = { isNotificationEnabled = it },
-                    colors = SwitchDefaults.colors(
-                        checkedThumbColor = Color.White,
-                        checkedTrackColor = Color(0xFFC5BFFF)
-                    )
-                )
-            }
 
-            ProfileRowItem(
-                iconRes = R.drawable.logout,
+            SettingsItem(
+                title = "Notifikasi Harian",
+                icon = painterResource(id = R.drawable.notifications),
+                type = ItemType.Switch(
+                    isChecked = isNotificationEnabled,
+                    onCheckedChange = { isNotificationEnabled = it }
+                )
+            )
+
+            SettingsItem(
                 title = "Keluar Akun",
-                onClick = {}
+                icon = painterResource(id = R.drawable.logout),
+                type = ItemType.Arrow(onClick = {})
             )
 
-            ProfileRowItem(
-                iconRes = R.drawable.info,
+            SettingsItem(
                 title = "Tentang",
-                onClick = {}
+                icon = painterResource(id = R.drawable.info),
+                type = ItemType.Arrow(onClick = {})
             )
         }
-    }
-}
-
-@Composable
-fun ProfileRowItem(
-    iconRes: Int,
-    title: String,
-    onClick: () -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() }
-            .padding(vertical = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            imageVector = ImageVector.vectorResource(id = iconRes),
-            contentDescription = null,
-            tint = Color(0xFF231F40),
-            modifier = Modifier.size(24.dp)
-        )
-        Spacer(modifier = Modifier.width(16.dp))
-        Text(
-            text = title,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Medium,
-            color = Color(0xFF231F40),
-            modifier = Modifier.weight(1f)
-        )
-        Icon(
-            painter = painterResource(id = R.drawable.next),
-            contentDescription = "next",
-            tint = Color(0xFF231F40),
-            modifier = Modifier
-                .size(16.dp)
-                .aspectRatio(1f)
-        )
     }
 }
 
