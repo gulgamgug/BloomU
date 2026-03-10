@@ -124,16 +124,20 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun checkNotificationPermission() {
+        val settings = com.russhwolf.settings.Settings()
+        val isEnabled = settings.getBoolean("daily_notif_enabled", false)
+        
+        if (!isEnabled) return // Jangan cek izin/jadwalin kalo emang dimatiin
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(
                     this,
                     Manifest.permission.POST_NOTIFICATIONS
-                ) != PackageManager.PERMISSION_GRANTED
+                ) == PackageManager.PERMISSION_GRANTED
             ) {
-                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-            } else {
                 NotificationHelper.scheduleDailyNotification(this)
             }
+            // Kalo belum granted, biarin user nyalain manual di profil
         } else {
             NotificationHelper.scheduleDailyNotification(this)
         }

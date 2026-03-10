@@ -39,4 +39,8 @@ object NotificationHelper {
             workRequest
         )
     }
+
+    fun cancelDailyNotification(context: Context) {
+        WorkManager.getInstance(context).cancelUniqueWork(WORK_NAME)
+    }
 }
