@@ -49,18 +49,18 @@ fun BloomUTheme(
         else -> LightColorScheme
     }
 
-//    val view = LocalView.current
-//    if (!view.isInEditMode) {
-//        SideEffect {
-//            val window = (view.context as Activity).window
-//            window.statusBarColor = android.graphics.Color.TRANSPARENT
-//            window.navigationBarColor = android.graphics.Color.TRANSPARENT
-//
-//            val controller = WindowCompat.getInsetsController(window, view)
-//            controller.isAppearanceLightStatusBars = !darkTheme
-//            controller.isAppearanceLightNavigationBars = !darkTheme
-//        }
-//    }
+    val view = androidx.compose.ui.platform.LocalView.current
+    if (!view.isInEditMode) {
+        androidx.compose.runtime.SideEffect {
+            val window = (view.context as android.app.Activity).window
+            window.statusBarColor = android.graphics.Color.TRANSPARENT
+            window.navigationBarColor = android.graphics.Color.TRANSPARENT
+
+            val controller = androidx.core.view.WindowCompat.getInsetsController(window, view)
+            controller.isAppearanceLightStatusBars = !darkTheme
+            controller.isAppearanceLightNavigationBars = !darkTheme
+        }
+    }
 
     MaterialTheme(
         colorScheme = colorScheme,

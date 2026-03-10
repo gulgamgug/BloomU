@@ -16,9 +16,11 @@ multiplatformSettings = "1.2.0"
 googleId = "1.1.1"
 foundation = "1.10.4"
 foundationLayout = "1.10.4"
+workRuntimeKtx = "2.10.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "workRuntimeKtx" }
 supabase-bom = { module = "io.github.jan-tennert.supabase:bom", version.ref = "bom" }
 supabase-auth = { module = "io.github.jan-tennert.supabase:auth-kt" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
