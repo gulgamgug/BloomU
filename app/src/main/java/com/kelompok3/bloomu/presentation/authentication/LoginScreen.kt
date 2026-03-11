@@ -45,6 +45,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kelompok3.bloomu.R
+import com.kelompok3.bloomu.navigation.ForgotPasswordRoute
+import com.kelompok3.bloomu.navigation.HomeRoute
+import com.kelompok3.bloomu.navigation.RegisterRoute
 import com.kelompok3.bloomu.presentation.component.AuthTextField
 import com.kelompok3.bloomu.presentation.component.LoadingDialog
 import com.kelompok3.bloomu.presentation.component.ShowEllipse
@@ -59,6 +62,7 @@ import kotlinx.coroutines.flow.collectLatest
 fun LoginScreen(
     onLoginSuccess: () -> Unit,
     onToRegisterScreen: () -> Unit,
+    onToForgotPassword: () -> Unit,
     viewModel: AuthViewModel = viewModel()
 ) {
     val context = LocalContext.current
@@ -182,16 +186,21 @@ fun LoginScreen(
                 visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation()
             )
             Spacer(Modifier.height(8.dp))
-            Text(
-                text = "Lupa kata sandi?",
-                modifier = Modifier.fillMaxWidth(),
-                style = TextStyle(
-                    fontSize = 12.sp,
-                    fontFamily = InterFontFamily,
-                    color = Color(0xFF9383CC),
-                    textAlign = TextAlign.End
+            TextButton(
+                onClick = onToForgotPassword,
+                modifier = Modifier.align(Alignment.End),
+                contentPadding = androidx.compose.foundation.layout.PaddingValues(0.dp)
+            ) {
+                Text(
+                    text = "Lupa kata sandi?",
+                    style = TextStyle(
+                        fontSize = 12.sp,
+                        fontFamily = InterFontFamily,
+                        color = Color(0xFF9383CC),
+                        textAlign = TextAlign.End
+                    )
                 )
-            )
+            }
 
             Spacer(Modifier.height(120.dp))
             Button(

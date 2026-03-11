@@ -23,6 +23,10 @@ object AuthService {
         }
     }
 
+    suspend fun sendResetPasswordEmail(email: String) {
+        supabase.auth.resetPasswordForEmail(email)
+    }
+
     // Fungsi logout jika diperlukan nanti
     suspend fun signOut() {
         supabase.auth.signOut()

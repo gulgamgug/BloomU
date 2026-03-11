@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 sealed class AuthEvent {
     object LoginSuccess : AuthEvent()
     data class RegisterSuccess(val email: String) : AuthEvent()
+    object ResetPasswordEmailSent : AuthEvent()
     data class Error(val message: String) : AuthEvent()
 }
 
@@ -121,6 +122,27 @@ class AuthViewModel : ViewModel() {
                     else -> "Terjadi kesalahan saat mendaftar: $errorMessage"
                 }
                 _eventFlow.emit(AuthEvent.Error(userFriendlyMessage))
+            } finally {
+                isLoading = false
+            }
+        }
+    }
+
+    fun resetPassword() {
+        if (email.isBlank()) {
+            viewModelScope.launch {
+                _eventFlow.emit(AuthEvent.Error("Email harus diisi"))
+            }
+            return
+        }
+
+        isLoading = true
+        viewModelScope.launch {
+            try {
+                AuthService.sendResetPasswordEmail(email)
+                _eventFlow.emit(AuthEvent.ResetPasswordEmailSent)
+            } catch (e: Exception) {
+                _eventFlow.emit(AuthEvent.Error("Gagal mengirim email reset: ${e.message}"))
             } finally {
                 isLoading = false
             }
