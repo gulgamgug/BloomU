@@ -65,7 +65,7 @@ fun CalendarPopUpContent(
         ) {
             // Year Text
             Text(
-                text = "2025",
+                text = "2026",
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 color = primaryColor,
@@ -83,7 +83,7 @@ fun CalendarPopUpContent(
                     OutlinedButton(
                         onClick = { onMonthSelected(month) },
                         border = BorderStroke(1.5.dp, primaryColor),
-                        shape = RoundedCornerShape(12.dp),
+                        shape = RoundedCornerShape(15.dp),
                         contentPadding = PaddingValues(horizontal = 4.dp, vertical = 4.dp),
                         colors = ButtonDefaults.outlinedButtonColors(
                             contentColor = primaryColor,
