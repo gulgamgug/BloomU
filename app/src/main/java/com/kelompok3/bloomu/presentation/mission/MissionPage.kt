@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -41,6 +42,7 @@ import com.kelompok3.bloomu.ui.theme.InterFontFamily
 
 @Composable
 fun MissionPage(
+    modifier: Modifier = Modifier,
     viewModel: MissionViewModel = viewModel()
 ) {
     val scrollState = rememberScrollState()
@@ -53,13 +55,14 @@ fun MissionPage(
     ShowEllipse(3)
 
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(scrollState)
+                .statusBarsPadding() // Pindahkan ke sini agar padding ikut ter-scroll
                 .padding(horizontal = 20.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -253,6 +256,6 @@ fun MissionItem(
 @Composable
 fun MissionPreview() {
     BloomUTheme(dynamicColor = false) {
-        MissionPage()
+        MissionPage(modifier = Modifier)
     }
 }

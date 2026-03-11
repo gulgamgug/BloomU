@@ -13,7 +13,19 @@ data class DailyMission(
     val isFinished: Boolean
 )
 
+enum class MissionScreen {
+    MAIN, // Halaman MissionPage utama yang sudah ada
+    SELECT,
+    DETAILS
+}
+
 class MissionViewModel : ViewModel() {
+    var currentScreen by mutableStateOf(MissionScreen.MAIN)
+        private set
+
+    var selectedCategoryMode by mutableStateOf<MissionCategoryMode?>(null)
+        private set
+
     var streakCount by mutableStateOf(4)
         private set
 
@@ -52,7 +64,15 @@ class MissionViewModel : ViewModel() {
 
     fun onCategorySelected(category: String) {
         selectedCategory = category
-        // Nantinya bisa ditambahkan logika untuk filter misi berdasarkan kategori
+    }
+
+    fun navigateTo(screen: MissionScreen) {
+        currentScreen = screen
+    }
+
+    fun selectCategoryMode(mode: MissionCategoryMode) {
+        selectedCategoryMode = mode
+        navigateTo(MissionScreen.DETAILS)
     }
 
     fun toggleMission(missionId: Int) {
