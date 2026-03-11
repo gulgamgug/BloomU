@@ -27,6 +27,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -34,6 +35,7 @@ import com.kelompok3.bloomu.R
 import com.kelompok3.bloomu.presentation.component.AuthTextField
 import com.kelompok3.bloomu.presentation.component.LoadingDialog
 import com.kelompok3.bloomu.presentation.component.ShowEllipse
+import com.kelompok3.bloomu.ui.theme.BloomUTheme
 import com.kelompok3.bloomu.ui.theme.InterFontFamily
 import kotlinx.coroutines.flow.collectLatest
 
@@ -60,7 +62,24 @@ fun ForgotPasswordScreen(
         }
     }
 
-    LoadingDialog(isLoading = viewModel.isLoading)
+    ForgotPasswordContent(
+        email = viewModel.email,
+        isLoading = viewModel.isLoading,
+        onEmailChange = { viewModel.onEmailChange(it) },
+        onResetPassword = { viewModel.resetPassword() },
+        onBackToLogin = onBackToLogin
+    )
+}
+
+@Composable
+fun ForgotPasswordContent(
+    email: String,
+    isLoading: Boolean,
+    onEmailChange: (String) -> Unit,
+    onResetPassword: () -> Unit,
+    onBackToLogin: () -> Unit
+) {
+    LoadingDialog(isLoading = isLoading)
 
     ShowEllipse(0)
 
@@ -112,8 +131,8 @@ fun ForgotPasswordScreen(
             )
         AuthTextField(
             placeholder = "Email",
-            value = viewModel.email,
-            onValueChange = { viewModel.onEmailChange(it) },
+            value = email,
+            onValueChange = onEmailChange,
             leadingIcon = {
                 Icon(
                     painter = painterResource(id = R.drawable.email),
@@ -125,9 +144,7 @@ fun ForgotPasswordScreen(
         Spacer(Modifier.height(40.dp))
         Button(
             modifier = Modifier.fillMaxWidth().height(53.dp),
-            onClick = {
-                viewModel.resetPassword()
-            },
+            onClick = onResetPassword,
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFF221E52),
                 contentColor = Color.White)
@@ -147,5 +164,19 @@ fun ForgotPasswordScreen(
         TextButton(onClick = onBackToLogin) {
             Text(text = footerText)
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ForgotPasswordPreview() {
+    BloomUTheme {
+        ForgotPasswordContent(
+            email = "user@example.com",
+            isLoading = false,
+            onEmailChange = {},
+            onResetPassword = {},
+            onBackToLogin = {}
+        )
     }
 }

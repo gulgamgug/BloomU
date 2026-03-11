@@ -14,6 +14,8 @@ val supabase = createSupabaseClient(
 ) {
     install(Auth) {
         sessionManager = SettingsSessionManager(Settings())
+        scheme = "bloomu"
+        host = "reset-password"
     }
     install(ComposeAuth){
         googleNativeLogin(serverClientId = "138131137737-0feoata5vkin85flototo06snk1jqtod.apps.googleusercontent.com")

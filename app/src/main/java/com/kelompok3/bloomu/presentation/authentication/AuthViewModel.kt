@@ -14,6 +14,7 @@ sealed class AuthEvent {
     object LoginSuccess : AuthEvent()
     data class RegisterSuccess(val email: String) : AuthEvent()
     object ResetPasswordEmailSent : AuthEvent()
+    object PasswordUpdated : AuthEvent()
     data class Error(val message: String) : AuthEvent()
 }
 
@@ -143,6 +144,27 @@ class AuthViewModel : ViewModel() {
                 _eventFlow.emit(AuthEvent.ResetPasswordEmailSent)
             } catch (e: Exception) {
                 _eventFlow.emit(AuthEvent.Error("Gagal mengirim email reset: ${e.message}"))
+            } finally {
+                isLoading = false
+            }
+        }
+    }
+
+    fun updatePassword() {
+        if (password.length < 8) {
+            viewModelScope.launch {
+                _eventFlow.emit(AuthEvent.Error("Password minimal 8 karakter"))
+            }
+            return
+        }
+
+        isLoading = true
+        viewModelScope.launch {
+            try {
+                AuthService.updatePassword(password)
+                _eventFlow.emit(AuthEvent.PasswordUpdated)
+            } catch (e: Exception) {
+                _eventFlow.emit(AuthEvent.Error("Gagal memperbarui password: ${e.message}"))
             } finally {
                 isLoading = false
             }

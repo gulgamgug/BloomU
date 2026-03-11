@@ -74,6 +74,7 @@ class MainActivity : ComponentActivity() {
             )
         )
         super.onCreate(savedInstanceState)
+        android.util.Log.d("BloomU_Debug", "MainActivity onCreate intent: ${intent?.data}")
         supabase.handleDeeplinks(intent)
 
         checkNotificationPermission()
@@ -121,6 +122,13 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    override fun onNewIntent(intent: android.content.Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent) // Update intent utama
+        android.util.Log.d("BloomU_Debug", "MainActivity onNewIntent intent: ${intent?.data}")
+        supabase.handleDeeplinks(intent)
     }
 
     private fun checkNotificationPermission() {

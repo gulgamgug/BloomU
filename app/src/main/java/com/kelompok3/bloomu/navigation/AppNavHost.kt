@@ -1,8 +1,13 @@
 package com.kelompok3.bloomu.navigation
 
+import android.app.Activity
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -22,6 +27,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -30,24 +36,23 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.kelompok3.bloomu.R
+import com.kelompok3.bloomu.presentation.authentication.AuthService
+import com.kelompok3.bloomu.presentation.authentication.ForgotPasswordScreen
 import com.kelompok3.bloomu.presentation.authentication.LoginScreen
 import com.kelompok3.bloomu.presentation.authentication.OtpScreen
 import com.kelompok3.bloomu.presentation.authentication.RegisterScreen
+import com.kelompok3.bloomu.presentation.authentication.sandiBaru
 import com.kelompok3.bloomu.presentation.component.ShowEllipse
 import com.kelompok3.bloomu.presentation.dailycheckin.CheckInScreen
 import com.kelompok3.bloomu.presentation.home.OnboardingScreen
 import com.kelompok3.bloomu.presentation.home.OnboardingViewModel
+import com.kelompok3.bloomu.presentation.profile.editAkun
 import com.kelompok3.bloomu.supabase.supabase
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.status.SessionStatus
 import kotlinx.coroutines.delay
-
-import com.kelompok3.bloomu.presentation.profile.editAkun
-
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.take
 
 @Composable
 fun AppNavHost(
@@ -71,43 +76,60 @@ fun AppNavHost(
         }
     ) {
         composable<LoadingRoute> {
-            val onboardingViewModel: OnboardingViewModel = viewModel() // Inisialisasi ViewModel di sini
+            val context = LocalContext.current
+            val intent = (context as? Activity)?.intent
+            val intentData = intent?.data?.toString() ?: ""
+            // Cek apakah masuk lewat redirect reset password
+            val isRecovery = intentData.startsWith("bloomu://") && intentData.contains("reset-password")
+
+            android.util.Log.d("BloomU_Debug", "LoadingRoute: intentData=$intentData, isRecovery=$isRecovery")
+
+            val onboardingViewModel: OnboardingViewModel = viewModel()
             var showLogography by remember { mutableStateOf(false) }
             var showProgressBar by remember { mutableStateOf(false) }
 
             LaunchedEffect(Unit) {
-                onLoadingFinished() // Matikan native splash screen
-                delay(500)          // Tunggu setengah detik
-                showLogography = true // Munculkan tulisan bloomu
+                onLoadingFinished()
                 delay(500)
-                showProgressBar = true // Munculkan loading bar
+                showLogography = true
+                delay(500)
+                showProgressBar = true
             }
 
             LaunchedEffect(showProgressBar) {
-                if (showProgressBar) {
-                    supabase.auth.sessionStatus.collect { status ->
-                        if (status is SessionStatus.Authenticated || status is SessionStatus.NotAuthenticated) {
-                            delay(250) // Supaya loaidng nya keliatan
-                            val user = supabase.auth.currentUserOrNull()
-                            
-                            if (user != null) {
-                                navController.navigate(HomeRoute()) {
+                if (!showProgressBar) return@LaunchedEffect
+
+                // Tunggu sampai status ditentukan oleh SDK (Authenticated atau Not)
+                supabase.auth.sessionStatus
+                    .filter { it is SessionStatus.Authenticated || it is SessionStatus.NotAuthenticated }
+                    .take(1)
+                    .collect { status ->
+                        android.util.Log.d("BloomU_Debug", "Status Sesi: $status")
+                        delay(500)
+                        val user = supabase.auth.currentUserOrNull()
+                        
+                        if (user != null) {
+                            if (isRecovery) {
+                                navController.navigate(ResetPasswordRoute) {
                                     popUpTo(LoadingRoute) { inclusive = true }
                                 }
                             } else {
-                                if (onboardingViewModel.isOnboardingCompleted()) {
-                                    navController.navigate(LoginRoute) {
-                                        popUpTo(LoadingRoute) { inclusive = true }
-                                    }
-                                } else {
-                                    navController.navigate(OnboardingRoute) {
-                                        popUpTo(LoadingRoute) { inclusive = true }
-                                    }
+                                navController.navigate(HomeRoute()) {
+                                    popUpTo(LoadingRoute) { inclusive = true }
+                                }
+                            }
+                        } else {
+                            if (onboardingViewModel.isOnboardingCompleted()) {
+                                navController.navigate(LoginRoute) {
+                                    popUpTo(LoadingRoute) { inclusive = true }
+                                }
+                            } else {
+                                navController.navigate(OnboardingRoute) {
+                                    popUpTo(LoadingRoute) { inclusive = true }
                                 }
                             }
                         }
                     }
-                }
             }
 
             ShowEllipse(0) //background
@@ -178,6 +200,9 @@ fun AppNavHost(
                     navController.navigate(RegisterRoute) {
                         popUpTo(LoginRoute) { inclusive = true }
                     }
+                },
+                onToForgotPassword = {
+                    navController.navigate(ForgotPasswordRoute)
                 }
             )
         }
@@ -195,6 +220,22 @@ fun AppNavHost(
                 onToLoginScreen = {
                     navController.navigate(LoginRoute) {
                         popUpTo(RegisterRoute) { inclusive = true }
+                    }
+                }
+            )
+        }
+
+        composable<ForgotPasswordRoute> {
+            ForgotPasswordScreen(
+                onBackToLogin = { navController.popBackStack() }
+            )
+        }
+
+        composable<ResetPasswordRoute> {
+            sandiBaru(
+                onSuccess = {
+                    navController.navigate(HomeRoute()) {
+                        popUpTo(ResetPasswordRoute) { inclusive = true }
                     }
                 }
             )

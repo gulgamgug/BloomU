@@ -6,6 +6,8 @@ import kotlinx.serialization.Serializable
 @Serializable object OnboardingRoute
 @Serializable object LoginRoute
 @Serializable object RegisterRoute
+@Serializable object ForgotPasswordRoute
+@Serializable object ResetPasswordRoute
 @Serializable data class HomeRoute(val selectedTab: Int = 0)
 @Serializable object AnalyticRoute
 @Serializable object CareRoute

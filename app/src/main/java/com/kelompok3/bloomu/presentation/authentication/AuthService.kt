@@ -24,7 +24,18 @@ object AuthService {
     }
 
     suspend fun sendResetPasswordEmail(email: String) {
-        supabase.auth.resetPasswordForEmail(email)
+        // SESUAI DOCUMENTATION
+        supabase.auth.resetPasswordForEmail(
+            email = email,
+            redirectUrl = "bloomu://reset-password"
+        )
+    }
+
+    suspend fun updatePassword(password: String) {
+        // SESUAI DOCUMENTATION: updateUser untuk mengganti password setelah login via link
+        supabase.auth.updateUser {
+            this.password = password
+        }
     }
 
     // Fungsi logout jika diperlukan nanti
