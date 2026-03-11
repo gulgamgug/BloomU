@@ -13,6 +13,8 @@ import kotlinx.coroutines.launch
 sealed class AuthEvent {
     object LoginSuccess : AuthEvent()
     data class RegisterSuccess(val email: String) : AuthEvent()
+    object ResetPasswordEmailSent : AuthEvent()
+    object PasswordUpdated : AuthEvent()
     data class Error(val message: String) : AuthEvent()
 }
 
@@ -78,6 +80,24 @@ class AuthViewModel : ViewModel() {
     }
 
     fun signUp() {
+        // 1. Validasi Input Kosong
+        if (nama.isBlank() || email.isBlank() || password.isBlank()) {
+            viewModelScope.launch {
+                _eventFlow.emit(AuthEvent.Error("Semua kolom harus diisi"))
+            }
+            return
+        }
+
+        // 2. Validasi Format Email
+        val emailPattern = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}\$".toRegex()
+        if (!email.matches(emailPattern)) {
+            viewModelScope.launch {
+                _eventFlow.emit(AuthEvent.Error("Format email tidak valid"))
+            }
+            return
+        }
+
+        // 3. Validasi Panjang Password
         if (password.length < 8) {
             viewModelScope.launch {
                 _eventFlow.emit(AuthEvent.Error("Password minimal 8 karakter"))
@@ -91,7 +111,60 @@ class AuthViewModel : ViewModel() {
                 AuthService.signUp(email, password, nama)
                 _eventFlow.emit(AuthEvent.RegisterSuccess(email))
             } catch (e: Exception) {
-                _eventFlow.emit(AuthEvent.Error(e.message ?: "Terjadi kesalahan saat mendaftar"))
+                val errorMessage = e.message ?: ""
+                val userFriendlyMessage = when {
+                    errorMessage.contains("User already registered", ignoreCase = true) || 
+                    errorMessage.contains("already exists", ignoreCase = true) -> {
+                        "Email sudah terdaftar. Silahkan menggunakan layanan login."
+                    }
+                    errorMessage.contains("network", ignoreCase = true) -> {
+                        "Koneksi internet bermasalah"
+                    }
+                    else -> "Terjadi kesalahan saat mendaftar: $errorMessage"
+                }
+                _eventFlow.emit(AuthEvent.Error(userFriendlyMessage))
+            } finally {
+                isLoading = false
+            }
+        }
+    }
+
+    fun resetPassword() {
+        if (email.isBlank()) {
+            viewModelScope.launch {
+                _eventFlow.emit(AuthEvent.Error("Email harus diisi"))
+            }
+            return
+        }
+
+        isLoading = true
+        viewModelScope.launch {
+            try {
+                AuthService.sendResetPasswordEmail(email)
+                _eventFlow.emit(AuthEvent.ResetPasswordEmailSent)
+            } catch (e: Exception) {
+                _eventFlow.emit(AuthEvent.Error("Gagal mengirim email reset: ${e.message}"))
+            } finally {
+                isLoading = false
+            }
+        }
+    }
+
+    fun updatePassword() {
+        if (password.length < 8) {
+            viewModelScope.launch {
+                _eventFlow.emit(AuthEvent.Error("Password minimal 8 karakter"))
+            }
+            return
+        }
+
+        isLoading = true
+        viewModelScope.launch {
+            try {
+                AuthService.updatePassword(password)
+                _eventFlow.emit(AuthEvent.PasswordUpdated)
+            } catch (e: Exception) {
+                _eventFlow.emit(AuthEvent.Error("Gagal memperbarui password: ${e.message}"))
             } finally {
                 isLoading = false
             }

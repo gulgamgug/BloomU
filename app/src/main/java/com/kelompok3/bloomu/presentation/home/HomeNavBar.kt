@@ -19,17 +19,20 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.kelompok3.bloomu.navigation.AnalyticRoute
-import com.kelompok3.bloomu.navigation.CareRoute
 import com.kelompok3.bloomu.navigation.HomeRoute
+import com.kelompok3.bloomu.navigation.MissionRoute
 import com.kelompok3.bloomu.navigation.ProfileRoute
 import com.kelompok3.bloomu.presentation.calendar.CalendarPage
+import com.kelompok3.bloomu.presentation.mission.MissionPage
+import com.kelompok3.bloomu.presentation.profile.ProfilePage
+
 
 data class NavItem(
     val label: String,
@@ -37,17 +40,20 @@ data class NavItem(
     val route: Any
 )
 
+
 @Composable
 fun HomeNavBar( //navbar
+    initialTab: Int = 0,
     onCheckInClick: () -> Unit,
-    onLogOutSuccess: () -> Unit
+    onLogOutSuccess: () -> Unit,
+    onEditAccountClick: () -> Unit = {}
 ) {
-    var selectedTab by remember { mutableStateOf(0) }
+    var selectedTab by rememberSaveable { mutableStateOf(initialTab) }
 
     val navItems = listOf( //isi navbar
         NavItem("Home", Icons.Default.Home, HomeRoute),
         NavItem("Kalender", Icons.Default.CalendarViewDay, AnalyticRoute),
-        NavItem("Care", Icons.Default.ListAlt, CareRoute),
+        NavItem("Misi", Icons.Default.ListAlt, MissionRoute),
         NavItem("Profil", Icons.Default.Person, ProfileRoute)
     )
 
@@ -90,17 +96,25 @@ fun HomeNavBar( //navbar
         }
     ) { innerPadding ->
         // Konten utama berdasarkan tab yang dipilih
+        // Gunakan padding bottom saja agar background bisa tembus ke status bar (seamless)
+        val contentModifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding())
+
         when (selectedTab) {
             0 -> HomeScreen(
-                modifier = Modifier.padding(innerPadding),
+                modifier = contentModifier,
                 onCheckInClick = onCheckInClick,
                 onLogOutSuccess = onLogOutSuccess
             )
-            1 -> CalendarPage(Modifier.padding(innerPadding))
-            2 -> PlaceholderScreen("Care", Modifier.padding(innerPadding))
-            3 -> PlaceholderScreen("Profil", Modifier.padding(innerPadding))
+            1 -> CalendarPage(modifier = contentModifier)
+            2 -> MissionPage(modifier = contentModifier)
+            3 -> ProfilePage(
+                modifier = contentModifier,
+                onEditAccountClick = onEditAccountClick,
+                onLogOutSuccess = onLogOutSuccess
+            )
         }
     }
+
 }
 
 @androidx.compose.ui.tooling.preview.Preview(showBackground = true, showSystemUi = true)

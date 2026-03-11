@@ -18,9 +18,15 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,12 +37,17 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kelompok3.bloomu.R
+import com.kelompok3.bloomu.navigation.ForgotPasswordRoute
+import com.kelompok3.bloomu.navigation.HomeRoute
+import com.kelompok3.bloomu.navigation.RegisterRoute
 import com.kelompok3.bloomu.presentation.component.AuthTextField
 import com.kelompok3.bloomu.presentation.component.LoadingDialog
 import com.kelompok3.bloomu.presentation.component.ShowEllipse
@@ -51,9 +62,11 @@ import kotlinx.coroutines.flow.collectLatest
 fun LoginScreen(
     onLoginSuccess: () -> Unit,
     onToRegisterScreen: () -> Unit,
+    onToForgotPassword: () -> Unit,
     viewModel: AuthViewModel = viewModel()
 ) {
     val context = LocalContext.current
+    var passwordVisible by remember { mutableStateOf(false) }
 
     val googleState = supabase.composeAuth.rememberSignInWithGoogle(
         onResult = { result ->
@@ -156,19 +169,38 @@ fun LoginScreen(
                         painter = painterResource(id = R.drawable.gembok),
                         contentDescription = "password icon"
                     )
-                }
+                },
+                trailingIcon = {
+                    val icon = if (passwordVisible) {
+                        Icons.Filled.Visibility
+                    } else {
+                        Icons.Filled.VisibilityOff
+                    }
+                    
+                    val description = if (passwordVisible) "Sembunyikan password" else "Tampilkan password"
+
+                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                        Icon(imageVector = icon, contentDescription = description)
+                    }
+                },
+                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation()
             )
             Spacer(Modifier.height(8.dp))
-            Text(
-                text = "Lupa kata sandi?",
-                modifier = Modifier.fillMaxWidth(),
-                style = TextStyle(
-                    fontSize = 12.sp,
-                    fontFamily = InterFontFamily,
-                    color = Color(0xFF9383CC),
-                    textAlign = TextAlign.End
+            TextButton(
+                onClick = onToForgotPassword,
+                modifier = Modifier.align(Alignment.End),
+                contentPadding = androidx.compose.foundation.layout.PaddingValues(0.dp)
+            ) {
+                Text(
+                    text = "Lupa kata sandi?",
+                    style = TextStyle(
+                        fontSize = 12.sp,
+                        fontFamily = InterFontFamily,
+                        color = Color(0xFF9383CC),
+                        textAlign = TextAlign.End
+                    )
                 )
-            )
+            }
 
             Spacer(Modifier.height(120.dp))
             Button(

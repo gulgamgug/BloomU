@@ -32,7 +32,7 @@ object AssessmentContentProvider {
                 )
             )
             physicalScore <= 2 -> AssessmentCard(
-                imageRes = R.drawable.card_good_1,
+                imageRes = R.drawable.card_bad_1,
                 title = "Tubuhmu butuh istirahat",
                 description = "Energimu terlihat rendah hari ini. Tubuhmu sedang memberikan sinyal untuk melambat sejenak.",
                 microActions = listOf(

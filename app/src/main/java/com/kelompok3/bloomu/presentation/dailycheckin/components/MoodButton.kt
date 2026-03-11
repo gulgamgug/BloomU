@@ -1,4 +1,4 @@
-package com.kelompok3.bloomu.presentation.dailycheckin
+package com.kelompok3.bloomu.presentation.dailycheckin.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable

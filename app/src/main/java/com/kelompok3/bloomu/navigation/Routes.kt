@@ -6,11 +6,15 @@ import kotlinx.serialization.Serializable
 @Serializable object OnboardingRoute
 @Serializable object LoginRoute
 @Serializable object RegisterRoute
-@Serializable object HomeRoute
+@Serializable object ForgotPasswordRoute
+@Serializable object ResetPasswordRoute
+@Serializable data class HomeRoute(val selectedTab: Int = 0)
 @Serializable object AnalyticRoute
 @Serializable object CareRoute
 @Serializable object ProfileRoute
 @Serializable object CheckInRoute
+@Serializable object MissionRoute
+@Serializable object EditAccountRoute
 
 @Serializable data class OtpRoute(val email: String)
 @Serializable data class DailyCheckInRoute(val moodData: List<Float>)

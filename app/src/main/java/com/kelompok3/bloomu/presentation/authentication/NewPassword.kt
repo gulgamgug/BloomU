@@ -1,62 +1,85 @@
 package com.kelompok3.bloomu.presentation.authentication
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import android.widget.Toast
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.blur
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kelompok3.bloomu.R
-import com.kelompok3.bloomu.ui.theme.BloomUTheme
+import com.kelompok3.bloomu.presentation.component.AuthTextField
+import com.kelompok3.bloomu.presentation.component.LoadingDialog
+import com.kelompok3.bloomu.presentation.component.ShowEllipse
 import com.kelompok3.bloomu.ui.theme.InterFontFamily
+import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun sandiBaru() {
-    val gradientBackground = Brush.verticalGradient(
-        colors = listOf(Color(0xFFFFFFFF), Color(0xFFF3EFFF))
-    )
+fun NewPassword(
+    onSuccess: () -> Unit,
+    viewModel: AuthViewModel = viewModel()
+) {
+    val context = LocalContext.current
+
     val textColorDark = Color(0xFF6B5E9E)
     val textColorLight = Color(0xFF988BCA)
     val buttonColor = Color(0xFF201D40)
 
-    var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
     var isPasswordVisible by remember { mutableStateOf(false) }
     var isConfirmPasswordVisible by remember { mutableStateOf(false) }
 
+    LaunchedEffect(Unit) {
+        viewModel.eventFlow.collectLatest { event ->
+            when (event) {
+                is AuthEvent.PasswordUpdated -> {
+                    Toast.makeText(context, "Password berhasil diperbarui!", Toast.LENGTH_SHORT).show()
+                    onSuccess()
+                }
+                is AuthEvent.Error -> {
+                    Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+                }
+                else -> {}
+            }
+        }
+    }
+
+    LoadingDialog(isLoading = viewModel.isLoading)
+
+    ShowEllipse(0)
+
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(gradientBackground)
     ) {
-        // Ellipse 1 kanan atas dengan efek blur
-        Image(
-            painter = painterResource(id = R.drawable.ellipse_1),
-            contentDescription = null,
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .size(400.dp)
-                .offset(x = 80.dp, y = (-80).dp)
-                .alpha(1.0f)
-                .blur(45.dp)
-        )
-        
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -106,17 +129,10 @@ fun sandiBaru() {
                     modifier = Modifier.padding(start = 4.dp, bottom = 8.dp)
                 )
                 
-                TextField(
-                    value = password,
-                    onValueChange = { password = it },
-                    placeholder = {
-                        Text(
-                            text = "Masukkan teks",
-                            color = Color(0xFFD4D4D4),
-                            fontSize = 14.sp,
-                            fontFamily = InterFontFamily
-                        )
-                    },
+                AuthTextField(
+                    placeholder = "Masukkan teks",
+                    value = viewModel.password,
+                    onValueChange = { viewModel.onPasswordChange(it) },
                     leadingIcon = {
                         Icon(
                             painter = painterResource(id = R.drawable.gembok),
@@ -128,26 +144,14 @@ fun sandiBaru() {
                     trailingIcon = {
                         IconButton(onClick = { isPasswordVisible = !isPasswordVisible }) {
                             Icon(
-                                painter = painterResource(id = R.drawable.tampilkan), // Menggunakan icon eye/tampilkan
+                                painter = painterResource(id = R.drawable.tampilkan),
                                 contentDescription = "Toggle Visibility",
                                 tint = Color.Black,
                                 modifier = Modifier.size(20.dp)
                             )
                         }
                     },
-                    visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                    singleLine = true,
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = Color.White,
-                        unfocusedContainerColor = Color.White,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        cursorColor = textColorDark
-                    ),
-                    shape = RoundedCornerShape(24.dp), // Bentuk oval
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .shadow(elevation = 8.dp, shape = RoundedCornerShape(24.dp), spotColor = Color(0x1A000000))
+                    visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation()
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
@@ -164,17 +168,10 @@ fun sandiBaru() {
                     modifier = Modifier.padding(start = 4.dp, bottom = 8.dp)
                 )
                 
-                TextField(
+                AuthTextField(
+                    placeholder = "Masukkan teks",
                     value = confirmPassword,
                     onValueChange = { confirmPassword = it },
-                    placeholder = {
-                        Text(
-                            text = "Masukkan teks",
-                            color = Color(0xFFD4D4D4),
-                            fontSize = 14.sp,
-                            fontFamily = InterFontFamily
-                        )
-                    },
                     leadingIcon = {
                         Icon(
                             painter = painterResource(id = R.drawable.gembok),
@@ -193,27 +190,21 @@ fun sandiBaru() {
                             )
                         }
                     },
-                    visualTransformation = if (isConfirmPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                    singleLine = true,
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = Color.White,
-                        unfocusedContainerColor = Color.White,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        cursorColor = textColorDark
-                    ),
-                    shape = RoundedCornerShape(24.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .shadow(elevation = 8.dp, shape = RoundedCornerShape(24.dp), spotColor = Color(0x1A000000))
+                    visualTransformation = if (isConfirmPasswordVisible) VisualTransformation.None else PasswordVisualTransformation()
                 )
             }
 
             Spacer(modifier = Modifier.weight(1f))
 
-            // Tombol Konfirmasi di paling bawah
+            // Tombol Konfirmasi
             Button(
-                onClick = { /* Handle Confirmation */ },
+                onClick = { 
+                    if (viewModel.password != confirmPassword) {
+                        Toast.makeText(context, "Password tidak cocok", Toast.LENGTH_SHORT).show()
+                    } else {
+                        viewModel.updatePassword()
+                    }
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 40.dp)
@@ -230,13 +221,5 @@ fun sandiBaru() {
                 )
             }
         }
-    }
-}
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun sandiBaruPreview() {
-    BloomUTheme(dynamicColor = false) {
-        sandiBaru()
     }
 }

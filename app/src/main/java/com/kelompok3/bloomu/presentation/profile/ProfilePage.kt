@@ -1,37 +1,87 @@
 package com.kelompok3.bloomu.presentation.profile
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kelompok3.bloomu.R
+import com.kelompok3.bloomu.presentation.component.ItemType
+import com.kelompok3.bloomu.presentation.component.SettingsItem
 import com.kelompok3.bloomu.ui.theme.BloomUTheme
-import androidx.compose.ui.graphics.Brush
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
-fun ProfilePage() {
-    val darkBlue = Color(0xFF231F40) // Warna tombol dan teks profil
-    var isNotificationEnabled by remember { mutableStateOf(true) }
+fun ProfilePage(
+    modifier: Modifier = Modifier,
+    onEditAccountClick: () -> Unit = {},
+    onLogOutSuccess: () -> Unit = {},
+    viewModel: ProfileViewModel = viewModel()
+) {
+    val darkBlue = Color(0xFF231F40) //
+    val context = LocalContext.current
+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        //buat minta izin notif
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            viewModel.toggleNotification(true, context)
+        } else {
+            Toast.makeText(context, "Izin notifikasi ditolak", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        //kalo log out biar keluar aplikasi
+        viewModel.eventFlow.collectLatest { event ->
+            when (event) {
+                is ProfileEvent.LogoutSuccess -> onLogOutSuccess()
+                is ProfileEvent.Error -> {
+                    Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(
                 brush = Brush.verticalGradient(
@@ -46,7 +96,6 @@ fun ProfilePage() {
     ) {
         Spacer(modifier = Modifier.height(48.dp))
 
-        // Judul Profil
         Text(
             text = "Profil",
             fontSize = 22.sp,
@@ -57,7 +106,6 @@ fun ProfilePage() {
 
         Spacer(modifier = Modifier.height(5.dp))
 
-        // Foto Profil dengan Grid Background
         Box(
             modifier = Modifier.size(160.dp),
             contentAlignment = Alignment.Center
@@ -97,15 +145,15 @@ fun ProfilePage() {
             }
         }
 
-        // Nama & Email
+        // nama email
         Text(
-            text = "Revi",
+            text = viewModel.userName,
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
             color = darkBlue
         )
         Text(
-            text = "vincentrevi@student.ub.ac.id",
+            text = viewModel.userEmail,
             fontSize = 14.sp,
             color = Color(0xFF8A7BBF),
             modifier = Modifier.padding(top = 4.dp)
@@ -113,9 +161,9 @@ fun ProfilePage() {
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        // Tombol Edit Akun
+        // tombol edit akun
         Button(
-            onClick = { /* Action Edit */ },
+            onClick = onEditAccountClick,
             modifier = Modifier
                 .width(210.dp)
                 .height(50.dp),
@@ -132,94 +180,55 @@ fun ProfilePage() {
 
         Spacer(modifier = Modifier.height(40.dp))
 
-        // List Menu
+        // settings item
         Column(modifier = Modifier.fillMaxWidth()) {
-            ProfileRowItem(
-                iconRes = R.drawable.settings,
+            SettingsItem(
                 title = "Pengaturan",
-                onClick = {}
+                icon = painterResource(id = R.drawable.settings),
+                type = ItemType.Arrow(onClick = {})
             )
-            
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 12.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.notifications),
-                    contentDescription = null,
-                    tint = darkBlue,
-                    modifier = Modifier.size(24.dp)
-                )
-                Spacer(modifier = Modifier.width(16.dp))
-                Text(
-                    text = "Notifikasi Harian",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = darkBlue,
-                    modifier = Modifier.weight(1f)
-                )
-                Switch(
-                    checked = isNotificationEnabled,
-                    onCheckedChange = { isNotificationEnabled = it },
-                    colors = SwitchDefaults.colors(
-                        checkedThumbColor = Color.White,
-                        checkedTrackColor = Color(0xFFC5BFFF)
-                    )
-                )
-            }
 
-            ProfileRowItem(
-                iconRes = R.drawable.logout,
+            SettingsItem(
+                title = "Notifikasi Harian",
+                icon = painterResource(id = R.drawable.notifications),
+                type = ItemType.Switch(
+                    isChecked = viewModel.isNotificationEnabled,
+                    onCheckedChange = { enabled ->
+                        if (enabled) {
+                            // cek permission dulu kalo di a13+
+                            // karena beda cara minta izinnya sama di a12
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                if (ContextCompat.checkSelfPermission(
+                                        context,
+                                        Manifest.permission.POST_NOTIFICATIONS
+                                    ) != PackageManager.PERMISSION_GRANTED
+                                ) {
+                                    permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                                } else {
+                                    viewModel.toggleNotification(true, context)
+                                }
+                            } else {
+                                viewModel.toggleNotification(true, context)
+                            }
+                        } else {
+                            viewModel.toggleNotification(false, context)
+                        }
+                    }
+                )
+            )
+
+            SettingsItem(
                 title = "Keluar Akun",
-                onClick = {}
+                icon = painterResource(id = R.drawable.logout),
+                type = ItemType.Arrow(onClick = { viewModel.logout() })
             )
 
-            ProfileRowItem(
-                iconRes = R.drawable.info,
+            SettingsItem(
                 title = "Tentang",
-                onClick = {}
+                icon = painterResource(id = R.drawable.info),
+                type = ItemType.Arrow(onClick = {})
             )
         }
-    }
-}
-
-@Composable
-fun ProfileRowItem(
-    iconRes: Int,
-    title: String,
-    onClick: () -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() }
-            .padding(vertical = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            imageVector = ImageVector.vectorResource(id = iconRes),
-            contentDescription = null,
-            tint = Color(0xFF231F40),
-            modifier = Modifier.size(24.dp)
-        )
-        Spacer(modifier = Modifier.width(16.dp))
-        Text(
-            text = title,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Medium,
-            color = Color(0xFF231F40),
-            modifier = Modifier.weight(1f)
-        )
-        Icon(
-            painter = painterResource(id = R.drawable.next),
-            contentDescription = "next",
-            tint = Color(0xFF231F40),
-            modifier = Modifier
-                .size(16.dp)
-                .aspectRatio(1f)
-        )
     }
 }
 
