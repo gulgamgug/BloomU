@@ -30,7 +30,7 @@ import com.kelompok3.bloomu.ui.theme.InterFontFamily
 
 @Composable
 fun FunFactCard() {
-    // Gradasi Putih ke Ungu Muda
+
     val gradientBrush = Brush.verticalGradient(
         colors = listOf(Color(0xFFFFFFFF), Color(0xFFE9E3FF))
     )
@@ -63,14 +63,13 @@ fun FunFactCard() {
             )
         }
 
-        // Row untuk Gambar dan Teks
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(20.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Gambar Amico
+
             Image(
                 painter = painterResource(id = R.drawable.amico),
                 contentDescription = "Funfact Illustration",
