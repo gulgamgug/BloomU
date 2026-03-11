@@ -40,7 +40,7 @@ fun energi() {
     )
 
     val darkBlue = Color(0xFF221E52)
-    val energyDarkGold = Color(0xFFD9B310) // Diubah ke warna yang jauh lebih terang
+    val energyDarkGold = Color(0xFFD9B310)
 
     val scrollState = rememberScrollState()
 
@@ -49,7 +49,7 @@ fun energi() {
             .fillMaxSize()
             .background(lightPurpleBg)
     ) {
-        // --- BACKGROUND LAYER (Bloom Effect) ---
+
         Image(
             painter = painterResource(id = R.drawable.ellipse_1),
             contentDescription = "ellipse",
@@ -74,7 +74,6 @@ fun energi() {
                 .blur(80.dp)
         )
 
-        // --- Ellipse Tengah Kanan ---
         Image(
             painter = painterResource(id = R.drawable.ellipse_1),
             contentDescription = "ellipse_3",
@@ -86,7 +85,6 @@ fun energi() {
                 .blur(80.dp)
         )
 
-        // --- CONTENT LAYER ---
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -96,9 +94,8 @@ fun energi() {
         ) {
             Spacer(modifier = Modifier.height(60.dp))
 
-            // Header Row
             Box(modifier = Modifier.fillMaxWidth()) {
-                // Back Button (Original asset colors)
+
                 Image(
                     painter = painterResource(id = R.drawable.back),
                     contentDescription = "Back",
@@ -108,7 +105,6 @@ fun energi() {
                         .clickable { /* Back Logic */ }
                 )
 
-                // Title
                 Text(
                     text = "Misi",
                     fontSize = 20.sp,
@@ -121,7 +117,6 @@ fun energi() {
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            // Main Banner Card
             Card(
                 shape = RoundedCornerShape(20.dp),
                 modifier = Modifier
@@ -156,7 +151,6 @@ fun energi() {
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            // Description Paragraph
             Text(
                 text = "Kategori Energi membantu meningkatkan energi tubuh dan membuat tubuh terasa lebih segar. Kategori ini membantu mengurangi rasa lelah dan meningkatkan semangat beraktivitas.",
                 color = Color.Black,
@@ -182,16 +176,15 @@ fun energi() {
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // Activity Grid (2x2)
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                    ActivityCard(
+                    EnergyActivityCard(
                         iconRes = R.drawable.physical_therapy,
                         label = "Stretching 5 menit",
                         modifier = Modifier.weight(1f),
                         accentColor = energyDarkGold
                     )
-                    ActivityCard(
+                    EnergyActivityCard(
                         iconRes = R.drawable.local_drink,
                         label = "Minum air cukup",
                         modifier = Modifier.weight(1f),
@@ -199,13 +192,13 @@ fun energi() {
                     )
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                    ActivityCard(
+                    EnergyActivityCard(
                         iconRes = R.drawable.barefoot,
                         label = "Jalan kaki sebentar",
                         modifier = Modifier.weight(1f),
                         accentColor = energyDarkGold
                     )
-                    ActivityCard(
+                    EnergyActivityCard(
                         iconRes = R.drawable.nature_people,
                         label = "Keluar ruangan 5 menit",
                         modifier = Modifier.weight(1f),
@@ -226,7 +219,7 @@ fun energi() {
                 shape = RoundedCornerShape(28.dp)
             ) {
                 Text(
-                    text = "Mulai Misi",
+                    text = "Muli Misi",
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.White,
@@ -240,7 +233,7 @@ fun energi() {
 }
 
 @Composable
-fun ActivityCard(iconRes: Int, label: String, modifier: Modifier, accentColor: Color) {
+fun EnergyActivityCard(iconRes: Int, label: String, modifier: Modifier, accentColor: Color) {
     Box(
         modifier = modifier
             .height(100.dp)
