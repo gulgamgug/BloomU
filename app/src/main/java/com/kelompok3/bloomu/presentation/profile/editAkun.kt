@@ -57,12 +57,11 @@ fun editAkun() {
         ) {
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Header: Back Button & Title
             Box(
                 modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
             ) {
-                // Back Button
+
                 Image(
                     painter = painterResource(id = R.drawable.back),
                     contentDescription = "Back",
@@ -73,7 +72,6 @@ fun editAkun() {
                         .clickable { /* Back Logic */ }
                 )
 
-                // Title
                 Text(
                     text = "Edit Akun",
                     fontSize = 20.sp,
@@ -85,19 +83,17 @@ fun editAkun() {
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            // Profile Picture Section
             Box(
                 modifier = Modifier.size(150.dp),
                 contentAlignment = Alignment.Center
             ) {
-                // Background grid decorative box (mimicking screenshot)
+
                 Box(
                     modifier = Modifier
                         .size(110.dp)
                         .background(Color(0xFFFFEBF2), shape = RoundedCornerShape(100.dp))
                 )
-                
-                // Profile Circle
+
                 Box(
                     modifier = Modifier
                         .size(100.dp)
@@ -112,7 +108,6 @@ fun editAkun() {
                     )
                 }
 
-                // Edit Icon Badge
                 Box(
                     modifier = Modifier
                         .size(32.dp)
@@ -130,9 +125,8 @@ fun editAkun() {
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            // Form Fields
             Column(modifier = Modifier.fillMaxWidth()) {
-                // Email Field
+
                 EditAccountField(
                     label = "Email",
                     value = email,
@@ -145,7 +139,6 @@ fun editAkun() {
 
                 Spacer(modifier = Modifier.height(12.dp))
 
-                // Nama Field
                 EditAccountField(
                     label = "Nama",
                     value = nama,
@@ -158,7 +151,6 @@ fun editAkun() {
 
                 Spacer(modifier = Modifier.height(12.dp))
 
-                // Password Field
                 Text(
                     text = "Password",
                     fontSize = 12.sp,
@@ -208,7 +200,6 @@ fun editAkun() {
 
             Spacer(modifier = Modifier.weight(1f))
 
-            // Save Button
             Button(
                 onClick = { /* Save Logic */ },
                 modifier = Modifier
