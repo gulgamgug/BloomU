@@ -31,6 +31,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kelompok3.bloomu.presentation.component.ShowEllipse
+import com.kelompok3.bloomu.presentation.mission.components.CategoryCard
+import com.kelompok3.bloomu.presentation.mission.components.MissionCategoryMode
 import com.kelompok3.bloomu.ui.theme.BloomUTheme
 import com.kelompok3.bloomu.ui.theme.InterFontFamily
 
@@ -52,6 +54,7 @@ fun MissionDetailsContent(
     onBackClick: () -> Unit
 ) {
     val scrollState = rememberScrollState()
+    val activities = getActivitiesForMode(mode)
 
     ShowEllipse(3)
 
@@ -125,21 +128,21 @@ fun MissionDetailsContent(
         Spacer(modifier = Modifier.height(16.dp))
 
         // 4 MissionItems (2x2 Grid)
-        val activities = listOf("Aktivitas 1", "Aktivitas 2", "Aktivitas 3", "Aktivitas 4")
-        
         Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-            for (i in 0 until activities.size step 2) {
+            for (i in activities.indices step 2) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     MissionItems(
-                        title = activities[i],
+                        activity = activities[i],
+                        mode = mode,
                         modifier = Modifier.weight(1f)
                     )
                     if (i + 1 < activities.size) {
                         MissionItems(
-                            title = activities[i+1],
+                            activity = activities[i+1],
+                            mode = mode,
                             modifier = Modifier.weight(1f)
                         )
                     } else {
@@ -157,9 +160,9 @@ fun MissionDetailsContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(56.dp),
-            shape = RoundedCornerShape(20.dp),
+            shape = RoundedCornerShape(50.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF9383CC)
+                containerColor = Color(0xFF221E52)
             )
         ) {
             Text(
@@ -180,7 +183,7 @@ fun MissionDetailsContent(
 fun MissionDetailsScreenPreview() {
     BloomUTheme {
         MissionDetailsContent(
-            mode = MissionCategoryMode.ENERGI,
+            mode = MissionCategoryMode.ISTIRAHAT,
             onBackClick = {}
         )
     }

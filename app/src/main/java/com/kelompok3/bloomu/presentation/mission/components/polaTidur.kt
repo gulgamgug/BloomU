@@ -1,15 +1,29 @@
-package com.kelompok3.bloomu.presentation.mission
+package com.kelompok3.bloomu.presentation.mission.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,17 +44,17 @@ import com.kelompok3.bloomu.ui.theme.BloomUTheme
 import com.kelompok3.bloomu.ui.theme.InterFontFamily
 
 @Composable
-fun kebiasaanKecil() {
+fun polaTidur() {
     val lightPurpleBg = Brush.verticalGradient(
         colors = listOf(Color(0xFFFFFFFF), Color(0xFFE9E3FF))
     )
 
-    val smallHabitGradient = Brush.verticalGradient(
-        colors = listOf(Color(0xFF16EB07), Color(0xFF0D8504))
+    val sleepGradient = Brush.verticalGradient(
+        colors = listOf(Color(0xFFFB8C00), Color(0xFF955300))
     )
 
     val darkBlue = Color(0xFF221E52)
-    val habitAccentColor = Color(0xFF00C853) 
+    val sleepAccentColor = Color(0xFFFFA726) // Diubah ke oranye yang jauh lebih terang dan menyala
 
     val scrollState = rememberScrollState()
 
@@ -49,6 +63,7 @@ fun kebiasaanKecil() {
             .fillMaxSize()
             .background(lightPurpleBg)
     ) {
+
         Image(
             painter = painterResource(id = R.drawable.ellipse_1),
             contentDescription = "ellipse",
@@ -125,20 +140,20 @@ fun kebiasaanKecil() {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(smallHabitGradient)
+                        .background(sleepGradient)
                         .padding(16.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Image(
-                            painter = painterResource(id = R.drawable.kebiasaankecil),
-                            contentDescription = "Kebiasaan Kecil Illustration",
+                            painter = painterResource(id = R.drawable.istirahat),
+                            contentDescription = "Pola Tidur Illustration",
                             modifier = Modifier
                                 .weight(1f)
                                 .padding(bottom = 8.dp)
                         )
                         Text(
-                            text = "Kebiasaan Kecil",
+                            text = "Pola Tidur",
                             color = Color.White,
                             fontSize = 22.sp,
                             fontWeight = FontWeight.Bold,
@@ -151,7 +166,7 @@ fun kebiasaanKecil() {
             Spacer(modifier = Modifier.height(10.dp))
 
             Text(
-                text = "Kategori Kebiasaan Kecil membantu membangun perubahan positif melalui tindakan sederhana yang dilakukan secara konsisten dalam kehidupan sehari-hari.",
+                text = "Kategori Pola Tidur membantu tubuh dan pikiran mendapatkan waktu istirahat yang cukup. Kategori ini membantu mengurangi kelelahan dan membuat tubuh lebih rileks.",
                 color = Color.Black,
                 fontSize = 10.sp,
                 lineHeight = 18.sp,
@@ -162,6 +177,7 @@ fun kebiasaanKecil() {
 
             Spacer(modifier = Modifier.height(32.dp))
 
+            // "Aktivitas" Section Title
             Text(
                 text = "Aktivitas",
                 fontSize = 20.sp,
@@ -176,31 +192,31 @@ fun kebiasaanKecil() {
 
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                    SmallHabitActivityCard(
-                        iconRes = R.drawable.bed,
-                        label = "Rapikan tempat tidur",
+                    SleepActivityCard(
+                        iconRes = R.drawable.hotel,
+                        label = "Power nap 15 menit",
                         modifier = Modifier.weight(1f),
-                        accentColor = habitAccentColor
+                        accentColor = sleepAccentColor
                     )
-                    SmallHabitActivityCard(
-                        iconRes = R.drawable.clean_hands,
-                        label = "Cuci muka",
+                    SleepActivityCard(
+                        iconRes = R.drawable.mobile_hand_off,
+                        label = "Matikan layar 30 menit sebelum tidur",
                         modifier = Modifier.weight(1f),
-                        accentColor = habitAccentColor
+                        accentColor = sleepAccentColor
                     )
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                    SmallHabitActivityCard(
-                        iconRes = R.drawable.bathtub,
-                        label = "Mandi lebih awal",
+                    SleepActivityCard(
+                        iconRes = R.drawable.air,
+                        label = "Tarik napas dalam 3 menit",
                         modifier = Modifier.weight(1f),
-                        accentColor = habitAccentColor
+                        accentColor = sleepAccentColor
                     )
-                    SmallHabitActivityCard(
-                        iconRes = R.drawable.clear_day,
-                        label = "Bangun 15 menit lebih awal",
+                    SleepActivityCard(
+                        iconRes = R.drawable.physical_therapy__1_,
+                        label = "Stretching sebelum tidur",
                         modifier = Modifier.weight(1f),
-                        accentColor = habitAccentColor
+                        accentColor = sleepAccentColor
                     )
                 }
             }
@@ -231,7 +247,7 @@ fun kebiasaanKecil() {
 }
 
 @Composable
-fun SmallHabitActivityCard(iconRes: Int, label: String, modifier: Modifier, accentColor: Color) {
+fun SleepActivityCard(iconRes: Int, label: String, modifier: Modifier, accentColor: Color) {
     Box(
         modifier = modifier
             .height(100.dp)
@@ -262,8 +278,8 @@ fun SmallHabitActivityCard(iconRes: Int, label: String, modifier: Modifier, acce
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun kebiasaanKecilPreview() {
+fun polaTidurPreview() {
     BloomUTheme(dynamicColor = false) {
-        kebiasaanKecil()
+        polaTidur()
     }
 }

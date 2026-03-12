@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.kelompok3.bloomu.presentation.mission.components.MissionCategoryMode
 
 data class DailyMission(
     val id: Int,
@@ -26,45 +27,25 @@ class MissionViewModel : ViewModel() {
     var selectedCategoryMode by mutableStateOf<MissionCategoryMode?>(null)
         private set
 
+    // Daftar mode yang sudah di-subscribe oleh user
+    var subscribedModes by mutableStateOf(setOf<MissionCategoryMode>())
+        private set
+
+    // Filter yang sedang aktif
+    var activeFilters by mutableStateOf(setOf<MissionCategoryMode>())
+        private set
+
     var streakCount by mutableStateOf(4)
         private set
 
-    var categories by mutableStateOf(listOf("Kebiasaan kecil", "Energi"))
-        private set
-
-    var selectedCategory by mutableStateOf("Kebiasaan kecil")
-        private set
-
-    var missions by mutableStateOf(
+    // Misi harian statis (contoh)
+    var staticMissions by mutableStateOf(
         listOf(
-            DailyMission(
-                id = 1,
-                title = "Rapikan tempat tidurmu",
-                description = "Langkah kecil yang bikin pikiran lebih teratur, mood lebih positif, dan siap menghadapi aktivitas seharian.",
-                estimation = "Estimasi waktu: 3-5 menit",
-                isFinished = false
-            ),
-            DailyMission(
-                id = 2,
-                title = "Lari pagi",
-                description = "Gerakan ringan yang bantu melepaskan stres, meningkatkan energi, dan bikin mood lebih fresh!.",
-                estimation = "Estimasi waktu: 30-60 menit",
-                isFinished = false
-            ),
-            DailyMission(
-                id = 3,
-                title = "8 gelas air putih setiap hari",
-                description = "Hidrasi yang cukup bantu tubuh lebih segar dan pikiran lebih fokus!",
-                estimation = "Estimasi waktu: 3-5 menit",
-                isFinished = true
-            )
+            DailyMission(1, "Rapikan tempat tidurmu", "Langkah kecil yang bikin pikiran lebih teratur.", "3-5 menit", false),
+            DailyMission(2, "Lari pagi", "Gerakan ringan yang bantu melepaskan stres.", "30-60 menit", false)
         )
     )
         private set
-
-    fun onCategorySelected(category: String) {
-        selectedCategory = category
-    }
 
     fun navigateTo(screen: MissionScreen) {
         currentScreen = screen
@@ -75,8 +56,26 @@ class MissionViewModel : ViewModel() {
         navigateTo(MissionScreen.DETAILS)
     }
 
+    fun subscribeMode(mode: MissionCategoryMode) {
+        subscribedModes = subscribedModes + mode
+        navigateTo(MissionScreen.MAIN)
+    }
+
+    fun unsubscribeMode(mode: MissionCategoryMode) {
+        subscribedModes = subscribedModes - mode
+        activeFilters = activeFilters - mode
+    }
+
+    fun toggleFilter(mode: MissionCategoryMode) {
+        activeFilters = if (activeFilters.contains(mode)) {
+            activeFilters - mode
+        } else {
+            activeFilters + mode
+        }
+    }
+
     fun toggleMission(missionId: Int) {
-        missions = missions.map {
+        staticMissions = staticMissions.map {
             if (it.id == missionId) it.copy(isFinished = !it.isFinished) else it
         }
     }

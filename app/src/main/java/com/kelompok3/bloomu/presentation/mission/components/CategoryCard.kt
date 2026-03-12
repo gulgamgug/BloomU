@@ -1,4 +1,4 @@
-package com.kelompok3.bloomu.presentation.mission
+package com.kelompok3.bloomu.presentation.mission.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
