@@ -134,4 +134,14 @@ class MissionViewModel(application: Application) : AndroidViewModel(application)
             prefManager.saveFinishedMissionIds(finishedIds)
         }
     }
+
+    fun clearDataOnLogout() {
+        viewModelScope.launch {
+            prefManager.clearAllData()
+            // Reset state di dalam ViewModel juga
+            subscribedModes = emptySet()
+            activeFilters = emptySet()
+            allMissions = emptyList()
+        }
+    }
 }

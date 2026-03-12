@@ -65,7 +65,6 @@ fun MiniDiaryPage(
     val gradientBrush = Brush.linearGradient(
         colors = listOf(Color(0xFFF5C6EC), Color(0xFF8366EB))
     )
-    var showError by remember { mutableStateOf(false) }
 
     Box(modifier = Modifier.fillMaxSize()) {
         ShowEllipse(4)
@@ -130,18 +129,7 @@ fun MiniDiaryPage(
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Button(
-                        onClick = {
-                            if (viewModel.diaryText.isNotBlank()) {
-                                onNext()
-                            } else {
-                                showError = true
-                                Toast.makeText(
-                                    context,
-                                    "Silahkan lengkapi diary Anda",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        },
+                        onClick = { onNext() },
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF221E52)),
                         shape = RoundedCornerShape(50.dp),
                         modifier = Modifier.height(48.dp).fillMaxWidth()
@@ -175,7 +163,7 @@ fun MiniDiaryPage(
                     color = Color(0xFF2A2567)
                 )
                 Text(
-                    "Ceritakan harimu di sini! (wajib)",
+                    "Ceritakan harimu di sini! (opsional)",
                     fontFamily = InterFontFamily,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Normal,
@@ -186,7 +174,6 @@ fun MiniDiaryPage(
                     value = viewModel.diaryText,
                     onValueChange = { 
                         viewModel.diaryText = it
-                        if (it.isNotBlank()) showError = false
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -194,7 +181,7 @@ fun MiniDiaryPage(
                         .padding(vertical = 10.dp)
                         .border(
                             width = 1.dp,
-                            brush = if (showError) SolidColor(Color.Red) else gradientBrush,
+                            brush = gradientBrush,
                             shape = RoundedCornerShape(25.dp)
                         ),
                     placeholder = {

@@ -149,9 +149,9 @@ fun MissionDetailsScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(56.dp),
-            shape = RoundedCornerShape(20.dp),
+            shape = RoundedCornerShape(50.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF9383CC)
+                containerColor = Color(0xFF221E52)
             )
         ) {
             Text(

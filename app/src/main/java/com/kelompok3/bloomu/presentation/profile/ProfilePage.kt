@@ -44,6 +44,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kelompok3.bloomu.R
 import com.kelompok3.bloomu.presentation.component.ItemType
 import com.kelompok3.bloomu.presentation.component.SettingsItem
+import com.kelompok3.bloomu.presentation.mission.MissionViewModel
 import com.kelompok3.bloomu.ui.theme.BloomUTheme
 import kotlinx.coroutines.flow.collectLatest
 
@@ -52,7 +53,8 @@ fun ProfilePage(
     modifier: Modifier = Modifier,
     onEditAccountClick: () -> Unit = {},
     onLogOutSuccess: () -> Unit = {},
-    viewModel: ProfileViewModel = viewModel()
+    viewModel: ProfileViewModel = viewModel(),
+    missionViewModel: MissionViewModel = viewModel() // Tambahkan MissionViewModel
 ) {
     val darkBlue = Color(0xFF231F40) //
     val context = LocalContext.current
@@ -72,7 +74,10 @@ fun ProfilePage(
         //kalo log out biar keluar aplikasi
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
-                is ProfileEvent.LogoutSuccess -> onLogOutSuccess()
+                is ProfileEvent.LogoutSuccess -> {
+                    missionViewModel.clearDataOnLogout() // Bersihkan data misi
+                    onLogOutSuccess()
+                }
                 is ProfileEvent.Error -> {
                     Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
                 }
@@ -182,10 +187,11 @@ fun ProfilePage(
 
         // settings item
         Column(modifier = Modifier.fillMaxWidth()) {
-            SettingsItem(
-                title = "Pengaturan",
-                icon = painterResource(id = R.drawable.settings),
-                type = ItemType.Arrow(onClick = {})
+            Text(
+                "Pengaturan",
+                color = Color(0xFF9383CC),
+                fontSize = 12.sp,
+                fontWeight = FontWeight.SemiBold,
             )
 
             SettingsItem(
@@ -221,12 +227,6 @@ fun ProfilePage(
                 title = "Keluar Akun",
                 icon = painterResource(id = R.drawable.logout),
                 type = ItemType.Arrow(onClick = { viewModel.logout() })
-            )
-
-            SettingsItem(
-                title = "Tentang",
-                icon = painterResource(id = R.drawable.info),
-                type = ItemType.Arrow(onClick = {})
             )
         }
     }

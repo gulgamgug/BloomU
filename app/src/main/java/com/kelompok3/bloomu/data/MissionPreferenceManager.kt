@@ -63,4 +63,11 @@ class MissionPreferenceManager(private val context: Context) {
             prefs[FINISHED_MISSION_IDS] = emptySet()
         }
     }
+
+    // Hapus semua data saat logout
+    suspend fun clearAllData() {
+        context.dataStore.edit { prefs ->
+            prefs.clear()
+        }
+    }
 }
