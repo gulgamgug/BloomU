@@ -27,6 +27,7 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.kelompok3.bloomu.ui.theme.InterFontFamily
 
 @Composable
 fun MoodChart(moodData: List<Float>) {
@@ -100,7 +101,12 @@ fun MoodChart(moodData: List<Float>) {
 
                     val textResult = textMeasurer.measure(
                         text = days[i],
-                        style = TextStyle(fontSize = 14.sp, color = Color.DarkGray)
+                        style = TextStyle(
+                            fontSize = 14.sp,
+                            color = Color.DarkGray,
+                            fontFamily = InterFontFamily,
+                            fontWeight = FontWeight.Normal
+                        )
                     )
                     drawText(
                         textLayoutResult = textResult,

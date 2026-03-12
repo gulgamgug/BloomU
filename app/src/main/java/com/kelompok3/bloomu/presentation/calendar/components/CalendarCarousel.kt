@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -46,7 +47,7 @@ fun CalendarCarousel(
     // Total padding horizontal: 24dp (Box luar) + 20dp (Box dalam) = 44dp per sisi
     val totalSidePadding = 24.dp + 20.dp
     val containerWidthPx = with(density) { (configuration.screenWidthDp.dp - (totalSidePadding * 2)).toPx() }
-    val itemWidthPx = with(density) { 36.dp.toPx() }
+    val itemWidthPx = with(density) { 40.dp.toPx() }
     
     // Offset = (Setengah Lebar Kontainer) - (Setengah Lebar Item)
     val centerOffset = (containerWidthPx / 2) - (itemWidthPx / 2)
@@ -97,10 +98,24 @@ fun CalendarCarousel(
                     else -> ""
                 }
 
+                val gradientBrush = Brush.linearGradient(
+                    colors = listOf(Color(0xFFF5C6EC), Color(0xFF8366EB))
+                )
+
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
-                        .width(36.dp)
+                        .width(40.dp)
+                        .then(
+                            if (isSelected) {
+                                Modifier.border(
+                                    width = 1.dp,
+                                    brush = gradientBrush,
+                                    shape = RoundedCornerShape(20.dp)
+                                )
+                            } else Modifier
+                        )
+                        .padding(vertical = 4.dp)
                         .clickable { onDaySelected(day) }
                 ) {
                     Text(

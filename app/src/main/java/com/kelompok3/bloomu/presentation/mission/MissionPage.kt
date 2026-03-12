@@ -212,7 +212,7 @@ fun MissionMainScreen(
                 }
             } else {
                 Text(
-                    text = "Klik tombol + untuk menambah kategori misi.\nKlik dan tahan kategori untuk menghapusnya.",
+                    text = "Tekan tombol + untuk menambah kategori misi.\nTekan dan tahan kategori untuk menghapusnya.",
                     fontSize = 12.sp,
                     fontFamily = InterFontFamily,
                     color = Color.Gray,
