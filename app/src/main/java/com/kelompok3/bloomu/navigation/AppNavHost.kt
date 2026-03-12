@@ -45,6 +45,7 @@ import com.kelompok3.bloomu.presentation.component.ShowEllipse
 import com.kelompok3.bloomu.presentation.dailycheckin.CheckInScreen
 import com.kelompok3.bloomu.presentation.home.OnboardingScreen
 import com.kelompok3.bloomu.presentation.home.OnboardingViewModel
+import com.kelompok3.bloomu.presentation.notifikasi.notifikasi
 import com.kelompok3.bloomu.presentation.profile.editAkun
 import com.kelompok3.bloomu.supabase.supabase
 import io.github.jan.supabase.auth.auth
@@ -279,6 +280,7 @@ fun AppNavHost(
             com.kelompok3.bloomu.presentation.home.HomeNavBar(
                 initialTab = route.selectedTab,
                 onCheckInClick = { navController.navigate(CheckInRoute) },
+                onNotificationClick = { navController.navigate(NotificationRoute) },
                 onLogOutSuccess = {
                     navController.navigate(LoginRoute) {
                         popUpTo(HomeRoute()) { inclusive = true }
@@ -290,6 +292,12 @@ fun AppNavHost(
 
         composable<EditAccountRoute> {
             editAkun(
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable<NotificationRoute> {
+            notifikasi(
                 onBack = { navController.popBackStack() }
             )
         }

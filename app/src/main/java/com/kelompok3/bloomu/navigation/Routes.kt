@@ -17,6 +17,7 @@ import kotlinx.serialization.Serializable
 @Serializable object MissionSelectRoute
 @Serializable data class MissionDetailsRoute(val categoryName: String)
 @Serializable object EditAccountRoute
+@Serializable object NotificationRoute
 
 @Serializable data class OtpRoute(val email: String)
 @Serializable data class DailyCheckInRoute(val moodData: List<Float>)

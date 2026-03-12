@@ -3,18 +3,30 @@ package com.kelompok3.bloomu.presentation.notifikasi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.blur
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -24,46 +36,26 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kelompok3.bloomu.R
+import com.kelompok3.bloomu.presentation.component.ShowEllipse
 import com.kelompok3.bloomu.ui.theme.BloomUTheme
 import com.kelompok3.bloomu.ui.theme.InterFontFamily
 
 @Composable
-fun notifikasi() {
+fun notifikasi(
+    onBack: () -> Unit = {}
+) {
     val scrollState = rememberScrollState()
     val lightPurpleBg = Brush.verticalGradient(
         colors = listOf(Color(0xFFFFFFFF), Color(0xFFE9E3FF))
     )
     val purpleText = Color(0xFF403959)
 
+    ShowEllipse(0)
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(lightPurpleBg)
     ) {
-        // --- BACKGROUND LAYER (Bloom Effect) ---
-        Image(
-            painter = painterResource(id = R.drawable.ellipse_1),
-            contentDescription = "ellipse",
-            modifier = Modifier
-                .align(Alignment.TopCenter)
-                .size(1000.dp)
-                .offset(y = (-450).dp)
-                .rotate(0f)
-                .alpha(0.7f)
-                .blur(100.dp)
-        )
 
-        Image(
-            painter = painterResource(id = R.drawable.ellipse_1),
-            contentDescription = "ellipse_2",
-            modifier = Modifier
-                .align(Alignment.TopCenter)
-                .size(800.dp)
-                .offset(y = (-350).dp)
-                .rotate(90f)
-                .alpha(0.5f)
-                .blur(80.dp)
-        )
 
         // --- CONTENT LAYER ---
         Column(
@@ -76,14 +68,23 @@ fun notifikasi() {
 
             // Header Row
             Box(modifier = Modifier.fillMaxWidth()) {
-                Image(
-                    painter = painterResource(id = R.drawable.back),
-                    contentDescription = "Back",
+                IconButton(
+                    onClick = onBack,
                     modifier = Modifier
                         .align(Alignment.CenterStart)
-                        .size(33.dp)
-                        .clickable { /* Back Logic */ }
-                )
+                        .size(30.dp)
+                        .background(
+                            Color(0xFF2A2567),
+                            shape = CircleShape
+                        )
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                        contentDescription = "Back",
+                        tint = Color.White,
+                        modifier = Modifier.size(30.dp)
+                    )
+                }
 
                 Text(
                     text = "Notifikasi",
