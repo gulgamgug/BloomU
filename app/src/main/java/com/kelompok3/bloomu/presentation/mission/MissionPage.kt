@@ -29,47 +29,97 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
+import com.kelompok3.bloomu.navigation.MissionDetailsRoute
+import com.kelompok3.bloomu.navigation.MissionRoute
+import com.kelompok3.bloomu.navigation.MissionSelectRoute
 import com.kelompok3.bloomu.presentation.component.ShowEllipse
 import com.kelompok3.bloomu.presentation.mission.components.MissionCTA
 import com.kelompok3.bloomu.presentation.mission.components.MissionCategoryMode
-import com.kelompok3.bloomu.ui.theme.BloomUTheme
 import com.kelompok3.bloomu.ui.theme.InterFontFamily
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MissionPage(
     modifier: Modifier = Modifier,
     viewModel: MissionViewModel = viewModel()
 ) {
-    val scrollState = rememberScrollState()
+    val navController = rememberNavController()
 
+    NavHost(
+        navController = navController,
+        startDestination = MissionRoute,
+        modifier = modifier
+    ) {
+        // 1. Halaman Utama Misi (Daftar misi yang sudah diambil)
+        composable<MissionRoute> {
+            MissionMainScreen(
+                viewModel = viewModel,
+                onAddClick = { navController.navigate(MissionSelectRoute) }
+            )
+        }
+        
+        // 2. Halaman Pilih Kategori
+        composable<MissionSelectRoute> {
+            MissionSelectScreen(
+                onBack = { navController.popBackStack() },
+                onCategorySelect = { mode ->
+                    navController.navigate(MissionDetailsRoute(categoryName = mode.name))
+                }
+            )
+        }
+        
+        // 3. Halaman Detail Kategori
+        composable<MissionDetailsRoute> { backStackEntry ->
+            val route: MissionDetailsRoute = backStackEntry.toRoute()
+            val mode = MissionCategoryMode.valueOf(route.categoryName)
+            
+            MissionDetailsScreen(
+                mode = mode,
+                onBack = { navController.popBackStack() },
+                onSubscribe = {
+                    viewModel.subscribeMode(mode)
+                    // Kembali ke halaman utama setelah subscribe
+                    navController.popBackStack(MissionRoute, inclusive = false)
+                }
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun MissionMainScreen(
+    viewModel: MissionViewModel,
+    onAddClick: () -> Unit
+) {
+    val scrollState = rememberScrollState()
     val subscribedModes = viewModel.subscribedModes.toList()
     val activeFilters = viewModel.activeFilters
-    val staticMissions = viewModel.staticMissions
+    val allMissions = viewModel.allMissions
 
-    // Menggabungkan misi statis dengan misi dari mode yang di-subscribe
-    val allMissions = staticMissions + viewModel.subscribedModes.flatMap { getMissionDataFromMode(it) }
+    // Hitung progress
+    val completedCount = allMissions.count { it.isFinished }
+    val totalCount = allMissions.size
 
-    // Memfilter misi berdasarkan kategori yang dipilih (jika ada filter aktif)
-    val filteredMissions = if (activeFilters.isEmpty()) {
+    val displayedMissions = if (activeFilters.isEmpty()) {
         allMissions
     } else {
-        // Misi statis tetap muncul, misi kategori difilter
-        staticMissions + viewModel.subscribedModes
-            .filter { activeFilters.contains(it) }
-            .flatMap { getMissionDataFromMode(it) }
+        allMissions.filter { mission ->
+            viewModel.activeFilters.any { mode ->
+                getMissionDataFromMode(mode).any { it.id == mission.id }
+            }
+        }
     }
 
     ShowEllipse(3)
 
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-    ) {
+    Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -90,11 +140,13 @@ fun MissionPage(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            MissionCTA()
+            MissionCTA(
+                completedCount = completedCount,
+                totalCount = totalCount
+            )
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            // Baris Judul Kategori dan Tombol +
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -108,12 +160,11 @@ fun MissionPage(
                     fontFamily = InterFontFamily
                 )
                 
-                // Tombol + untuk ke MissionSelectScreen
                 Box(
                     modifier = Modifier
                         .size(32.dp)
                         .background(Color(0xFFE9E3FF), CircleShape)
-                        .clickable { viewModel.navigateTo(MissionScreen.SELECT) },
+                        .clickable { onAddClick() },
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
@@ -127,7 +178,6 @@ fun MissionPage(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // Chip Kategori (Grid 2x2)
             if (subscribedModes.isNotEmpty()) {
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     for (i in subscribedModes.indices step 2) {
@@ -162,7 +212,7 @@ fun MissionPage(
                 }
             } else {
                 Text(
-                    text = "Belum ada kategori yang diikuti.",
+                    text = "Klik tombol + untuk menambah kategori misi.\nKlik dan tahan kategori untuk menghapusnya.",
                     fontSize = 12.sp,
                     fontFamily = InterFontFamily,
                     color = Color.Gray,
@@ -194,16 +244,25 @@ fun MissionPage(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Mission List (Filtered)
-            filteredMissions.forEach { mission ->
-                OngoingMissions(
-                    title = mission.title,
-                    description = mission.description,
-                    estimation = mission.estimation,
-                    isFinished = mission.isFinished,
-                    onClick = { viewModel.toggleMission(mission.id) }
+            if (displayedMissions.isNotEmpty()) {
+                displayedMissions.forEach { mission ->
+                    OngoingMissions(
+                        title = mission.title,
+                        description = mission.description,
+                        estimation = mission.estimation,
+                        isFinished = mission.isFinished,
+                        onClick = { viewModel.toggleMission(mission.id) }
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+                }
+            } else {
+                Text(
+                    text = "Daftar misi harianmu kosong.",
+                    fontSize = 12.sp,
+                    fontFamily = InterFontFamily,
+                    color = Color.Gray,
+                    modifier = Modifier.padding(vertical = 20.dp)
                 )
-                Spacer(modifier = Modifier.height(12.dp))
             }
 
             Spacer(modifier = Modifier.height(40.dp))
@@ -245,13 +304,5 @@ fun CategoryChip(
                 fontFamily = InterFontFamily
             )
         }
-    }
-}
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun MissionPreview() {
-    BloomUTheme(dynamicColor = false) {
-        MissionPage(modifier = Modifier)
     }
 }

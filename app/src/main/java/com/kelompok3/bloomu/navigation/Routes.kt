@@ -14,6 +14,8 @@ import kotlinx.serialization.Serializable
 @Serializable object ProfileRoute
 @Serializable object CheckInRoute
 @Serializable object MissionRoute
+@Serializable object MissionSelectRoute
+@Serializable data class MissionDetailsRoute(val categoryName: String)
 @Serializable object EditAccountRoute
 
 @Serializable data class OtpRoute(val email: String)

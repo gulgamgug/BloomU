@@ -30,7 +30,11 @@ import com.kelompok3.bloomu.ui.theme.BloomUTheme
 import com.kelompok3.bloomu.ui.theme.InterFontFamily
 
 @Composable
-fun MissionCTA(modifier: Modifier = Modifier) {
+fun MissionCTA(
+    completedCount: Int,
+    totalCount: Int,
+    modifier: Modifier = Modifier
+) {
     Card(
         shape = RoundedCornerShape(20.dp),
         modifier = modifier
@@ -78,7 +82,7 @@ fun MissionCTA(modifier: Modifier = Modifier) {
                         .padding(horizontal = 16.dp, vertical = 8.dp)
                 ) {
                     Text(
-                        text = "1/3 misi telah selesai!",
+                        text = "$completedCount/$totalCount misi telah selesai!",
                         fontSize = 12.sp,
                         color = Color(0xFFB8A4FF),
                         fontFamily = InterFontFamily,
@@ -103,7 +107,7 @@ fun MissionCTA(modifier: Modifier = Modifier) {
 fun MissionCTAPreview() {
     BloomUTheme {
         Box(modifier = Modifier.padding(20.dp)) {
-            MissionCTA()
+            MissionCTA(completedCount = 1, totalCount = 3)
         }
     }
 }

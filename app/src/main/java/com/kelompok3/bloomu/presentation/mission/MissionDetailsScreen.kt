@@ -38,20 +38,9 @@ import com.kelompok3.bloomu.ui.theme.InterFontFamily
 
 @Composable
 fun MissionDetailsScreen(
-    viewModel: MissionViewModel
-) {
-    val mode = viewModel.selectedCategoryMode ?: return
-    
-    MissionDetailsContent(
-        mode = mode,
-        onBackClick = { viewModel.navigateTo(MissionScreen.SELECT) }
-    )
-}
-
-@Composable
-fun MissionDetailsContent(
     mode: MissionCategoryMode,
-    onBackClick: () -> Unit
+    onBack: () -> Unit,
+    onSubscribe: () -> Unit
 ) {
     val scrollState = rememberScrollState()
     val activities = getActivitiesForMode(mode)
@@ -80,7 +69,7 @@ fun MissionDetailsContent(
                 modifier = Modifier
                     .align(Alignment.CenterStart)
                     .size(24.dp)
-                    .clickable { onBackClick() }
+                    .clickable { onBack() }
             )
             Text(
                 text = "Misi",
@@ -156,13 +145,13 @@ fun MissionDetailsContent(
 
         // Tombol Mulai Misi
         Button(
-            onClick = { /* Placeholder */ },
+            onClick = { onSubscribe() },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(56.dp),
-            shape = RoundedCornerShape(50.dp),
+            shape = RoundedCornerShape(20.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF221E52)
+                containerColor = Color(0xFF9383CC)
             )
         ) {
             Text(
@@ -182,9 +171,10 @@ fun MissionDetailsContent(
 @Composable
 fun MissionDetailsScreenPreview() {
     BloomUTheme {
-        MissionDetailsContent(
-            mode = MissionCategoryMode.ISTIRAHAT,
-            onBackClick = {}
+        MissionDetailsScreen(
+            mode = MissionCategoryMode.ENERGI,
+            onBack = {},
+            onSubscribe = {}
         )
     }
 }
