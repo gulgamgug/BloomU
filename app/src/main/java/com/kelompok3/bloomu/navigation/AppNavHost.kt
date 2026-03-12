@@ -52,6 +52,13 @@ import io.github.jan.supabase.auth.status.SessionStatus
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.take
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.ui.graphics.graphicsLayer
+
 
 @Composable
 fun AppNavHost(
@@ -163,12 +170,26 @@ fun AppNavHost(
                         }
                     }
 
+
                     Spacer(Modifier.height(40.dp))
                     Box(modifier = Modifier.height(40.dp)) {
                         if (showProgressBar) {
-                            CircularProgressIndicator(
-                                color = Color(0xFF221E52),
-                                strokeWidth = 3.dp
+                            val infiniteTransition = rememberInfiniteTransition(label = "loading")
+                            val angle by infiniteTransition.animateFloat(
+                                initialValue = 360f,
+                                targetValue = 0f,
+                                animationSpec = infiniteRepeatable(
+                                    animation = tween(1000, easing = LinearEasing),
+                                    repeatMode = RepeatMode.Restart
+                                ),
+                                label = "rotation"
+                            )
+                            Image(
+                                painter = painterResource(id = R.drawable.loading_circle),
+                                contentDescription = "Loading",
+                                modifier = Modifier
+                                    .size(40.dp)
+                                    .graphicsLayer { rotationZ = angle }
                             )
                         }
                     }
