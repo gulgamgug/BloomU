@@ -70,7 +70,7 @@ fun OtpScreen(
             when (event) {
                 is OtpEvent.Success -> onVerifSuccess()
                 is OtpEvent.Error -> {
-                    Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+                    // Toast dihapus sesuai permintaan
                 }
                 is OtpEvent.ResendSuccess -> {
                     Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
@@ -93,8 +93,7 @@ fun OtpScreen(
             verticalArrangement = Arrangement.Top
         ) {
             Spacer(Modifier.height(60.dp))
-            
-            // Gambar OTP (otepe.xml)
+
             Image(
                 painter = painterResource(id = R.drawable.otepe),
                 contentDescription = null,
@@ -130,7 +129,34 @@ fun OtpScreen(
             
             Spacer(Modifier.height(40.dp))
 
-            OtpInputField(digitCount = 6, onOtpComplete = { viewModel.onOtpCodeChange(it) })
+            OtpInputField(
+                digitCount = 6, 
+                onOtpComplete = { viewModel.onOtpCodeChange(it) },
+                isError = viewModel.isError
+            )
+
+            if (viewModel.isError) {
+                Spacer(Modifier.height(8.dp))
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.error_24),
+                        contentDescription = null,
+                        modifier = Modifier.size(16.dp)
+                    )
+                    Spacer(Modifier.width(4.dp))
+                    Text(
+                        text = "Kode OTP tidak valid",
+                        color = Color.Red,
+                        fontSize = 12.sp,
+                        fontFamily = InterFontFamily,
+                        fontWeight = FontWeight.Normal
+                    )
+                }
+            }
             
             Spacer(Modifier.height(30.dp))
             
@@ -188,7 +214,8 @@ fun OtpScreen(
 @Composable
 fun OtpInputField(
     digitCount: Int = 6,
-    onOtpComplete: (String) -> Unit
+    onOtpComplete: (String) -> Unit,
+    isError: Boolean = false
 ) {
     val otpValues = remember { mutableStateListOf("", "", "", "", "", "") }
     val focusRequesters = remember { List(digitCount) { FocusRequester() } }
@@ -209,16 +236,14 @@ fun OtpInputField(
                         }
                     }
                     val combinedCode = otpValues.joinToString("")
-                    if (combinedCode.length == digitCount) {
-                        onOtpComplete(combinedCode)
-                    }
+                    onOtpComplete(combinedCode)
                 },
                 modifier = Modifier
                     .width(50.dp)
                     .height(90.dp)
                     .border(
                         width = 1.dp,
-                        brush = gradientBrush,
+                        brush = if (isError) androidx.compose.ui.graphics.SolidColor(Color.Red) else gradientBrush,
                         shape = RoundedCornerShape(10.dp)
                     )
                     .focusRequester(focusRequesters[index])

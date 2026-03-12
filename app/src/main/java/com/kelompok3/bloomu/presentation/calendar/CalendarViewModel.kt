@@ -27,7 +27,10 @@ import kotlin.time.ExperimentalTime
 data class MoodEntry(
     @SerialName("mood_score") val moodScore: Int,
     @SerialName("created_at") val createdAt: String,
-    @SerialName("diary_note") val diaryNote: String? = null
+    @SerialName("diary_note") val diaryNote: String? = null,
+    @SerialName("mental_score") val mentalScore: Int? = 0,
+    @SerialName("physical_score") val physicalScore: Int? = 0,
+    @SerialName("academic_score") val academicScore: Int? = 0
 )
 
 class CalendarViewModel : ViewModel() {
@@ -111,7 +114,7 @@ class CalendarViewModel : ViewModel() {
                 val nextMonthStart = LocalDateTime(nextYear, nextMonth, 1, 0, 0, 0, 0)
                 val nextMonthStartIso = nextMonthStart.toInstant(tz).toString()
 
-                val response = supabase.postgrest["daily_checkins"].select(columns = Columns.list("mood_score", "created_at", "diary_note")) {
+                val response = supabase.postgrest["daily_checkins"].select(columns = Columns.list("mood_score", "created_at", "diary_note", "mental_score", "physical_score", "academic_score")) {
                     filter {
                         eq("user_id", user.id)
                         gte("created_at", monthStartIso)

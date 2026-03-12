@@ -125,7 +125,10 @@ fun HomeNavBar( //navbar
                 onNotificationClick = onNotificationClick,
                 onLogOutSuccess = onLogOutSuccess
             )
-            1 -> CalendarPage(modifier = contentModifier)
+            1 -> CalendarPage(
+                modifier = contentModifier,
+                onCheckInClick = onCheckInClick
+            )
             2 -> MissionPage(modifier = contentModifier)
             3 -> ProfilePage(
                 modifier = contentModifier,

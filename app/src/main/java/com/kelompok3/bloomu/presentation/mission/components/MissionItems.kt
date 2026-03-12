@@ -1,4 +1,4 @@
-package com.kelompok3.bloomu.presentation.mission
+package com.kelompok3.bloomu.presentation.mission.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -27,7 +27,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kelompok3.bloomu.R
-import com.kelompok3.bloomu.presentation.mission.components.MissionCategoryMode
 import com.kelompok3.bloomu.ui.theme.BloomUTheme
 import com.kelompok3.bloomu.ui.theme.InterFontFamily
 

@@ -38,6 +38,7 @@ import kotlin.time.ExperimentalTime
 @Composable
 fun CalendarPage(
     modifier: Modifier,
+    onCheckInClick: () -> Unit = {},
     viewModel: CalendarViewModel = viewModel()
 ) {
     val distribution = viewModel.getMoodDistribution()
@@ -137,7 +138,8 @@ fun CalendarPage(
             // Section 5: Mood Detail Card
             MoodDetailCard(
                 selectedDay = viewModel.selectedDay,
-                moodEntry = viewModel.monthlyMoodData[viewModel.selectedDay]
+                moodEntry = viewModel.monthlyMoodData[viewModel.selectedDay],
+                onCheckInClick = onCheckInClick
             )
         }
     }

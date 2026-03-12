@@ -27,6 +27,7 @@ sealed class OtpEvent {
 class OtpViewModel : ViewModel() {
     var timerSeconds by mutableStateOf(60)
     var otpCode by mutableStateOf("")
+    var isError by mutableStateOf(false)
 
     private val _eventFlow = MutableSharedFlow<OtpEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
@@ -46,6 +47,7 @@ class OtpViewModel : ViewModel() {
 
     fun onOtpCodeChange(code: String) {
         otpCode = code
+        if (isError) isError = false
     }
 
     fun verifyOtp(email: String) {
@@ -58,6 +60,7 @@ class OtpViewModel : ViewModel() {
                 )
                 _eventFlow.emit(OtpEvent.Success)
             } catch (e: AuthRestException) {
+                isError = true
                 _eventFlow.emit(OtpEvent.Error("Kode OTP tidak valid"))
             } catch (e: HttpRequestException) {
                 _eventFlow.emit(OtpEvent.Error("Kesalahan jaringan"))

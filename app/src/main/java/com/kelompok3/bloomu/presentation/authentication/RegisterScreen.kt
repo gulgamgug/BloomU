@@ -14,16 +14,16 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -51,7 +51,6 @@ import com.kelompok3.bloomu.presentation.component.AuthTextField
 import com.kelompok3.bloomu.presentation.component.ShowEllipse
 import com.kelompok3.bloomu.supabase.supabase
 import com.kelompok3.bloomu.ui.theme.InterFontFamily
-import io.github.jan.supabase.compose.auth.composable.NativeSignInResult
 import io.github.jan.supabase.compose.auth.composable.rememberSignInWithGoogle
 import io.github.jan.supabase.compose.auth.composeAuth
 import kotlinx.coroutines.flow.collectLatest
@@ -73,14 +72,13 @@ fun RegisterScreen(
         }
     )
 
-    // Listen to events from ViewModel
     LaunchedEffect(Unit) {
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
                 is AuthEvent.RegisterSuccess -> {
                     onRegisterSuccess(event.email)
                 }
-                is AuthEvent.LoginSuccess -> { // Untuk Google login di layar register
+                is AuthEvent.LoginSuccess -> { // Untuk google login di layar register
                     onLoginSuccess()
                 }
                 is AuthEvent.Error -> {

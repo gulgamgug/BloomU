@@ -35,6 +35,8 @@ import androidx.compose.ui.unit.sp
 import com.kelompok3.bloomu.presentation.component.ShowEllipse
 import com.kelompok3.bloomu.presentation.mission.components.CategoryCard
 import com.kelompok3.bloomu.presentation.mission.components.MissionCategoryMode
+import com.kelompok3.bloomu.presentation.mission.components.MissionItems
+import com.kelompok3.bloomu.presentation.mission.components.getActivitiesForMode
 import com.kelompok3.bloomu.ui.theme.BloomUTheme
 import com.kelompok3.bloomu.ui.theme.InterFontFamily
 
@@ -140,7 +142,7 @@ fun MissionDetailsScreen(
                     )
                     if (i + 1 < activities.size) {
                         MissionItems(
-                            activity = activities[i+1],
+                            activity = activities[i + 1],
                             mode = mode,
                             modifier = Modifier.weight(1f)
                         )

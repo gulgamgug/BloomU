@@ -47,7 +47,7 @@ class DailyNotificationWorker(
             intent, 
             PendingIntent.FLAG_IMMUTABLE
         )
-//set pesan notif disini
+
         val builder = NotificationCompat.Builder(applicationContext, channelId)
             .setSmallIcon(R.drawable.logo_gambar)
             .setContentTitle("Waktunya Check-in!")

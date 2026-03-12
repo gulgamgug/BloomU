@@ -46,7 +46,7 @@ fun ForgotPasswordScreen(
 ) {
     val context = LocalContext.current
 
-    // Listen to events from ViewModel
+    // ViewModel
     LaunchedEffect(Unit) {
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
