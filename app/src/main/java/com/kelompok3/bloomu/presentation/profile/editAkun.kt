@@ -30,6 +30,8 @@ import com.kelompok3.bloomu.R
 import com.kelompok3.bloomu.ui.theme.BloomUTheme
 import com.kelompok3.bloomu.ui.theme.InterFontFamily
 
+import com.kelompok3.bloomu.presentation.component.AuthTextField
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun editAkun(
@@ -133,7 +135,7 @@ fun editAkun(
                     label = "Email",
                     value = email,
                     onValueChange = { email = it },
-                    placeholder = "Masukkan teks",
+                    placeholder = "Email",
                     leadingIconRes = R.drawable.email,
                     labelColor = labelColor,
                     darkBlue = darkBlue
@@ -145,7 +147,7 @@ fun editAkun(
                     label = "Nama",
                     value = nama,
                     onValueChange = { nama = it },
-                    placeholder = "Masukkan teks",
+                    placeholder = "Nama",
                     leadingIconRes = R.drawable.username,
                     labelColor = labelColor,
                     darkBlue = darkBlue
@@ -160,12 +162,10 @@ fun editAkun(
                     color = labelColor,
                     modifier = Modifier.padding(start = 4.dp, bottom = 6.dp)
                 )
-                TextField(
+                AuthTextField(
+                    placeholder = "Password",
                     value = password,
                     onValueChange = { password = it },
-                    placeholder = {
-                        Text("Masukkan teks", color = Color(0xFFD4D4D4), fontSize = 13.sp)
-                    },
                     leadingIcon = {
                         Icon(
                             painter = painterResource(id = R.drawable.gembok),
@@ -184,19 +184,7 @@ fun editAkun(
                             )
                         }
                     },
-                    visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                    singleLine = true,
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = Color.White,
-                        unfocusedContainerColor = Color.White,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent
-                    ),
-                    shape = RoundedCornerShape(24.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(48.dp)
-                        .shadow(elevation = 3.dp, shape = RoundedCornerShape(24.dp), spotColor = Color(0x1A000000))
+                    visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation()
                 )
             }
 
@@ -241,12 +229,10 @@ fun EditAccountField(
             color = labelColor,
             modifier = Modifier.padding(start = 4.dp, bottom = 6.dp)
         )
-        TextField(
+        AuthTextField(
+            placeholder = placeholder,
             value = value,
             onValueChange = onValueChange,
-            placeholder = {
-                Text(placeholder, color = Color(0xFFD4D4D4), fontSize = 13.sp)
-            },
             leadingIcon = {
                 Icon(
                     painter = painterResource(id = leadingIconRes),
@@ -254,19 +240,7 @@ fun EditAccountField(
                     tint = darkBlue,
                     modifier = Modifier.size(18.dp)
                 )
-            },
-            singleLine = true,
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = Color.White,
-                unfocusedContainerColor = Color.White,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent
-            ),
-            shape = RoundedCornerShape(24.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(48.dp)
-                .shadow(elevation = 3.dp, shape = RoundedCornerShape(24.dp), spotColor = Color(0x1A000000))
+            }
         )
     }
 }
