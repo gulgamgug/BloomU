@@ -35,6 +35,10 @@ class CalendarViewModel : ViewModel() {
     var monthlyMoodData by mutableStateOf<Map<Int, MoodEntry>>(emptyMap())
         private set
 
+    // Khusus buat HomeScreen: jumlah mood bulan ini saja
+    var currentMonthMoodCount by mutableStateOf(0)
+        private set
+
     // state buat kontrol UI
     var selectedMonth by mutableStateOf(kotlin.time.Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).month)
     var selectedYear by mutableStateOf(kotlin.time.Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).year)
@@ -42,6 +46,48 @@ class CalendarViewModel : ViewModel() {
 
     init {
         fetchMonthlyMoodData()
+        fetchCurrentMonthMoodCount()
+    }
+
+    // Fungsi khusus untuk HomeScreen agar selalu akurat ke bulan sekarang
+    fun fetchCurrentMonthMoodCount() {
+        viewModelScope.launch {
+            try {
+                val user = supabase.auth.currentUserOrNull() ?: return@launch
+                val now = kotlin.time.Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+                val currentMonth = now.month
+                val currentYear = now.year
+
+                val tz = TimeZone.currentSystemDefault()
+                val monthStart = LocalDateTime(currentYear, currentMonth, 1, 0, 0, 0, 0)
+                val monthStartIso = monthStart.toInstant(tz).toString()
+                
+                val nextMonth = if (currentMonth == Month.DECEMBER) Month.JANUARY else Month(currentMonth.number + 1)
+                val nextYear = if (currentMonth == Month.DECEMBER) currentYear + 1 else currentYear
+                val nextMonthStart = LocalDateTime(nextYear, nextMonth, 1, 0, 0, 0, 0)
+                val nextMonthStartIso = nextMonthStart.toInstant(tz).toString()
+
+                // Sertakan created_at agar decoding ke MoodEntry tidak gagal
+                val response = supabase.postgrest["daily_checkins"].select(columns = Columns.list("mood_score", "created_at")) {
+                    filter {
+                        eq("user_id", user.id)
+                        gte("created_at", monthStartIso)
+                        lt("created_at", nextMonthStartIso)
+                    }
+                }
+                val entries = response.decodeList<MoodEntry>()
+                
+                // Hitung jumlah hari unik (seperti di kalender)
+                val uniqueDays = entries.map { 
+                    Instant.parse(it.createdAt).toLocalDateTime(tz).dayOfMonth 
+                }.toSet()
+                
+                currentMonthMoodCount = uniqueDays.size
+            } catch (e: Exception) {
+                android.util.Log.e("BloomU_Debug", "Error fetchCurrentMonthMoodCount: ${e.message}")
+                e.printStackTrace()
+            }
+        }
     }
 
     // fungsi narik data dari supabase sesuai bulan yang dipilih

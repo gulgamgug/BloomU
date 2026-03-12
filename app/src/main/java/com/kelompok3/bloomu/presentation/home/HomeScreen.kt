@@ -44,13 +44,16 @@ import com.kelompok3.bloomu.ui.theme.BloomUTheme
 import com.kelompok3.bloomu.ui.theme.InterFontFamily
 import kotlinx.coroutines.flow.collectLatest
 
+import com.kelompok3.bloomu.presentation.calendar.CalendarViewModel
+
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
     onCheckInClick: () -> Unit = {},
     onNotificationClick: () -> Unit = {},
     onLogOutSuccess: () -> Unit,
-    viewModel: HomeViewModel = viewModel()
+    viewModel: HomeViewModel = viewModel(),
+    calendarViewModel: CalendarViewModel = viewModel()
 ) {
     val context = LocalContext.current
 
@@ -58,6 +61,7 @@ fun HomeScreen(
     LaunchedEffect(Unit) {
         viewModel.checkTodayCheckIn() // cek ulang setiap kali masuk ke Home
         viewModel.fetchWeeklyMoodData() // ambil data mood mingguan
+        calendarViewModel.fetchCurrentMonthMoodCount() // ambil data mood khusus bulan sekarang
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
                 is HomeEvent.LogoutSuccess -> onLogOutSuccess()
@@ -73,6 +77,7 @@ fun HomeScreen(
         namaUser = viewModel.namaUser,
         isCheckInCompletedToday = viewModel.isCheckInCompletedToday,
         weeklyMoodData = viewModel.weeklyMoodData,
+        totalCheckInCount = calendarViewModel.currentMonthMoodCount,
         onCheckInClick = onCheckInClick,
         onNotificationClick = onNotificationClick,
         onLogoutClick = { viewModel.logout() }
@@ -85,6 +90,7 @@ fun HomeContent(
     namaUser: String,
     isCheckInCompletedToday: Boolean = false,
     weeklyMoodData: List<Float> = listOf(-1f, -1f, -1f, -1f, -1f, -1f, -1f),
+    totalCheckInCount: Int = 0,
     onCheckInClick: () -> Unit,
     onNotificationClick: () -> Unit,
     onLogoutClick: () -> Unit
@@ -151,16 +157,7 @@ fun HomeContent(
 
             //Spacer(modifier = Modifier.height(4.dp))
 
-            // fun fact
-            FunFactCard()
-
-
-            // ini grafik mood seminggu
-            MoodChart(moodData = weeklyMoodData)
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            // judul analitik
+// judul analitik
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -266,7 +263,7 @@ fun HomeContent(
                                     fontFamily = InterFontFamily
                                 )
                                 Text(
-                                    text = "120 Mood",
+                                    text = "$totalCheckInCount Mood",
                                     color = Color(0xFF2A2567),
                                     fontSize = 22.sp,
                                     fontWeight = FontWeight.Bold,
@@ -277,10 +274,18 @@ fun HomeContent(
                         }
                     }
                 }
+                Spacer(modifier = Modifier.height(20.dp))
+
+                FunFactCard()
+                Spacer(modifier = Modifier.height(20.dp))
+                MoodChart(moodData = weeklyMoodData)
+                Spacer(modifier = Modifier.height(8.dp))
             }
         }
     }
 }
+
+
 
 @Preview(showBackground = true)
 @Composable

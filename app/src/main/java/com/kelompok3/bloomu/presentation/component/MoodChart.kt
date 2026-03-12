@@ -35,7 +35,7 @@ fun MoodChart(moodData: List<Float>) {
 
     val textMeasurer = rememberTextMeasurer()
 
-    Column(modifier = Modifier.padding(16.dp)) {
+    Column(modifier = Modifier) {
         Text(
             text = "Grafik Mood Kamu!",
             color = Color(0xFF2B2553),

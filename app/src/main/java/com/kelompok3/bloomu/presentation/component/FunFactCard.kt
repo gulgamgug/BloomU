@@ -38,7 +38,7 @@ fun FunFactCard() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            //.padding(16.dp)
             .shadow(elevation = 6.dp, shape = RoundedCornerShape(30.dp))
             .background(brush = gradientBrush, shape = RoundedCornerShape(30.dp))
     ) {
