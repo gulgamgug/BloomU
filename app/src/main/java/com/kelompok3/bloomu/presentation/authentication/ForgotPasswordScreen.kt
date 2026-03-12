@@ -51,7 +51,7 @@ fun ForgotPasswordScreen(
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
                 is AuthEvent.ResetPasswordEmailSent -> {
-                    Toast.makeText(context, "Email instruksi reset kata sandi telah dikirim!", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, "Email link reset kata sandi telah dikirim!", Toast.LENGTH_LONG).show()
                     onBackToLogin()
                 }
                 is AuthEvent.Error -> {
@@ -108,7 +108,7 @@ fun ForgotPasswordContent(
         Spacer(Modifier.height(40.dp))
 
         Text(
-            text = "Masukkan email kamu untuk mendapatkan instruksi pengaturan ulang kata sandi.",
+            text = "Masukkan email kamu untuk mendapatkan link pengaturan ulang kata sandi.",
             modifier = Modifier.fillMaxWidth(),
             style = TextStyle(
                 fontSize = 14.sp,
@@ -148,7 +148,7 @@ fun ForgotPasswordContent(
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFF221E52),
                 contentColor = Color.White)
-        ) { Text("Kirim Instruksi", fontFamily = InterFontFamily, fontWeight = FontWeight.Bold) }
+        ) { Text("Kirim Link", fontFamily = InterFontFamily, fontWeight = FontWeight.Bold) }
 
         Spacer(Modifier.height(20.dp))
 

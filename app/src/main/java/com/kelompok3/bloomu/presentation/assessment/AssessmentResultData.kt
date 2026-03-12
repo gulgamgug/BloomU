@@ -10,19 +10,17 @@ data class AssessmentCard(
 )
 
 object AssessmentContentProvider {
-    // Logika penampilan card berdasarkan skor (skor 1-4 per pertanyaan)
+    // Logika penampilan card
     fun getAssessmentResult(
         moodScore: Int,
         mentalScore: Int,
         physicalScore: Int,
         academicScore: Int
     ): AssessmentCard {
-        // Contoh logika sederhana: ambil domain dengan skor terendah untuk diberikan saran
-        // Atau jika semua baik, tampilkan apresiasi
-        
+        // priority system
         return when {
             mentalScore <= 2 -> AssessmentCard(
-                imageRes = R.drawable.card_bad_1, // Ganti dengan image yang sesuai nanti
+                imageRes = R.drawable.card_bad_1, // Ganti image yang sesuai nanti (ga jadi ternyata)
                 title = "Pikiranmu sedang sedikit penuh",
                 description = "Sepertinya ada banyak hal yang membebani pikiranmu hari ini. Tidak apa-apa untuk merasa lelah.",
                 microActions = listOf(

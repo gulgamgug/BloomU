@@ -1,13 +1,12 @@
-package com.kelompok3.bloomu.presentation.authentication
+package com.kelompok3.bloomu.supabase
 
-import com.kelompok3.bloomu.supabase.supabase
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.builtin.Email
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 
 object AuthService {
-    
+
     suspend fun signIn(email: String, password: String) {
         supabase.auth.signInWith(Email) {
             this.email = email
@@ -24,7 +23,6 @@ object AuthService {
     }
 
     suspend fun sendResetPasswordEmail(email: String) {
-        // SESUAI DOCUMENTATION
         supabase.auth.resetPasswordForEmail(
             email = email,
             redirectUrl = "bloomu://reset-password"
@@ -32,13 +30,12 @@ object AuthService {
     }
 
     suspend fun updatePassword(password: String) {
-        // SESUAI DOCUMENTATION: updateUser untuk mengganti password setelah login via link
         supabase.auth.updateUser {
             this.password = password
         }
     }
 
-    // Fungsi logout jika diperlukan nanti
+
     suspend fun signOut() {
         supabase.auth.signOut()
     }

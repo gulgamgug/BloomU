@@ -31,8 +31,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.kelompok3.bloomu.presentation.dailycheckin.getMoodInfo
 import com.kelompok3.bloomu.presentation.component.ShowEllipse
+import com.kelompok3.bloomu.presentation.dailycheckin.getMoodInfo
 import com.kelompok3.bloomu.ui.theme.BloomUTheme
 import com.kelompok3.bloomu.ui.theme.InterFontFamily
 
@@ -57,7 +57,6 @@ fun AssessmentResultScreen(
             .fillMaxSize()
             .background(Color.White)
     ) {
-        // Background Ellipse dari Login Screen
         ShowEllipse(mode = 0)
 
         Column(
@@ -68,7 +67,7 @@ fun AssessmentResultScreen(
         ) {
             Spacer(modifier = Modifier.height(60.dp))
 
-            // Emoji di bagian atas (mengikuti MoodPage.kt logic melalui getMoodInfo)
+            // Emoji di bagian atas
             Image(
                 painter = painterResource(id = moodInfo.first),
                 contentDescription = "Mood Emoji",
@@ -77,7 +76,7 @@ fun AssessmentResultScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Teks Status Suasana Hati
+            // Teks status
             Text(
                 text = "Suasana hati kamu ${moodInfo.second.lowercase()}",
                 color = Color(0xFF403959),
@@ -87,7 +86,7 @@ fun AssessmentResultScreen(
                 textAlign = TextAlign.Center
             )
 
-            // Teks Tanggal (Format dari ViewModel)
+            // Teks tanggal
             Text(
                 text = viewModel.currentDate,
                 color = Color(0xFF564553),
@@ -99,7 +98,7 @@ fun AssessmentResultScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Matahari Senyum (CARD) - Image Dinamis
+            // Card
             cardData?.let {
                 Image(
                     painter = painterResource(id = it.imageRes),
@@ -110,7 +109,7 @@ fun AssessmentResultScreen(
                 Spacer(modifier = Modifier.weight(1f))
                 Spacer(modifier = Modifier.height(15.dp))
 
-                // Teks Motivasi Tengah Bawah - Dinamis
+                // Teks motivasi
                 Text(
                     text = it.title,
                     color = Color(0xFF221E52),
@@ -135,7 +134,7 @@ fun AssessmentResultScreen(
 
                 Spacer(modifier = Modifier.height(40.dp))
 
-                // Box Kebiasaan Kecil (Microactions Dinamis)
+                // Box microaction
                 Surface(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -149,7 +148,6 @@ fun AssessmentResultScreen(
                     border = BorderStroke(1.dp, Color(0xFF534A73).copy(alpha = 0.1f))
                 ) {
                     Column {
-                        // Header Box
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -166,7 +164,7 @@ fun AssessmentResultScreen(
                                 textAlign = TextAlign.Center
                             )
                         }
-                        // Isi Box (Microaction Terpilih)
+                        // Isi box
                         Text(
                             text = it.microActions.firstOrNull() ?: "",
                             color = Color(0xFF403959),
@@ -179,13 +177,11 @@ fun AssessmentResultScreen(
                     }
                 }
             } ?: run {
-                // Loading state jika data belum siap
                 Spacer(modifier = Modifier.weight(1f))
             }
 
             Spacer(modifier = Modifier.height(40.dp))
 
-            // Button Selesai
             Button(
                 onClick = onBackToHome,
                 modifier = Modifier
@@ -205,7 +201,7 @@ fun AssessmentResultScreen(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // Button Selesaikan misi baru (Gradasi) - Tetap dummy sementara
+            // Button selesaikan - mockup
             val gradient = Brush.linearGradient(
                 colors = listOf(Color(0xFFF5C6EC), Color(0xFF8366EB))
             )

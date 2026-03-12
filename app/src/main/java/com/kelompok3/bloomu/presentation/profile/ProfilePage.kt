@@ -26,6 +26,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,6 +49,7 @@ import com.kelompok3.bloomu.R
 import com.kelompok3.bloomu.presentation.component.ItemType
 import com.kelompok3.bloomu.presentation.component.SettingsItem
 import com.kelompok3.bloomu.presentation.mission.MissionViewModel
+import com.kelompok3.bloomu.presentation.profile.components.LogoutConfirmationDialog
 import com.kelompok3.bloomu.ui.theme.BloomUTheme
 import kotlinx.coroutines.flow.collectLatest
 
@@ -58,6 +63,7 @@ fun ProfilePage(
 ) {
     val darkBlue = Color(0xFF231F40) //
     val context = LocalContext.current
+    var showLogoutDialog by remember { mutableStateOf(false) }
 
     val permissionLauncher = rememberLauncherForActivityResult(
         //buat minta izin notif
@@ -83,6 +89,18 @@ fun ProfilePage(
                 }
             }
         }
+    }
+
+    if (showLogoutDialog) {
+        LogoutConfirmationDialog(
+            onConfirm = {
+                showLogoutDialog = false
+                viewModel.logout()
+            },
+            onDismiss = {
+                showLogoutDialog = false
+            }
+        )
     }
 
     Column(
@@ -226,7 +244,7 @@ fun ProfilePage(
             SettingsItem(
                 title = "Keluar Akun",
                 icon = painterResource(id = R.drawable.logout),
-                type = ItemType.Arrow(onClick = { viewModel.logout() })
+                type = ItemType.Arrow(onClick = { showLogoutDialog = true })
             )
         }
     }

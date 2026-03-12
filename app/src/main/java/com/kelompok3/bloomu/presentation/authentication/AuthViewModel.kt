@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kelompok3.bloomu.supabase.AuthService
 import io.github.jan.supabase.compose.auth.composable.NativeSignInResult
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -19,12 +20,12 @@ sealed class AuthEvent {
 }
 
 class AuthViewModel : ViewModel() {
-    // Shared states
+    // Shared state
     var email by mutableStateOf("")
     var password by mutableStateOf("")
     var isLoading by mutableStateOf(false)
     
-    // Register specific state
+    // Register state spesifik
     var nama by mutableStateOf("")
 
     private val _eventFlow = MutableSharedFlow<AuthEvent>()
