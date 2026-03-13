@@ -283,7 +283,7 @@ fun AppNavHost(
                 onNotificationClick = { navController.navigate(NotificationRoute) },
                 onLogOutSuccess = {
                     navController.navigate(LoginRoute) {
-                        popUpTo(HomeRoute()) { inclusive = true }
+                        popUpTo<HomeRoute> { inclusive = true }
                     }
                 },
                 onEditAccountClick = { navController.navigate(EditAccountRoute) }
@@ -324,12 +324,12 @@ fun AppNavHost(
                 academicScore = args.academicScore,
                 onBackToHome = {
                     navController.navigate(HomeRoute()) {
-                        popUpTo(HomeRoute()) { inclusive = true }
+                        popUpTo<HomeRoute> { inclusive = true }
                     }
                 },
                 onGoToMissions = {
                     navController.navigate(HomeRoute(selectedTab = 2)) {
-                        popUpTo(HomeRoute()) { inclusive = true }
+                        popUpTo<HomeRoute> { inclusive = true }
                     }
                 }
             )
