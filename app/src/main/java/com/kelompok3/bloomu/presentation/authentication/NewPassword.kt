@@ -88,7 +88,7 @@ fun NewPassword(
         ) {
             Spacer(modifier = Modifier.height(180.dp))
 
-            // Title
+            //
             Text(
                 text = "Masukkan Kata Sandi Baru",
                 style = TextStyle(
@@ -101,7 +101,7 @@ fun NewPassword(
             
             Spacer(modifier = Modifier.height(12.dp))
             
-            // Subtitle
+            //
             Text(
                 text = "Silakan masukkan Kata Sandi baru Anda",
                 style = TextStyle(
@@ -114,10 +114,10 @@ fun NewPassword(
 
             Spacer(modifier = Modifier.height(40.dp))
 
-            // Form Section
+            // Form
             Column(modifier = Modifier.fillMaxWidth()) {
                 
-                // --- Input 1: Kata Sandi ---
+                //
                 Text(
                     text = "Kata sandi",
                     style = TextStyle(
@@ -156,7 +156,6 @@ fun NewPassword(
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                // --- Input 2: Konfirmasi Kata Sandi ---
                 Text(
                     text = "Konfirmasi kata sandi",
                     style = TextStyle(
@@ -196,7 +195,6 @@ fun NewPassword(
 
             Spacer(modifier = Modifier.weight(1f))
 
-            // Tombol Konfirmasi
             Button(
                 onClick = { 
                     if (viewModel.password != confirmPassword) {

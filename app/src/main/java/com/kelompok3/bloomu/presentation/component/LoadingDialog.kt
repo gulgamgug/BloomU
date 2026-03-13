@@ -34,7 +34,6 @@ fun LoadingDialog(isLoading: Boolean) {
         ) {
             Surface(
                 shape = MaterialTheme.shapes.extraLarge,
-                // Menggunakan warna putih dengan transparansi 60% (alpha 0.6f)
                 color = Color.White.copy(alpha = 0.6f),
                 tonalElevation = 0.dp
             ) {

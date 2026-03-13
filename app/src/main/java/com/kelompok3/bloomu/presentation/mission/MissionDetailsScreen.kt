@@ -61,7 +61,7 @@ fun MissionDetailsScreen(
     ) {
         Spacer(modifier = Modifier.height(20.dp))
 
-        // Top Bar: Back Button dan Judul
+        // topbar
         Box(
             modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.Center
@@ -94,7 +94,6 @@ fun MissionDetailsScreen(
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        // Selected CategoryCard (Full Width)
         CategoryCard(
             mode = mode,
             modifier = Modifier.fillMaxWidth()
@@ -102,7 +101,7 @@ fun MissionDetailsScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Deskripsi Kategori
+        // deksripis kategori
         Text(
             text = mode.description,
             fontFamily = InterFontFamily,
@@ -116,7 +115,6 @@ fun MissionDetailsScreen(
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        // Label Aktivitas (Tengah)
         Text(
             text = "Aktivitas",
             fontFamily = InterFontFamily,
@@ -128,7 +126,7 @@ fun MissionDetailsScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // 4 MissionItems (2x2 Grid)
+        //2x2 mission items
         Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
             for (i in activities.indices step 2) {
                 Row(
@@ -155,7 +153,6 @@ fun MissionDetailsScreen(
 
         Spacer(modifier = Modifier.height(48.dp))
 
-        // Tombol Mulai Misi
         Button(
             onClick = { onSubscribe() },
             modifier = Modifier

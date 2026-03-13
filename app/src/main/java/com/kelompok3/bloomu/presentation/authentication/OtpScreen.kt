@@ -21,6 +21,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -163,9 +164,15 @@ fun OtpScreen(
             Button(
                 onClick = { viewModel.verifyOtp(email) },
                 modifier = Modifier.fillMaxWidth().height(50.dp),
-                shape = RoundedCornerShape(12.dp)
+                shape = RoundedCornerShape(40.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF221E52)),
             ) { 
-                Text("Verifikasi Kode", fontFamily = InterFontFamily) 
+                Text(
+                    "Verifikasi Kode",
+                    fontFamily = InterFontFamily,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                )
             }
 
             Spacer(Modifier.height(40.dp))

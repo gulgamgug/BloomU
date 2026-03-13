@@ -1,8 +1,18 @@
 package com.kelompok3.bloomu.presentation.profile
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,7 +45,6 @@ fun PopupLogout(
                     .padding(35.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Teks Utama
                 Text(
                     text = "Apakah kamu yakin ingin keluar akun?",
                     fontSize = 18.sp,
@@ -45,12 +54,10 @@ fun PopupLogout(
                     modifier = Modifier.padding(bottom = 32.dp)
                 )
 
-                // Row Tombol
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    // Tombol Tidak
                     Button(
                         onClick = onDismissRequest,
                         modifier = Modifier
@@ -67,7 +74,6 @@ fun PopupLogout(
                         )
                     }
 
-                    // Tombol Ya
                     Button(
                         onClick = onConfirmLogout,
                         modifier = Modifier

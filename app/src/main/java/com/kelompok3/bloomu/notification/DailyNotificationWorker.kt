@@ -21,7 +21,7 @@ class DailyNotificationWorker(
         showNotification()
         return Result.success()
     }
-
+//untested, ga tau bisa apa nggak soale tak tunggu2 ya ga muncul muncul i
     private fun showNotification() {
         val notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val channelId = "daily_checkin_channel"

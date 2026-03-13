@@ -26,8 +26,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.kelompok3.bloomu.ui.theme.InterFontFamily
 import com.kelompok3.bloomu.presentation.mission.components.MissionCategoryMode
+import com.kelompok3.bloomu.ui.theme.InterFontFamily
 
 @Composable
 fun OngoingMissions(
@@ -115,7 +115,7 @@ fun OngoingMissions(
     }
 }
 
-// Fungsi helper untuk mendapatkan data misi dari mode kategori
+// fubgsi untuk mendapatkan data misi dari mode kategori
 fun getMissionDataFromMode(mode: MissionCategoryMode): List<DailyMission> {
     return when (mode) {
         MissionCategoryMode.ENERGI -> listOf(

@@ -47,7 +47,7 @@ fun CalendarPage(
     val today = kotlin.time.Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
     val daysCount = viewModel.getDaysCount()
     
-    // Logika pembatasan tanggal carousel
+    // pembatasan tanggal carousel
     val maxDayToShow = if (viewModel.selectedYear == today.year && viewModel.selectedMonth == today.month) {
         today.dayOfMonth
     } else if (viewModel.selectedYear > today.year || (viewModel.selectedYear == today.year && viewModel.selectedMonth > today.month)) {
@@ -81,12 +81,11 @@ fun CalendarPage(
             
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Section 1: Streak (Runtutan Api)
             StreakSection()
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            // Section 2: Chart Mood
+            // chart mood
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -110,7 +109,6 @@ fun CalendarPage(
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            // Section 3: Month Selector
             MonthSelector(
                 selectedMonth = viewModel.selectedMonth,
                 onMonthSelected = { newMonth ->
@@ -121,7 +119,6 @@ fun CalendarPage(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Section 4: Calendar Carousel
             CalendarCarousel(
                 selectedYear = viewModel.selectedYear,
                 selectedMonth = viewModel.selectedMonth,
@@ -135,7 +132,6 @@ fun CalendarPage(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Section 5: Mood Detail Card
             MoodDetailCard(
                 selectedDay = viewModel.selectedDay,
                 moodEntry = viewModel.monthlyMoodData[viewModel.selectedDay],

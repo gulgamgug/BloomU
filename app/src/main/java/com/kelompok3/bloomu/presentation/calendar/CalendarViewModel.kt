@@ -38,7 +38,7 @@ class CalendarViewModel : ViewModel() {
     var monthlyMoodData by mutableStateOf<Map<Int, MoodEntry>>(emptyMap())
         private set
 
-    // Khusus buat HomeScreen: jumlah mood bulan ini saja
+    // Khusus buat homescreen: jumlah mood bulan ini saja
     var currentMonthMoodCount by mutableStateOf(0)
         private set
 
@@ -52,7 +52,7 @@ class CalendarViewModel : ViewModel() {
         fetchCurrentMonthMoodCount()
     }
 
-    // Fungsi khusus untuk HomeScreen agar selalu akurat ke bulan sekarang
+    // Fungsi khusus untuk homescreen agar biar nampilin bulan sekarang
     fun fetchCurrentMonthMoodCount() {
         viewModelScope.launch {
             try {
@@ -70,7 +70,7 @@ class CalendarViewModel : ViewModel() {
                 val nextMonthStart = LocalDateTime(nextYear, nextMonth, 1, 0, 0, 0, 0)
                 val nextMonthStartIso = nextMonthStart.toInstant(tz).toString()
 
-                // Sertakan created_at agar decoding ke MoodEntry tidak gagal
+                //  created_at supaya decoding ke MoodEntry tidak gagal
                 val response = supabase.postgrest["daily_checkins"].select(columns = Columns.list("mood_score", "created_at")) {
                     filter {
                         eq("user_id", user.id)
@@ -80,7 +80,7 @@ class CalendarViewModel : ViewModel() {
                 }
                 val entries = response.decodeList<MoodEntry>()
                 
-                // Hitung jumlah hari unik (seperti di kalender)
+                // Hitung jumlah hari unik (kayak di kalender)
                 val uniqueDays = entries.map { 
                     Instant.parse(it.createdAt).toLocalDateTime(tz).dayOfMonth 
                 }.toSet()

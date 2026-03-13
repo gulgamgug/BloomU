@@ -56,7 +56,7 @@ fun MissionPage(
         startDestination = MissionRoute,
         modifier = modifier
     ) {
-        // 1. Halaman Utama Misi (Daftar misi yang sudah diambil)
+
         composable<MissionRoute> {
             MissionMainScreen(
                 viewModel = viewModel,
@@ -64,7 +64,7 @@ fun MissionPage(
             )
         }
         
-        // 2. Halaman Pilih Kategori
+
         composable<MissionSelectRoute> {
             MissionSelectScreen(
                 onBack = { navController.popBackStack() },
@@ -74,7 +74,7 @@ fun MissionPage(
             )
         }
         
-        // 3. Halaman Detail Kategori
+
         composable<MissionDetailsRoute> { backStackEntry ->
             val route: MissionDetailsRoute = backStackEntry.toRoute()
             val mode = MissionCategoryMode.valueOf(route.categoryName)
@@ -84,7 +84,7 @@ fun MissionPage(
                 onBack = { navController.popBackStack() },
                 onSubscribe = {
                     viewModel.subscribeMode(mode)
-                    // Kembali ke halaman utama setelah subscribe
+                    // Kembali ke halaman utama
                     navController.popBackStack(MissionRoute, inclusive = false)
                 }
             )

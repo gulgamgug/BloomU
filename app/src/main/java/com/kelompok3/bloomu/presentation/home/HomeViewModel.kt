@@ -95,9 +95,7 @@ class HomeViewModel : ViewModel() {
                 val tz = TimeZone.currentSystemDefault()
                 val now = kotlin.time.Clock.System.now().toLocalDateTime(tz)
                 
-                // Cari hari Minggu terdekat
-                // DayOfWeek.ordinal: MONDAY=0, ..., SUNDAY=6
-                // Kita mau: Minggu=0, Senin=1, ..., Sabtu=6
+                // cari hari minggu terdekat
                 val currentDayValue = if (now.dayOfWeek == DayOfWeek.SUNDAY) 0 else now.dayOfWeek.ordinal + 1
                 val sundayDate = now.date.minus(currentDayValue, DateTimeUnit.DAY)
                 

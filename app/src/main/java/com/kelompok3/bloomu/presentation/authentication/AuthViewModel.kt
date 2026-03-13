@@ -81,7 +81,7 @@ class AuthViewModel : ViewModel() {
     }
 
     fun signUp() {
-        // 1. Validasi Input Kosong
+        // Validasi input kosong
         if (nama.isBlank() || email.isBlank() || password.isBlank()) {
             viewModelScope.launch {
                 _eventFlow.emit(AuthEvent.Error("Semua kolom harus diisi"))
@@ -89,7 +89,7 @@ class AuthViewModel : ViewModel() {
             return
         }
 
-        // 2. Validasi Format Email
+        // Validasi format email
         val emailPattern = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}\$".toRegex()
         if (!email.matches(emailPattern)) {
             viewModelScope.launch {
@@ -98,7 +98,7 @@ class AuthViewModel : ViewModel() {
             return
         }
 
-        // 3. Validasi Panjang Password
+        // Validasi panjang password
         if (password.length < 8) {
             viewModelScope.launch {
                 _eventFlow.emit(AuthEvent.Error("Password minimal 8 karakter"))

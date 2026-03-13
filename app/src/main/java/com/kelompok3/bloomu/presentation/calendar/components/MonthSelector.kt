@@ -62,7 +62,7 @@ fun MonthSelector(
     val primaryColor = Color(0xFF2A2567)
 
     Box {
-        // Tombol pemicu (Trigger Button)
+        // Tombol trigger
         Surface(
             modifier = Modifier
                 .clickable { expanded = true },
@@ -96,7 +96,7 @@ fun MonthSelector(
                 alignment = Alignment.Center, // Membuat popup muncul di tengah layar
                 properties = PopupProperties(focusable = true)
             ) {
-                // Animasi Sederhana (Pop Up effect)
+                // Animasi pop up
                 AnimatedVisibility(
                     visible = expanded,
                     enter = fadeIn() + scaleIn(
@@ -129,7 +129,7 @@ fun MonthSelector(
                                 modifier = Modifier.padding(bottom = 16.dp)
                             )
 
-                            // Grid 4 baris x 3 kolom
+                            // Grid 4x3
                             for (row in 0 until 4) {
                                 Row(
                                     modifier = Modifier.fillMaxWidth(),

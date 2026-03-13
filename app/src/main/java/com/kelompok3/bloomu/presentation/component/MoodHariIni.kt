@@ -21,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -37,7 +38,6 @@ fun PerasaanCard(
     isCompleted: Boolean = false,
     onClick: () -> Unit
 ) {
-    // Definisi Gradasi Linear F5C6EC dan 8366EB
     val gradientBrush =
         Brush.linearGradient(
         colors =
@@ -49,11 +49,16 @@ fun PerasaanCard(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(30.dp))
-            .height(200.dp)
-            .padding(16.dp)
+            .padding(16.dp) //supaya shadow keliatan
+            .height(170.dp)
+            .shadow(
+                elevation = 10.dp,
+                shape = RoundedCornerShape(30.dp),
+                ambientColor = Color.Black.copy(alpha = 0.5f),
+                spotColor = Color.Black.copy(alpha = 0.5f)
+            )
             .background(brush = gradientBrush, shape = RoundedCornerShape(30.dp))
-            .padding(20.dp)
+            .clip(RoundedCornerShape(30.dp))
             .clickable(
                 enabled = !isCompleted,
                 interactionSource = remember { MutableInteractionSource() },
@@ -61,7 +66,8 @@ fun PerasaanCard(
                     bounded = true,
                     color = Color.Unspecified
                 )
-            ) { onClick() },
+            ) { onClick() }
+            .padding(20.dp),
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -79,7 +85,6 @@ fun PerasaanCard(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Deret Emoji ke samping
             Row(
                 horizontalArrangement = Arrangement.spacedBy(-25.dp),
                 verticalAlignment = Alignment.CenterVertically

@@ -43,6 +43,7 @@ fun AssessmentResultScreen(
     physicalScore: Int,
     academicScore: Int,
     onBackToHome: () -> Unit,
+    onGoToMissions: () -> Unit = {},
     viewModel: AssessmentResultViewModel = viewModel()
 ) {
     LaunchedEffect(Unit) {
@@ -207,7 +208,7 @@ fun AssessmentResultScreen(
             )
 
             Button(
-                onClick = { },
+                onClick = onGoToMissions,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(53.dp)

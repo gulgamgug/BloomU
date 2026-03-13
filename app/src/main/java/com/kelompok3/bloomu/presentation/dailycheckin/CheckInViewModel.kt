@@ -25,19 +25,19 @@ data class DailyCheckIn(
 )
 
 class CheckInViewModel : ViewModel() {
-    // 1. STATE UI
+    // state ui
     var currentStep by mutableIntStateOf(1)
     var selectedMoodEmoji by mutableIntStateOf(3)
     var isLoading by mutableStateOf(false)
 
-    // 2. STATE PERTANYAAN
+    // state pertanyaan
     var activeQuestions by mutableStateOf<List<Question>>(emptyList())
         private set
 
-    // 3. STATE JAWABAN
+    // state jawaban
     var userAnswers by mutableStateOf<Map<Int, Int>>(emptyMap())
 
-    // 4. STATE DIARY
+    // state diary
     var diaryText by mutableStateOf("")
 
     init {
@@ -85,7 +85,6 @@ class CheckInViewModel : ViewModel() {
                 onSuccess(selectedMoodEmoji, mentalScore, physicalScore, academicScore)
             } catch (e: Exception) {
                 e.printStackTrace()
-                // Nanti bisa tambahkan error handling seperti Toast
             } finally {
                 isLoading = false
             }

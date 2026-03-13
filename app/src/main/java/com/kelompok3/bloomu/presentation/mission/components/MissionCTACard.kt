@@ -74,8 +74,7 @@ fun MissionCTA(
                     lineHeight = 20.sp
                 )
                 Spacer(Modifier.height(24.dp))
-                
-                // Menggunakan Box + CircleShape untuk Pill yang dinamis
+
                 Box(
                     modifier = Modifier
                         .background(color = Color.White, shape = CircleShape)

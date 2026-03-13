@@ -1,13 +1,15 @@
 package com.kelompok3.bloomu.navigation
 
 import kotlinx.serialization.Serializable
-
+//auth routes
 @Serializable object LoadingRoute
 @Serializable object OnboardingRoute
 @Serializable object LoginRoute
 @Serializable object RegisterRoute
 @Serializable object ForgotPasswordRoute
 @Serializable object ResetPasswordRoute
+
+//home routes
 @Serializable data class HomeRoute(val selectedTab: Int = 0)
 @Serializable object AnalyticRoute
 @Serializable object CareRoute
@@ -22,7 +24,7 @@ import kotlinx.serialization.Serializable
 @Serializable data class OtpRoute(val email: String)
 @Serializable data class DailyCheckInRoute(val moodData: List<Float>)
 
-// CheckIn Steps
+// Checkin routes
 @Serializable object MoodSelectionStepRoute
 @Serializable object QuestionsStepRoute
 @Serializable object MiniDiaryStepRoute

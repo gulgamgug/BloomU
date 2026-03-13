@@ -51,22 +51,21 @@ class MissionViewModel(application: Application) : AndroidViewModel(application)
             val today = LocalDate.now().toString()
             val lastReset = prefManager.lastResetDate.first()
             
-            // 1. Ambil kategori yang diikuti
+            // ambil kategori yang diikuti
             val savedModes = prefManager.subscribedModes.first().mapNotNull { modeName ->
                 try { MissionCategoryMode.valueOf(modeName) } catch (e: Exception) { null }
             }.toSet()
             subscribedModes = savedModes
 
-            // 2. Bangun daftar misi dari kategori tersebut
+            // bangun daftar misi dari kategori tersebut
             var initialMissions = savedModes.flatMap { getMissionDataFromMode(it) }
 
-            // 3. Cek Reset Harian
+            // reset harian
             if (lastReset != today) {
-                // Hari baru: progres nol
                 prefManager.clearDailyProgress()
                 prefManager.saveLastResetDate(today)
             } else {
-                // Hari yang sama: muat progres yang tersimpan
+                // hari yang sama-> muat progres yang tersimpan
                 val finishedIds = prefManager.finishedMissionIds.first().map { it.toInt() }.toSet()
                 initialMissions = initialMissions.map { 
                     if (finishedIds.contains(it.id)) it.copy(isFinished = true) else it 
@@ -94,7 +93,7 @@ class MissionViewModel(application: Application) : AndroidViewModel(application)
             val newMissions = getMissionDataFromMode(mode)
             allMissions = allMissions + newMissions
             
-            // Simpan ke DataStore
+            // simpan ke darastore
             viewModelScope.launch {
                 prefManager.saveSubscribedModes(newModes.map { it.name }.toSet())
             }
@@ -110,10 +109,10 @@ class MissionViewModel(application: Application) : AndroidViewModel(application)
         val missionsToRemove = getMissionDataFromMode(mode).map { it.id }.toSet()
         allMissions = allMissions.filterNot { missionsToRemove.contains(it.id) }
         
-        // Simpan ke DataStore
+        // simpa ke datastroe
         viewModelScope.launch {
             prefManager.saveSubscribedModes(newModes.map { it.name }.toSet())
-            // Juga bersihkan ID misi yang selesai jika kategorinya dihapus
+            // juga bersihkan id misi yang selesai jika kategorinya dihapus
             val remainingFinishedIds = allMissions.filter { it.isFinished }.map { it.id.toString() }.toSet()
             prefManager.saveFinishedMissionIds(remainingFinishedIds)
         }
@@ -128,7 +127,7 @@ class MissionViewModel(application: Application) : AndroidViewModel(application)
             if (it.id == missionId) it.copy(isFinished = !it.isFinished) else it
         }
         
-        // Simpan progres ke DataStore
+        // simpan progres ke DataStore
         viewModelScope.launch {
             val finishedIds = allMissions.filter { it.isFinished }.map { it.id.toString() }.toSet()
             prefManager.saveFinishedMissionIds(finishedIds)
@@ -138,7 +137,7 @@ class MissionViewModel(application: Application) : AndroidViewModel(application)
     fun clearDataOnLogout() {
         viewModelScope.launch {
             prefManager.clearAllData()
-            // Reset state di dalam ViewModel juga
+            // reset state viewmodel
             subscribedModes = emptySet()
             activeFilters = emptySet()
             allMissions = emptyList()

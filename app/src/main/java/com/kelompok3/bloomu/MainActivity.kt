@@ -93,7 +93,7 @@ class MainActivity : ComponentActivity() {
                         onLoadingFinished = { keepSplashShown = false }
                     )
 
-                    // Debug FAB (Tombol mengambang di pojok kanan bawah)
+                    // Debug fab
 //                    FloatingActionButton(
 //                        onClick = { showDebugMenu = true },
 //                        modifier = Modifier
@@ -105,7 +105,7 @@ class MainActivity : ComponentActivity() {
 //                        Icon(Icons.Default.Build, contentDescription = "Debug Menu")
 //                    }
 //
-//                    // Debug Bottom Sheet Menu
+//                    // Debug sheet
 //                    if (showDebugMenu) {
 //                        ModalBottomSheet(
 //                            onDismissRequest = { showDebugMenu = false },
@@ -126,7 +126,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onNewIntent(intent: android.content.Intent) {
         super.onNewIntent(intent)
-        setIntent(intent) // Update intent utama
+        setIntent(intent) // update intent utama
         android.util.Log.d("BloomU_Debug", "MainActivity onNewIntent intent: ${intent?.data}")
         supabase.handleDeeplinks(intent)
     }
@@ -135,7 +135,7 @@ class MainActivity : ComponentActivity() {
         val settings = com.russhwolf.settings.Settings()
         val isEnabled = settings.getBoolean("daily_notif_enabled", false)
         
-        if (!isEnabled) return // Jangan cek izin/jadwalin kalo emang dimatiin
+        if (!isEnabled) return // jangan cek izin/jadwalin kalo emang dimatiin
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(
@@ -145,7 +145,7 @@ class MainActivity : ComponentActivity() {
             ) {
                 NotificationHelper.scheduleDailyNotification(this)
             }
-            // Kalo belum granted, biarin user nyalain manual di profil
+            // kalo belum granted, biarin user nyalain manual di profil
         } else {
             NotificationHelper.scheduleDailyNotification(this)
         }
@@ -168,7 +168,7 @@ fun DebugMenuContent(onNavigate: (Any) -> Unit) {
             color = Color(0xFF221E52)
         )
 
-        // Daftar Route yang bisa dikunjungi
+        // daftar Route yang bisa dikunjungi
         val routes = listOf(
             "Loading Screen" to LoadingRoute,
             "Onboarding" to OnboardingRoute,

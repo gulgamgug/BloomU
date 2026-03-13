@@ -42,45 +42,12 @@ fun MoodPage(
     onBack: () -> Unit,
     onMoodSelected: (Int) -> Unit
 ) {
-    // Background utama Linear Gradient
     val gradientBackground = Brush.linearGradient(
         colors = listOf(Color(0xFFF5C6EC), Color(0xFF8366EB))
     )
-
-//    Box(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .background(gradientBackground)
-//    ) {
-//        // Ellipse kiri atas
-//        Box(
-//            modifier = Modifier
-//                .align(Alignment.TopStart)
-//                .offset(x = (-150).dp, y = (-150).dp)
-//                .size(500.dp)
-//                .background(
-//                    brush = Brush.radialGradient(
-//                        colors = listOf(Color.White.copy(alpha = 0.4f), Color.Transparent)
-//                    )
-//                )
-//        )
-//
-//        // Ellipse kanan bawah
-//        Box(
-//            modifier = Modifier
-//                .align(Alignment.BottomEnd)
-//                .offset(x = 150.dp, y = 150.dp)
-//                .size(500.dp)
-//                .background(
-//                    brush = Brush.radialGradient(
-//                        colors = listOf(Color.White.copy(alpha = 0.4f), Color.Transparent)
-//                    )
-//                )
-//        )
-
     ShowEllipse(2)
 
-        // Tombol Back
+
         IconButton(
             onClick = onBack,
             modifier = Modifier
@@ -130,10 +97,7 @@ fun MoodPage(
                     .padding(top = 4.dp, bottom = 24.dp),
                 textAlign = TextAlign.Center
             )
-            // Memberikan spacer agar box berada di tengah agak ke bawah
-            //Spacer(modifier = Modifier.weight(0.8f))
 
-            // Box untuk Emoji
             Box(
                 modifier = Modifier
                     .background(

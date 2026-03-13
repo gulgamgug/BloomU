@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kelompok3.bloomu.R
 import com.kelompok3.bloomu.R.drawable
+import com.kelompok3.bloomu.presentation.calendar.CalendarViewModel
 import com.kelompok3.bloomu.presentation.component.FunFactCard
 import com.kelompok3.bloomu.presentation.component.MoodChart
 import com.kelompok3.bloomu.presentation.component.PerasaanCard
@@ -43,8 +44,6 @@ import com.kelompok3.bloomu.presentation.component.ShowEllipse
 import com.kelompok3.bloomu.ui.theme.BloomUTheme
 import com.kelompok3.bloomu.ui.theme.InterFontFamily
 import kotlinx.coroutines.flow.collectLatest
-
-import com.kelompok3.bloomu.presentation.calendar.CalendarViewModel
 
 @Composable
 fun HomeScreen(
@@ -157,7 +156,7 @@ fun HomeContent(
 
             //Spacer(modifier = Modifier.height(4.dp))
 
-// judul analitik
+//  analitik
             Column(
                 modifier = Modifier
                     .fillMaxWidth()

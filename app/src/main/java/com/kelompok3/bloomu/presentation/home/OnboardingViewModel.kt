@@ -5,7 +5,7 @@ import com.russhwolf.settings.Settings
 
 class OnboardingViewModel : ViewModel() {
     private val settings = Settings()
-
+//cek user pertama kali buka aplikasi  ataungga
     fun setOnboardingCompleted() {
         settings.putBoolean("onboarding_completed", true)
     }

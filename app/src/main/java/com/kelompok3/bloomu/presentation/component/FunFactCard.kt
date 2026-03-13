@@ -56,7 +56,7 @@ fun FunFactCard() {
             .shadow(elevation = 6.dp, shape = RoundedCornerShape(30.dp))
             .background(brush = gradientBrush, shape = RoundedCornerShape(30.dp))
     ) {
-        // Box Judul
+        // judul
         Box(
             modifier = Modifier
                 .fillMaxWidth()

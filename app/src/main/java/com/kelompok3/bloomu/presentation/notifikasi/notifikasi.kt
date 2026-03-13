@@ -56,8 +56,7 @@ fun notifikasi(
             .fillMaxSize()
     ) {
 
-
-        // --- CONTENT LAYER ---
+        //content
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -65,8 +64,6 @@ fun notifikasi(
                 .padding(horizontal = 24.dp)
         ) {
             Spacer(modifier = Modifier.height(60.dp))
-
-            // Header Row
             Box(modifier = Modifier.fillMaxWidth()) {
                 IconButton(
                     onClick = onBack,
@@ -98,7 +95,7 @@ fun notifikasi(
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            // Section: Hari ini
+
             NotificationSection("Hari ini")
             NotificationItem(
                 title = "Bagaimana perasaanmu hari ini?",
@@ -113,7 +110,7 @@ fun notifikasi(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Section: Kemarin
+
             NotificationSection("Kemarin")
             NotificationItem(
                 title = "Bagaimana perasaanmu hari ini?",
@@ -128,7 +125,7 @@ fun notifikasi(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Section: Minggu lalu
+
             NotificationSection("Minggu lalu")
             NotificationItem(
                 title = "Bagaimana perasaanmu hari ini?",

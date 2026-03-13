@@ -9,7 +9,6 @@ import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import java.time.LocalDate
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "mission_prefs")
 
@@ -50,7 +49,7 @@ class MissionPreferenceManager(private val context: Context) {
         }
     }
 
-    // Simpan tanggal hari ini (saat reset)
+    // Simpan tanggal hari ini (pas reset)
     suspend fun saveLastResetDate(date: String) {
         context.dataStore.edit { prefs ->
             prefs[LAST_RESET_DATE] = date

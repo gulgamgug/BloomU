@@ -2,6 +2,11 @@ package com.kelompok3.bloomu.navigation
 
 import android.app.Activity
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
@@ -17,7 +22,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -27,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -53,12 +58,6 @@ import io.github.jan.supabase.auth.status.SessionStatus
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.take
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.ui.graphics.graphicsLayer
 
 
 @Composable
@@ -69,6 +68,7 @@ fun AppNavHost(
     NavHost(
         navController = navController,
         startDestination = LoadingRoute,
+        //animasi geser geser page
         enterTransition = {
             slideInHorizontally(initialOffsetX = { it }, animationSpec = tween(300)) + fadeIn(animationSpec = tween(300))
         },
@@ -106,7 +106,7 @@ fun AppNavHost(
             LaunchedEffect(showProgressBar) {
                 if (!showProgressBar) return@LaunchedEffect
 
-                // Tunggu sampai status ditentukan oleh SDK (Authenticated atau Not)
+                // Tunggu status sesi saat ini dari sdk)
                 supabase.auth.sessionStatus
                     .filter { it is SessionStatus.Authenticated || it is SessionStatus.NotAuthenticated }
                     .take(1)
@@ -116,7 +116,7 @@ fun AppNavHost(
                         val user = supabase.auth.currentUserOrNull()
                         
                         if (user != null) {
-                            if (isRecovery) {
+                            if (isRecovery) { //kalo user habis dari link reset password
                                 navController.navigate(ResetPasswordRoute) {
                                     popUpTo(LoadingRoute) { inclusive = true }
                                 }
@@ -157,7 +157,7 @@ fun AppNavHost(
                         modifier = Modifier.size(165.dp, 189.dp)
                     )
 
-                    AnimatedVisibility(
+                    AnimatedVisibility( //animasi splash screen
                         visible = showLogography,
                         enter = fadeIn() + expandVertically()
                     ) {
@@ -186,7 +186,7 @@ fun AppNavHost(
                                 label = "rotation"
                             )
                             Image(
-                                painter = painterResource(id = R.drawable.loading_circle),
+                                painter = painterResource(id = R.drawable.loading_circle), //loading circle
                                 contentDescription = "Loading",
                                 modifier = Modifier
                                     .size(40.dp)
@@ -199,7 +199,7 @@ fun AppNavHost(
         }
 
         composable<OnboardingRoute> {
-            val onboardingViewModel: OnboardingViewModel = viewModel() // Perbaiki cara panggil VM
+            val onboardingViewModel: OnboardingViewModel = viewModel() // panggil viewmodel
             OnboardingScreen(
                 onFinished = {
                     onboardingViewModel.setOnboardingCompleted()
@@ -324,6 +324,11 @@ fun AppNavHost(
                 academicScore = args.academicScore,
                 onBackToHome = {
                     navController.navigate(HomeRoute()) {
+                        popUpTo(HomeRoute()) { inclusive = true }
+                    }
+                },
+                onGoToMissions = {
+                    navController.navigate(HomeRoute(selectedTab = 2)) {
                         popUpTo(HomeRoute()) { inclusive = true }
                     }
                 }

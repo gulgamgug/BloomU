@@ -41,7 +41,7 @@ class ProfileViewModel : ViewModel() {
     private fun loadUserData() {
         val user = supabase.auth.currentUserOrNull()
         if (user != null) {
-            // Mengambil nama dari metadata (field "name" saat register)
+            // ambil nama dari metadata (field "name" saat register)
             userName = user.userMetadata?.get("name")?.jsonPrimitive?.content ?: "User"
             userEmail = user.email ?: ""
         } else {
