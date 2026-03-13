@@ -1,0 +1,36 @@
+package com.kelompok3.bloomu.navigation
+
+import kotlinx.serialization.Serializable
+//auth routes
+@Serializable object LoadingRoute
+@Serializable object OnboardingRoute
+@Serializable object LoginRoute
+@Serializable object RegisterRoute
+@Serializable object ForgotPasswordRoute
+@Serializable object ResetPasswordRoute
+
+//home routes
+@Serializable data class HomeRoute(val selectedTab: Int = 0)
+@Serializable object AnalyticRoute
+@Serializable object CareRoute
+@Serializable object ProfileRoute
+@Serializable object CheckInRoute
+@Serializable object MissionRoute
+@Serializable object MissionSelectRoute
+@Serializable data class MissionDetailsRoute(val categoryName: String)
+@Serializable object EditAccountRoute
+@Serializable object NotificationRoute
+
+@Serializable data class OtpRoute(val email: String)
+@Serializable data class DailyCheckInRoute(val moodData: List<Float>)
+
+// Checkin routes
+@Serializable object MoodSelectionStepRoute
+@Serializable object QuestionsStepRoute
+@Serializable object MiniDiaryStepRoute
+@Serializable data class AssessmentResultRoute(
+    val moodScore: Int,
+    val mentalScore: Int,
+    val physicalScore: Int,
+    val academicScore: Int
+)
