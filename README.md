@@ -45,7 +45,9 @@ BloomU dibangun dengan teknologi modern Android:
     - **PostgreSQL**: Untuk penyimpanan data pengguna dan hasil check-in.
     - **Auth**: Untuk manajemen sesi dan autentikasi.
 - **DataStore**: Untuk menyimpan data lokal.
-- **Jetpack Navigation**: Mengatur navigasi aplikasi.
+- **Jetpack Navigation**: Mengatur navigasi aplikasi.
+- **WorkManager**: Untuk menjadwalkan tugas di latar belakang.
+- **Ktor Client**: Untuk menangani permintaan data ke server.
 
 ## Arsitektur Aplikasi
 
