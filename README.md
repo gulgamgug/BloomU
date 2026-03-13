@@ -1,10 +1,10 @@
 # BloomU 
----
+
 BloomU adalah aplikasi self-awareness untuk mahasiswa yang membantu pengguna melacak kondisi emosinya secara harian dan memahami pola mood mereka melalui insight mingguan sederhana. Dengan microlearning ringan seputar kesehatan mental, BloomU mendorong mahasiswa lebih sadar terhadap dirinya dan menjaga kesejahteraan belajar.
 
 
 ##  Fitur Utama
----
+
 Berikut adalah fitur-fitur yang tersedia di BloomU:
 
 - **Sistem Autentikasi** (MVP)
@@ -36,20 +36,19 @@ Berikut adalah fitur-fitur yang tersedia di BloomU:
     - Logout Akun
 
 ## Tech Stack
----
+
 BloomU dibangun dengan teknologi modern Android:
 
 - **Bahasa**: Kotlin
 - **UI Framework**: Jetpack Compose
 - **Backend-as-a-Service**: Supabase
     - **PostgreSQL**: Untuk penyimpanan data pengguna dan hasil check-in.
-    - **GoTrue (Auth)**: Untuk manajemen sesi dan autentikasi.
-- **Local Storage**: Multiplatform Settings dan DataStore (Key-value storage untuk preferensi lokal).
-- **Navigation**: Jetpack Navigation Compose dengan Type-Safe Routes (Kotlinx Serialization). .
-- **Concurrency**: Kotlin Coroutines & Flow.
+    - **Auth**: Untuk manajemen sesi dan autentikasi.
+- **DataStore**: Untuk menyimpan data lokal.
+- **Jetpack Navigation**: Mengatur navigasi aplikasi.
 
 ## Arsitektur Aplikasi
----
+
 BloomU mengikuti pola arsitektur MVVM:
 
 1.  **View (UI Layer)**: Dibangun menggunakan Jetpack Compose. State UI diobservasi dari ViewModel untuk mereaksi perubahan data secara reaktif.
